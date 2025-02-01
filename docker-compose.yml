@@ -1,0 +1,10 @@
+services:
+  nginx:
+    build: ./proxy
+    image: proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${PWD}/frontend:/usr/share/nginx/html
+    restart: always
