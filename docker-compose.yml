@@ -8,3 +8,13 @@ services:
     volumes:
       - ${PWD}/frontend:/usr/share/nginx/html
     restart: always
+
+  backend-user:
+    build: ./backend-user
+    image: backend-user
+    container_name: backend-user
+    ports:
+      - "8000:8000"
+    volumes:
+      - ${PWD}/backend-user:/app
+    restart: always
