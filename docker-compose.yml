@@ -2,6 +2,7 @@ services:
   nginx:
     build: ./proxy
     image: proxy
+    container_name: proxy
     ports:
       - "80:80"
       - "443:443"
