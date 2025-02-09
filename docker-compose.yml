@@ -18,13 +18,13 @@ services:
     volumes:
       - ${PWD}/backend-user:/app
       - /app/node_modules
-#     environment:
-#       - OAUTH_UID_42=${OAUTH_UID_42}
-#       - OAUTH_SECRET_42=${OAUTH_SECRET_42}
-#       - OAUTH_REDIRECT_42=${OAUTH_REDIRECT_42}
-#       - OAUTH_UID_GITHUB=${OAUTH_UID_GITHUB}
-#       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
-#       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
+    environment:
+      - OAUTH_UID_42=${OAUTH_UID_42}
+      - OAUTH_SECRET_42=${OAUTH_SECRET_42}
+      - OAUTH_REDIRECT_42=${OAUTH_REDIRECT_42}
+      - OAUTH_UID_GITHUB=${OAUTH_UID_GITHUB}
+      - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
+      - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
 
 #   backend-ping-pong:
 #     build: ./backend-ping-pong
