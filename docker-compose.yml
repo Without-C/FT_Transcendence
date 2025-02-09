@@ -10,29 +10,29 @@ services:
       - ${PWD}/frontend:/usr/share/nginx/html
     restart: always
 
-  backend-user:
-    build: ./backend-user
-    image: backend-user
-    container_name: backend-user
-    environment:
-      - OAUTH_UID_42=${OAUTH_UID_42}
-      - OAUTH_SECRET_42=${OAUTH_SECRET_42}
-      - OAUTH_REDIRECT_42=${OAUTH_REDIRECT_42}
-      - OAUTH_UID_GITHUB=${OAUTH_UID_GITHUB}
-      - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
-      - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
-    ports:
-      - "8000:8000"
-    volumes:
-      - ${PWD}/backend-user:/app
-    restart: always
-
-  backend-ping-pong:
-    build: ./backend-ping-pong
-    image: backend-ping-pong
-    container_name: backend-ping-pong
-    ports:
-      - "8001:8000"
-    volumes:
-      - ${PWD}/backend-ping-pong:/app
-    restart: always
+#   backend-user:
+#     build: ./backend-user
+#     image: backend-user
+#     container_name: backend-user
+#     environment:
+#       - OAUTH_UID_42=${OAUTH_UID_42}
+#       - OAUTH_SECRET_42=${OAUTH_SECRET_42}
+#       - OAUTH_REDIRECT_42=${OAUTH_REDIRECT_42}
+#       - OAUTH_UID_GITHUB=${OAUTH_UID_GITHUB}
+#       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
+#       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ${PWD}/backend-user:/app
+#     restart: always
+# 
+#   backend-ping-pong:
+#     build: ./backend-ping-pong
+#     image: backend-ping-pong
+#     container_name: backend-ping-pong
+#     ports:
+#       - "8001:8000"
+#     volumes:
+#       - ${PWD}/backend-ping-pong:/app
+#     restart: always
