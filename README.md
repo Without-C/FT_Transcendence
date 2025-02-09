@@ -1,5 +1,5 @@
 <a href="https://club-project-one.vercel.app/" target="_blank">
-<img src="https://raw.githubusercontent.com/Without-C/FT_Transcendence/refs/heads/main/42%E1%84%89%E1%85%A5%E1%84%8B%E1%85%AE%E1%86%AF%20%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9.webp" alt="배너" width="100%"/>
+<img src="42logo.webp" alt="배너" width="100%"/>
 </a>
 
 <br/>
