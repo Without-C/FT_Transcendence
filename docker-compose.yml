@@ -26,3 +26,13 @@ services:
     volumes:
       - ${PWD}/backend-user:/app
     restart: always
+
+  backend-ping-pong:
+    build: ./backend-ping-pong
+    image: backend-ping-pong
+    container_name: backend-ping-pong
+    ports:
+      - "8001:8000"
+    volumes:
+      - ${PWD}/backend-ping-pong:/app
+    restart: always
