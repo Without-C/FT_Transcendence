@@ -27,12 +27,12 @@ services:
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
     tty: true
 
-#   backend-ping-pong:
-#     build: ./backend-ping-pong
-#     image: backend-ping-pong
-#     container_name: backend-ping-pong
-#     ports:
-#       - "8001:8000"
-#     volumes:
-#       - ${PWD}/backend-ping-pong:/app
-#     restart: always
+  backend-ping-pong:
+    build: ./backend-ping-pong
+    image: backend-ping-pong
+    container_name: backend-ping-pong
+    ports:
+      - "3001:3000"
+    volumes:
+      - ${PWD}/backend-ping-pong:/app
+    tty: true
