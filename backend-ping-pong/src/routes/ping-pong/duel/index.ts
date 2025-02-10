@@ -36,16 +36,23 @@ class MatchManager {
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     await fastify.register(websocket)
 
-    fastify.get('/ws', { websocket: true }, (connection) => {
-        connection.on('message', message => {
-            const msg = message.toString()
-            console.log('Received message:', msg)
-            connection.send(msg)
-        })
+    // const matchManager = new MatchManager(2);
+    // matchManager.addWaitingParticipant('1');
 
-        connection.on('close', () => {
-            console.log('Client disconnected')
-        })
+    fastify.get('/ws', { websocket: true }, async (connection) => {
+        try {
+            connection.on('message', async (message) => {
+                const msg = message.toString()
+                console.log('Received message:', msg)
+                await connection.send(msg)
+            })
+
+            connection.on('close', async () => {
+                console.log('Client disconnected')
+            })
+        } catch (error) {
+            console.error('WebSocket connection error:', error)
+        }
     })
 }
 
