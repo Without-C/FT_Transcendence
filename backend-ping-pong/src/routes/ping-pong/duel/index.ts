@@ -47,11 +47,12 @@ class PingPong {
                     },
                 }
             });
+
+            this.state.tick += 1;
         }, 1000 / 60);
     }
 
     private update(): void {
-        this.state.tick += 1;
     }
 
     public onMessage(from: Player, message: any): void {
