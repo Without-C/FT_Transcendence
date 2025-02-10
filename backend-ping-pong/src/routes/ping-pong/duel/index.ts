@@ -52,18 +52,14 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         const connectionId = uuidv4();
         matchManager.addWaitingParticipant(connectionId, ws);
 
-        try {
-            ws.on('message', async (message) => {
-                const msg = message.toString()
-                await ws.send(msg)
-            })
+        ws.on('message', async (message) => {
+            const msg = message.toString()
+            await ws.send(msg)
+        })
 
-            ws.on('close', async () => {
-                matchManager.removeWaitingParticipant(connectionId);
-            })
-        } catch (error) {
-            console.error('WebSocket connection error:', error)
-        }
+        ws.on('close', async () => {
+            matchManager.removeWaitingParticipant(connectionId);
+        })
     })
 }
 
