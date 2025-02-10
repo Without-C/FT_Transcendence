@@ -49,8 +49,8 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     const matchManager = new MatchManager(2);
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
-        const connectionId = uuidv4();
-        matchManager.addWaitingParticipant(connectionId, ws);
+        const identifier = uuidv4();
+        matchManager.addWaitingParticipant(identifier, ws);
 
         ws.on('message', async (message) => {
             const msg = message.toString()
@@ -58,7 +58,7 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         })
 
         ws.on('close', async () => {
-            matchManager.removeWaitingParticipant(connectionId);
+            matchManager.removeWaitingParticipant(identifier);
         })
     })
 }
