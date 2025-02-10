@@ -2,13 +2,13 @@ import { FastifyPluginAsync } from "fastify"
 import websocket from '@fastify/websocket'
 import { v4 as uuidv4 } from 'uuid'
 
-interface Participant {
+interface Player {
     id: string;
     ws: any;
 }
 
 class MatchManager {
-    private queue: Participant[] = [];
+    private queue: Player[] = [];
     private requiredPlayerCount: number;
 
     constructor(requiredPlayerCount: number) {
@@ -30,9 +30,9 @@ class MatchManager {
         return this.queue.length;
     }
 
-    tryMatchmaking(): Participant[] | null {
+    tryMatchmaking(): Player[] | null {
         if (this.queue.length >= this.requiredPlayerCount) {
-            const players: Participant[] = [];
+            const players: Player[] = [];
             for (let i = 0; i < this.requiredPlayerCount; i++) {
                 players.push(this.queue.pop()!);
             }
@@ -46,7 +46,7 @@ class MatchManager {
 class Group {
     private participants: Map<string, any> = new Map();
 
-    constructor(participants: Participant[]) {
+    constructor(participants: Player[]) {
         participants.forEach(participant => {
             this.participants.set(participant.id, participant.ws);
         });
@@ -66,7 +66,7 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     const matchManager = new MatchManager(2);
     let groups = new Map();
 
-    const makeRoom = (participants: Participant[]): void => {
+    const makeRoom = (participants: Player[]): void => {
         let group_name = uuidv4();
         const group = new Group(participants);
         groups.set(group_name, group);
