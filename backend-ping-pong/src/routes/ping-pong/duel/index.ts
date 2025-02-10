@@ -183,7 +183,6 @@ class Player {
     }
 }
 
-
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     await fastify.register(websocket)
 
