@@ -22,7 +22,7 @@ class PingPong {
     }
 
     private run(): void {
-        this.broadcast({ type: "wait", });
+        this.broadcast({ type: "start", });
 
         setInterval(() => {
             this.update();
@@ -122,6 +122,7 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
         const player = new Player(ws);
+        player.send({ type: "wait" })
 
         matchManager.addPlayer(player);
         const game = matchManager.tryMatchmaking();
