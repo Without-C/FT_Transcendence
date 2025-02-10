@@ -72,10 +72,17 @@ class PingPong {
 
     private update(): void {
         if (this.players[0].keyState.get("w")) {
-            this.state.paddle1.y += 5;
+            this.state.paddle1.y -= 5;
         }
         if (this.players[0].keyState.get("s")) {
-            this.state.paddle1.y -= 5;
+            this.state.paddle1.y += 5;
+        }
+
+        if (this.players[1].keyState.get("w")) {
+            this.state.paddle2.y -= 5;
+        }
+        if (this.players[1].keyState.get("s")) {
+            this.state.paddle2.y += 5;
         }
     }
 
@@ -123,7 +130,7 @@ class PingPong {
 
 class MatchManager {
     private waitingPlayers: Player[] = [];
-    private rooms: Map<string, PingPong> = new Map();
+    private games: Map<string, PingPong> = new Map();
     private requiredPlayers: number;
 
     constructor(requirePlayers: number) {
@@ -134,23 +141,24 @@ class MatchManager {
         this.waitingPlayers.push(player);
     }
 
-    public tryMatchmaking(): PingPong | null {
+    public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const room = new PingPong(playerForMatch);
-            this.rooms.set(room.id, room);
-            return room;
+            const game = new PingPong(playerForMatch);
+            playerForMatch.forEach(player => {
+                player.game = game;
+            });
+            this.games.set(game.id, game);
         }
-        return null;
     }
 
     public removePlayer(player: Player): void {
         this.waitingPlayers = this.waitingPlayers.filter(p => p.id !== player.id);
 
-        for (const [roomId, room] of this.rooms.entries()) {
+        for (const [roomId, room] of this.games.entries()) {
             if (room.hasPlayer(player)) {
                 room.onPlayerDisconnect(player);
-                this.rooms.delete(roomId);
+                this.games.delete(roomId);
                 break;
             }
         }
@@ -162,6 +170,7 @@ class Player {
     public id: string;
     public ws: any;
     public keyState: KeyState;
+    public game: PingPong | null = null;
 
     constructor(ws: any) {
         this.id = 'player-' + uuidv4();
@@ -185,12 +194,12 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         player.send({ type: "wait" })
 
         matchManager.addPlayer(player);
-        const game = matchManager.tryMatchmaking();
+        matchManager.tryMatchmaking();
 
         ws.on('message', async (message) => {
             const data = JSON.parse(message.toString())
-            if (game) {
-                game.onMessage(player, data);
+            if (player.game) {
+                player.game.onMessage(player, data);
             }
         });
 
