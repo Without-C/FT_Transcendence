@@ -26,7 +26,27 @@ class PingPong {
 
         setInterval(() => {
             this.update();
-            this.broadcast({ type: "wait", });
+            this.broadcast({
+                type: "game_state",
+                game_state: {
+                    ball: {
+                        x: 200,
+                        y: 300
+                    },
+                    paddle1: {
+                        x: 30,
+                        y: 200,
+                        width: 10,
+                        height: 100,
+                    },
+                    paddle2: {
+                        x: 570,
+                        y: 200,
+                        width: 10,
+                        height: 100,
+                    },
+                }
+            });
         }, 1000 / 60);
     }
 
