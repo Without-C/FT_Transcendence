@@ -41,15 +41,15 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         fastify.decorate('matchManager', matchManager);
     }
 
-    fastify.get('/ws', { websocket: true }, async (connection) => {
+    fastify.get('/ws', { websocket: true }, async (socket) => {
         try {
-            connection.on('message', async (message) => {
+            socket.on('message', async (message) => {
                 const msg = message.toString()
                 console.log('Received message:', msg)
-                await connection.send(msg)
+                await socket.send(msg)
             })
 
-            connection.on('close', async () => {
+            socket.on('close', async () => {
                 console.log('Client disconnected')
             })
         } catch (error) {
