@@ -3,6 +3,64 @@ import websocket from '@fastify/websocket'
 import { v4 as uuidv4 } from 'uuid'
 
 class PingPong {
+    public id: string;
+    private players: Player[];
+    private state: any;
+    private intervalId: NodeJS.Timeout | null = null;
+
+    constructor(players: Player[]) {
+        this.id = 'pingpong-' + uuidv4();
+        this.players = players;
+        this.state = this.initializeGame();
+        this.run();
+    }
+
+    private initializeGame(): any {
+        return {
+            tick: 0,
+        };
+    }
+
+    private run(): void {
+        this.broadcast({ type: "wait", });
+
+        setInterval(() => {
+            this.update();
+            this.broadcast({ type: "wait", });
+        }, 1000 / 60);
+    }
+
+    private update(): void {
+        this.state.tick += 1;
+    }
+
+    public onMessage(from: Player, message: any): void {
+    }
+
+    public hasPlayer(player: Player): boolean {
+        return this.players.some(p => p.id === player.id);
+    }
+
+    public onPlayerDisconnect(player: Player): void {
+        this.players.forEach(p => {
+            if (p.id !== player.id) {
+                p.send({
+                    type: "opponent_exit",
+                });
+            }
+        });
+
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    }
+
+    private broadcast(message: any): void {
+        this.players.forEach(p => {
+            p.send(message);
+        });
+    }
 }
 
 class MatchManager {
@@ -33,7 +91,7 @@ class MatchManager {
 
         for (const [roomId, room] of this.rooms.entries()) {
             if (room.hasPlayer(player)) {
-                room.handlePlayerDisconnect(player);
+                room.onPlayerDisconnect(player);
                 this.rooms.delete(roomId);
                 break;
             }
@@ -56,24 +114,28 @@ class Player {
     }
 }
 
-const matchManager = new MatchManager(2);
 
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     await fastify.register(websocket)
 
+    const matchManager = new MatchManager(2);
+
     fastify.get('/ws', { websocket: true }, async (ws) => {
         const player = new Player(ws);
 
-        const game = matchManager.addPlayer(player);
+        matchManager.addPlayer(player);
+        const game = matchManager.tryMatchmaking();
 
         ws.on('message', async (message) => {
             const data = JSON.parse(message.toString())
-            game.handleMessage(player, data);
-        })
+            if (game) {
+                game.onMessage(player, data);
+            }
+        });
 
         ws.on('close', async () => {
-            game.removePlayer(player);
-        })
+            matchManager.removePlayer(player);
+        });
     })
 }
 
