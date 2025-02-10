@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid'
 interface Player {
     id: string;
     ws: any;
+
+    group_name?: string;
 }
 
 class MatchManager {
@@ -15,12 +17,12 @@ class MatchManager {
         this.requiredPlayerCount = requiredPlayerCount;
     }
 
-    addWaitingParticipant(id: string, ws: any): void {
-        this.queue.push({ id, ws });
+    addWaitingParticipant(player: Player): void {
+        this.queue.push(player);
     }
 
     removeWaitingParticipant(id: string): void {
-        const index = this.queue.findIndex(participant => participant.id === id);
+        const index = this.queue.findIndex(player => player.id === id);
         if (index !== -1) {
             this.queue.splice(index, 1);
         }
@@ -46,9 +48,10 @@ class MatchManager {
 class Group {
     private participants: Map<string, any> = new Map();
 
-    constructor(participants: Player[]) {
-        participants.forEach(participant => {
-            this.participants.set(participant.id, participant.ws);
+    constructor(group_name: string, participants: Player[]) {
+        participants.forEach(player => {
+            player.group_name = group_name;
+            this.participants.set(player.id, player.ws);
         });
     }
 
@@ -68,16 +71,15 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
     const makeRoom = (participants: Player[]): void => {
         let group_name = uuidv4();
-        const group = new Group(participants);
+        const group = new Group(group_name, participants);
         groups.set(group_name, group);
 
         group.broadcast(JSON.stringify({ message: "hi" }));
     };
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
-        const identifier = uuidv4();
-        let group_name: string | null = null;
-        matchManager.addWaitingParticipant(identifier, ws);
+        let player: Player = { id: uuidv4(), ws }
+        matchManager.addWaitingParticipant(player);
 
         const match_result = matchManager.tryMatchmaking();
         if (match_result) {
@@ -87,10 +89,11 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         ws.on('message', async (message) => {
             const msg = message.toString()
             await ws.send(msg)
+            await ws.send(JSON.stringify({ group_name: player.group_name ? player.group_name : null }));
         })
 
         ws.on('close', async () => {
-            matchManager.removeWaitingParticipant(identifier);
+            matchManager.removeWaitingParticipant(player.id);
         })
     })
 }
