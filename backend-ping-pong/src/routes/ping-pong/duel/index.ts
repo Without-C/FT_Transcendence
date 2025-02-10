@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from "fastify"
 import websocket from '@fastify/websocket'
+import { v4 as uuidv4 } from 'uuid'
 
 class MatchManager {
     private queue: string[] = [];
@@ -18,6 +19,10 @@ class MatchManager {
         if (index !== -1) {
             this.queue.splice(index, 1);
         }
+    }
+
+    getWaitingCount(): number {
+        return this.queue.length;
     }
 
     tryMatchmaking(): string[] | null {
@@ -42,15 +47,17 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     }
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
+        const connectionId = uuidv4();
+        matchManager.addWaitingParticipant(connectionId);
+
         try {
             ws.on('message', async (message) => {
                 const msg = message.toString()
-                console.log('Received message:', msg)
                 await ws.send(msg)
             })
 
             ws.on('close', async () => {
-                console.log('Client disconnected')
+                matchManager.removeWaitingParticipant(connectionId);
             })
         } catch (error) {
             console.error('WebSocket connection error:', error)
