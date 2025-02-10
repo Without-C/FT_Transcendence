@@ -47,9 +47,6 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     await fastify.register(websocket)
 
     const matchManager = new MatchManager(2);
-    if (!fastify.hasDecorator('matchManager')) {
-        fastify.decorate('matchManager', matchManager);
-    }
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
         const connectionId = uuidv4();
