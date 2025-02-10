@@ -2,6 +2,26 @@ import { FastifyPluginAsync } from "fastify"
 import websocket from '@fastify/websocket'
 import { v4 as uuidv4 } from 'uuid'
 
+class KeyState {
+    private keyState: Record<string, boolean>;
+
+    constructor() {
+        this.keyState = {};
+    }
+
+    public set(key: string, state: 'press' | 'release'): void {
+        if (state === 'press') {
+            this.keyState[key] = true;
+        } else if (state === 'release') {
+            this.keyState[key] = false;
+        }
+    }
+
+    public get(key: string): boolean {
+        return this.keyState[key] ?? false;
+    }
+}
+
 class PingPong {
     public id: string;
     private players: Player[];
@@ -17,7 +37,22 @@ class PingPong {
 
     private initializeGame(): any {
         return {
-            tick: 0,
+            ball: {
+                x: 200,
+                y: 300
+            },
+            paddle1: {
+                x: 30,
+                y: 200,
+                width: 10,
+                height: 100,
+            },
+            paddle2: {
+                x: 570,
+                y: 200,
+                width: 10,
+                height: 100,
+            },
         };
     }
 
@@ -28,24 +63,7 @@ class PingPong {
             this.update();
             this.broadcast({
                 type: "game_state",
-                game_state: {
-                    ball: {
-                        x: 200,
-                        y: 300
-                    },
-                    paddle1: {
-                        x: 30,
-                        y: 200,
-                        width: 10,
-                        height: 100,
-                    },
-                    paddle2: {
-                        x: 570,
-                        y: 200,
-                        width: 10,
-                        height: 100,
-                    },
-                }
+                game_state: this.state,
             });
 
             this.state.tick += 1;
@@ -53,9 +71,28 @@ class PingPong {
     }
 
     private update(): void {
+        if (this.players[0].keyState.get("w")) {
+            this.state.paddle1.y += 5;
+        }
+        if (this.players[0].keyState.get("s")) {
+            this.state.paddle1.y -= 5;
+        }
     }
 
     public onMessage(from: Player, message: any): void {
+        const action = message.action
+
+        if (action === "key") {
+            const key = message.key;
+            const state = message.state
+
+            for (const player of this.players) {
+                if (player.id === from.id) {
+                    player.keyState.set(key, state);
+                    break;
+                }
+            }
+        }
     }
 
     public hasPlayer(player: Player): boolean {
@@ -124,10 +161,12 @@ class MatchManager {
 class Player {
     public id: string;
     public ws: any;
+    public keyState: KeyState;
 
     constructor(ws: any) {
         this.id = 'player-' + uuidv4();
         this.ws = ws;
+        this.keyState = new KeyState();
     }
 
     public send(message: any): void {
