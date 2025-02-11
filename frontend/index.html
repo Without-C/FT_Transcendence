@@ -123,6 +123,8 @@
 
         <!-- managing websocket -->
         <script>
+            let gameIsPlaying = false;
+
             const chatSocket = new WebSocket(
                 'ws://'
                 + window.location.host
@@ -138,12 +140,17 @@
                         setCanvasMessage("Waiting...", "black");
                         break;
                     case "start":
+                        gameIsPlaying = true;
                         setCanvasMessage("Game will be started!", "red");
                         break;
                     case "opponent_exit":
+                        gameIsPlaying = false;
                         setCanvasMessage("Opponent exited", "gray");
                         break;
                     case "game_state":
+                        if (!gameIsPlaying) {
+                            break;
+                        }
                         let ball = data.game_state.ball;
                         let paddle1 = data.game_state.paddle1;
                         let paddle2 = data.game_state.paddle2;
@@ -154,6 +161,7 @@
                         draw_score(score.player1, score.player2)
                         break;
                     case "game_over":
+                        gameIsPlaying = false;
                         let winner = data.winner;
                         draw_winner(data.winner);
                         break;
