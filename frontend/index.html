@@ -106,6 +106,19 @@
                 ctx.fillText(":", canvas.width / 2, 50);
                 ctx.fillText(player2_score, canvas.width * (3 / 5), 50);
             }
+
+            function draw_winner(winner) {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.font = "bold 60px Arial";
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                // 캔버스 중앙에 메시지 출력
+                ctx.fillText(winner, canvas.width / 2, canvas.height / 2);
+            }
         </script>
 
         <!-- managing websocket -->
@@ -118,6 +131,7 @@
 
             chatSocket.onmessage = function (e) {
                 const data = JSON.parse(e.data);
+                console.log(data);
 
                 switch (data.type) {
                     case "wait":
@@ -138,6 +152,10 @@
                         draw_paddle(paddle1.width, paddle1.height, paddle1.x, paddle1.y);
                         draw_paddle(paddle2.width, paddle2.height, paddle2.x, paddle2.y);
                         draw_score(score.player1, score.player2)
+                        break;
+                    case "game_over":
+                        let winner = data.winner;
+                        draw_winner(data.winner);
                         break;
                 }
             };

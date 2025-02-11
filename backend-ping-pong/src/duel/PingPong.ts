@@ -13,6 +13,9 @@ export class PingPong {
     private readonly width = 600;
     private readonly height = 400;
 
+    // 목표 점수
+    private readonly target_score = 3;
+
     // 시간
     private tick = 0;
 
@@ -59,6 +62,7 @@ export class PingPong {
         this.paddle_height,
     );
 
+    // 점수
     private player1_score = 0;
     private player2_score = 0;
 
@@ -140,6 +144,26 @@ export class PingPong {
         }
 
         this.ball.update();
+
+        if (this.player1_score >= this.target_score || this.player2_score >= this.target_score) {
+            this.stopGame()
+        }
+    }
+
+    private stopGame(): void {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+
+        let winner: string | null = null;
+        if (this.player1_score > this.player2_score) {
+            winner = "player1";
+        } else if (this.player2_score > this.player1_score) {
+            winner = "player2";
+        }
+
+        this.broadcast({ type: "game_over", winner: winner });
     }
 
     public onMessage(from: Player, message: any): void {
