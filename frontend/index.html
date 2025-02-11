@@ -174,7 +174,7 @@
                         draw_paddle(paddle2.width, paddle2.height, paddle2.x, paddle2.y);
                         draw_score(score.player1, score.player2)
                         break;
-                    case "game_over":
+                    case "round_end":
                         gameIsPlaying = false;
                         let winner = data.winner;
                         draw_winner(data.winner);

@@ -186,7 +186,7 @@ export class PingPong {
             winner = "player2";
         }
 
-        this.broadcast({ type: "game_over", winner: winner });
+        this.broadcast({ type: "round_end", winner: winner });
     }
 
     public onMessage(from: Player, message: any): void {
