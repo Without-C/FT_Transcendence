@@ -126,8 +126,50 @@ export class PingPong {
                 }
             });
 
+            if (this.player1_score >= this.target_score || this.player2_score >= this.target_score) {
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                this.endRound();
+            }
+
             this.tick += 1;
         }, 1000 / 60);
+    }
+
+    private endRound(): void {
+        let winner: string | null = null;
+        if (this.player1_score > this.player2_score) {
+            winner = "player1";
+            this.player1_round_score += 1;
+        } else if (this.player2_score > this.player1_score) {
+            winner = "player2";
+            this.player2_round_score += 1;
+        }
+
+        this.broadcast({ type: "round_end", winner: winner });
+
+        if (this.currentRound < this.totalRounds) {
+            this.startRound();
+            this.currentRound += 1;
+        } else {
+            this.endGame();
+        }
+    }
+
+    private endGame(): void {
+        let winner: string | null = null;
+        if (this.player1_round_score > this.player2_round_score) {
+            winner = "player1";
+        } else {
+            winner = "player2";
+        }
+
+        this.broadcast({
+            type: "end_game",
+            winner: winner,
+        });
     }
 
     private update(): void {
@@ -167,26 +209,6 @@ export class PingPong {
         }
 
         this.ball.update();
-
-        if (this.player1_score >= this.target_score || this.player2_score >= this.target_score) {
-            this.stopGame()
-        }
-    }
-
-    private stopGame(): void {
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
-
-        let winner: string | null = null;
-        if (this.player1_score > this.player2_score) {
-            winner = "player1";
-        } else if (this.player2_score > this.player1_score) {
-            winner = "player2";
-        }
-
-        this.broadcast({ type: "round_end", winner: winner });
     }
 
     public onMessage(from: Player, message: any): void {
