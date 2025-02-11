@@ -54,6 +54,7 @@ export class PingPong {
     // 공 초기화
     private ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
     private ballIsMoving = false;
+    private ballTurn = 0;
 
     // 패들 초기화
     private paddle1 = new Rectangle(
@@ -217,15 +218,25 @@ export class PingPong {
 
         // ball
         if (!this.ballIsMoving) {
-            this.ball.x = this.paddle_margin * 2;
-            this.ball.y = this.paddle1.y;
+            if (this.ballTurn == 0) {
+                this.ball.x = this.paddle_margin * 2;
+                this.ball.y = this.paddle1.y;
+            } else {
+                this.ball.x = this.width - this.paddle_margin * 2;
+                this.ball.y = this.paddle2.y;
+            }
             this.ball.vx = 0;
             this.ball.vy = 0;
         }
-        if (!this.ballIsMoving && this.players[0].keyState.get(" ")) {
+        if (!this.ballIsMoving && this.players[this.ballTurn].keyState.get(" ")) {
             this.ballIsMoving = true;
-            this.ball.vx = 5;
-            this.ball.vy = 5;
+            if (this.ballTurn == 0) {
+                this.ball.vx = 5;
+                this.ball.vy = 5;
+            } else {
+                this.ball.vx = -5;
+                this.ball.vy = 5;
+            }
         }
 
         const rects: Rectangle[] = [
@@ -241,11 +252,13 @@ export class PingPong {
         if (this.ball.collideWithRect(this.wall_left)) {
             this.player2_score += 1;
             this.ballIsMoving = false;
+            this.ballTurn = 1 - this.ballTurn;
         }
 
         if (this.ball.collideWithRect(this.wall_right)) {
             this.player1_score += 1;
             this.ballIsMoving = false;
+            this.ballTurn = 1 - this.ballTurn;
         }
 
         this.ball.update();
