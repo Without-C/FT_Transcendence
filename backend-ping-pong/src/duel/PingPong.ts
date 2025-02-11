@@ -59,6 +59,9 @@ export class PingPong {
         this.paddle_height,
     );
 
+    private player1_score = 0;
+    private player2_score = 0;
+
     constructor(players: Player[]) {
         this.id = 'pingpong-' + uuidv4();
         this.players = players;
@@ -88,6 +91,10 @@ export class PingPong {
                         y: this.paddle2.y,
                         width: this.paddle2.width,
                         height: this.paddle2.height,
+                    },
+                    score: {
+                        player1: this.player1_score,
+                        player2: this.player2_score,
                     }
                 }
             });
@@ -117,14 +124,20 @@ export class PingPong {
         const rects: Rectangle[] = [
             this.wall_top,
             this.wall_bottom,
-            this.wall_left,
-            this.wall_right,
             this.paddle1,
             this.paddle2,
         ];
         rects.forEach(rect => {
             this.ball.collideWithRect(rect);
         });
+
+        if (this.ball.collideWithRect(this.wall_left)) {
+            this.player2_score += 1;
+        }
+
+        if (this.ball.collideWithRect(this.wall_right)) {
+            this.player1_score += 1;
+        }
 
         this.ball.update();
     }
