@@ -16,6 +16,12 @@ export class PingPong {
     // 목표 점수
     private readonly target_score = 3;
 
+    // 라운드
+    private currentRound: number = 1;
+    private readonly totalRounds: number = 3;
+    private player1_round_score: number = 0;
+    private player2_round_score: number = 0;
+
     // 시간
     private tick = 0;
 
@@ -73,7 +79,24 @@ export class PingPong {
     }
 
     private run(): void {
-        this.broadcast({ type: "start", });
+        this.startRound();
+    }
+
+    private startRound(): void {
+        let countdown = 3;
+        const countdownInterval = setInterval(() => {
+            if (countdown > 0) {
+                this.broadcast({ type: "countdown", countdown: countdown });
+                countdown -= 1;
+            } else {
+                clearInterval(countdownInterval);
+                this.roundLoop();
+            }
+        }, 1000);
+    }
+
+    private roundLoop(): void {
+        this.broadcast({ type: "round_start", });
 
         this.intervalId = setInterval(() => {
             this.update();

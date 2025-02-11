@@ -80,6 +80,18 @@
                 ctx.fillText(message, canvas.width / 2, canvas.height / 2);
             }
 
+            function setCountdown(countdown) {
+                ctx.fillStyle = "green";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.font = "bold 60px Arial";
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
+            }
+
             function draw_ball(ball_x, ball_y, background) {
                 ctx.fillStyle = "green";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -138,7 +150,10 @@
                     case "wait":
                         setCanvasMessage("Waiting...", "black");
                         break;
-                    case "start":
+                    case "countdown":
+                        setCountdown(data.countdown);
+                        break;
+                    case "round_start":
                         gameIsPlaying = true;
                         setCanvasMessage("Game will be started!", "red");
                         break;
