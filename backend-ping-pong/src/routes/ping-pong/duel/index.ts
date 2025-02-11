@@ -144,7 +144,7 @@ class PingPong {
     private run(): void {
         this.broadcast({ type: "start", });
 
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
             this.update();
             this.broadcast({
                 type: "game_state",
@@ -226,6 +226,11 @@ class PingPong {
     }
 
     public onPlayerDisconnect(player: Player): void {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+
         this.players.forEach(p => {
             if (p.id !== player.id) {
                 p.send({
@@ -233,11 +238,6 @@ class PingPong {
                 });
             }
         });
-
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
     }
 
     private broadcast(message: any): void {
