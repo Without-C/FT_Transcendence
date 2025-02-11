@@ -150,7 +150,6 @@ export class PingPong {
                 this.endRound();
             }
 
-            this.tick += 1;
         }, 1000 / 60);
     }
 
@@ -164,7 +163,14 @@ export class PingPong {
             this.player2_round_score += 1;
         }
 
-        this.broadcast({ type: "round_end", winner: winner });
+        this.broadcast({
+            type: "round_end",
+            winner: winner,
+            round_score: {
+                player1: this.player1_round_score,
+                player2: this.player2_round_score,
+            }
+        });
 
         if (this.currentRound < this.totalRounds) {
             this.startRound();

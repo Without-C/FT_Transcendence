@@ -119,7 +119,7 @@
                 ctx.fillText(player2_score, canvas.width * (3 / 5), 50);
             }
 
-            function draw_winner(winner) {
+            function draw_winner(winner, player1_round_score, player2_round_score) {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -128,8 +128,10 @@
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                // 캔버스 중앙에 메시지 출력
                 ctx.fillText(winner, canvas.width / 2, canvas.height / 2);
+
+                ctx.fillText(player1_round_score, canvas.width * (1 / 5), 200);
+                ctx.fillText(player2_round_score, canvas.width * (4 / 5), 200);
             }
         </script>
 
@@ -155,7 +157,6 @@
                         break;
                     case "round_start":
                         gameIsPlaying = true;
-                        setCanvasMessage("Game will be started!", "red");
                         break;
                     case "opponent_exit":
                         gameIsPlaying = false;
@@ -176,8 +177,7 @@
                         break;
                     case "round_end":
                         gameIsPlaying = false;
-                        let winner = data.winner;
-                        draw_winner(data.winner);
+                        draw_winner(data.winner, data.round_score.player1, data.round_score.player2);
                         break;
                 }
             };
