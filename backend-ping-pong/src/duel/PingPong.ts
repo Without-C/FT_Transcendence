@@ -22,40 +22,37 @@ export class PingPong {
     private player1_round_score: number = 0;
     private player2_round_score: number = 0;
 
-    // 시간
-    private tick = 0;
-
     // 패들
-    private paddle_speed = 5
-    private paddle_width = 10
-    private paddle_height = 100
-    private paddle_margin = 30
+    private readonly paddle_speed = 5
+    private readonly paddle_width = 10
+    private readonly paddle_height = 100
+    private readonly paddle_margin = 30
 
     // 벽
-    private wall_depth = 10;
-
-    // 공 초기화
-    private ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
+    private readonly wall_depth = 10;
 
     // 벽 초기화
-    private wall_top = new Rectangle(
+    private readonly wall_top = new Rectangle(
         this.width / 2, -this.wall_depth / 2, this.width, this.wall_depth
     );
-    private wall_bottom = new Rectangle(
+    private readonly wall_bottom = new Rectangle(
         this.width / 2,
         this.height + this.wall_depth / 2,
         this.width,
         this.wall_depth,
     );
-    private wall_left = new Rectangle(
+    private readonly wall_left = new Rectangle(
         -this.wall_depth / 2, this.height / 2, this.wall_depth, this.height
     );
-    private wall_right = new Rectangle(
+    private readonly wall_right = new Rectangle(
         this.width + this.wall_depth / 2,
         this.height / 2,
         this.wall_depth,
         this.height,
     );
+
+    // 공 초기화
+    private ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
 
     // 패들 초기화
     private paddle1 = new Rectangle(
@@ -82,7 +79,26 @@ export class PingPong {
         this.startRound();
     }
 
+    private initRound(): void {
+        this.ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
+
+        this.paddle1 = new Rectangle(
+            this.paddle_margin, this.height / 2, this.paddle_width, this.paddle_height
+        );
+        this.paddle2 = new Rectangle(
+            this.width - this.paddle_margin,
+            this.height / 2,
+            this.paddle_width,
+            this.paddle_height,
+        );
+
+        this.player1_score = 0;
+        this.player2_score = 0;
+    }
+
     private startRound(): void {
+        this.initRound();
+
         let countdown = 3;
         const countdownInterval = setInterval(() => {
             if (countdown > 0) {
