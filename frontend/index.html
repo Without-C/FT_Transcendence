@@ -133,6 +133,18 @@
                 ctx.fillText(player1_round_score, canvas.width * (1 / 5), 200);
                 ctx.fillText(player2_round_score, canvas.width * (4 / 5), 200);
             }
+
+            function draw_winner(final_winner) {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.font = "bold 100px Arial";
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                ctx.fillText(final_winner, canvas.width / 2, canvas.height / 2);
+            }
         </script>
 
         <!-- managing websocket -->
@@ -178,6 +190,9 @@
                     case "round_end":
                         gameIsPlaying = false;
                         draw_winner(data.winner, data.round_score.player1, data.round_score.player2);
+                        break;
+                    case "game_end":
+                        draw_final_winner(data.final_winner);
                         break;
                 }
             };

@@ -181,16 +181,16 @@ export class PingPong {
     }
 
     private endGame(): void {
-        let winner: string | null = null;
+        let final_winner: string | null = null;
         if (this.player1_round_score > this.player2_round_score) {
-            winner = "player1";
+            final_winner = "player1";
         } else {
-            winner = "player2";
+            final_winner = "player2";
         }
 
         this.broadcast({
-            type: "end_game",
-            winner: winner,
+            type: "game_end",
+            winner: final_winner,
         });
     }
 
