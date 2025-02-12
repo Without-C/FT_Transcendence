@@ -35,4 +35,5 @@ services:
       - "3001:3000"
     volumes:
       - ${PWD}/backend-ping-pong:/app
+      - /app/node_modules
     tty: true
