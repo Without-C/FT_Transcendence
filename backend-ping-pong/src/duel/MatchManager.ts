@@ -1,12 +1,15 @@
 import { Player } from "./Player";
 import { PingPong } from "./PingPong";
+import { FastifyInstance } from "fastify";
 
 export class MatchManager {
+    private fastify: FastifyInstance
     private waitingPlayers: Player[] = [];
     private games: Map<string, PingPong> = new Map();
     private requiredPlayers: number;
 
-    constructor(requirePlayers: number) {
+    constructor(fastify: FastifyInstance, requirePlayers: number) {
+        this.fastify = fastify;
         this.requiredPlayers = requirePlayers;
     }
 
@@ -17,7 +20,7 @@ export class MatchManager {
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const game = new PingPong(playerForMatch);
+            const game = new PingPong(this.fastify, playerForMatch);
             playerForMatch.forEach(player => {
                 player.game = game;
             });
