@@ -38,6 +38,8 @@ services:
       - /app/node_modules
     environment:
       - AMQP_URL=${AMQP_URL}
+    depends_on:
+      - rabbitmq
     tty: true
 
   backend-blockchain:
@@ -51,6 +53,8 @@ services:
       - /app/node_modules
     environment:
       - AMQP_URL=${AMQP_URL}
+    depends_on:
+      - rabbitmq
     tty: true
 
   rabbitmq:
