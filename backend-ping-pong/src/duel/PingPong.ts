@@ -8,7 +8,7 @@ import { FastifyInstance } from "fastify";
 export class PingPong {
     private fastify: FastifyInstance;
     public id: string;
-    private is_playing: bool;
+    private is_playing: boolean = false;
     private players: Player[];
     private intervalId: NodeJS.Timeout | null = null;
 
@@ -82,6 +82,7 @@ export class PingPong {
     }
 
     private startGame(): void {
+        this.is_playing = true;
         this.startRound();
     }
 
@@ -188,6 +189,8 @@ export class PingPong {
     }
 
     private endGame(): void {
+        this.is_playing = false;
+
         let final_winner: string | null = null;
         if (this.player1_round_score > this.player2_round_score) {
             final_winner = "player1";
@@ -304,6 +307,10 @@ export class PingPong {
     }
 
     public onPlayerDisconnect(player: Player): void {
+        if (!this.is_playing) {
+            return;
+        }
+
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
