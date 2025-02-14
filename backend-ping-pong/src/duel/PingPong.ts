@@ -8,6 +8,7 @@ import { FastifyInstance } from "fastify";
 export class PingPong {
     private fastify: FastifyInstance;
     public id: string;
+    private is_playing: bool;
     private players: Player[];
     private intervalId: NodeJS.Timeout | null = null;
 
@@ -77,10 +78,10 @@ export class PingPong {
         this.fastify = fastify;
         this.id = 'pingpong-' + uuidv4();
         this.players = players;
-        this.run();
+        this.startGame();
     }
 
-    private run(): void {
+    private startGame(): void {
         this.startRound();
     }
 
