@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/autoload": "^6.0.0",
+    "@fastify/env": "^5.0.2",
     "@fastify/sensible": "^6.0.0",
     "amqplib": "^0.10.5",
     "fastify": "^5.0.0",
