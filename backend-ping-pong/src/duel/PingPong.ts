@@ -201,6 +201,7 @@ export class PingPong {
 
         this.fastify.amqpChannel.sendToQueue('duel-result',
             Buffer.from(JSON.stringify({
+                game_end_reason: "normal",
                 player1: {
                     id: this.players[0].id,
                     round_score: this.player1_round_score,
@@ -314,6 +315,23 @@ export class PingPong {
                 });
             }
         });
+
+        const remainingPlayer = this.players.find(p => p.id !== player.id);
+
+        this.fastify.amqpChannel.sendToQueue('duel-result',
+            Buffer.from(JSON.stringify({
+                game_end_reason: "player_disconnected",
+                player1: {
+                    id: this.players[0].id,
+                    round_score: this.player1_round_score,
+                    result: (remainingPlayer && this.players[0].id === remainingPlayer.id) ? "winner" : "loser",
+                },
+                player2: {
+                    id: this.players[1].id,
+                    round_score: this.player2_round_score,
+                    result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
+                },
+            })));
     }
 
     private broadcast(message: any): void {
