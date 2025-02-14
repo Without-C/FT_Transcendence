@@ -48,3 +48,13 @@ services:
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
     tty: true
+
+  rabbitmq:
+    image: rabbitmq:4.0-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+    volumes:
+      - ${PWD}/backend-blockchain:/app
+      - /app/node_modules
+    tty: true
