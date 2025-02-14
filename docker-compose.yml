@@ -47,6 +47,8 @@ services:
     volumes:
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
+    environment:
+      - AMQP_URL=${AMQP_URL}
     tty: true
 
   rabbitmq:
