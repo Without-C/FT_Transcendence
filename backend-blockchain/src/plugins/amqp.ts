@@ -23,11 +23,10 @@ const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
         const amqpUrl = fastify.config.AMQP_URL;
         const connection = await amqp.connect(amqpUrl);
         const channel = await connection.createChannel();
-        var queue = 'hello';
-        await channel.assertQueue(queue, { durable: false });
+        await channel.assertQueue('duel-result', { durable: false });
 
         // 메시지(게임 결과)를 받았을 때 처리할 함수 등록
-        channel.consume(queue, function (msg) {
+        channel.consume('duel-result', function (msg) {
             // consumer 연결이 끊긴 경우 msg가 null이 들어올 수 있어 예외처리
             if (!msg) {
                 fastify.log.warn("Consumer cancelled");

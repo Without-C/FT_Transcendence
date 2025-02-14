@@ -199,7 +199,7 @@ export class PingPong {
             final_winner: final_winner,
         });
 
-        this.fastify.amqpChannel.sendToQueue('hello',
+        this.fastify.amqpChannel.sendToQueue('duel-result',
             Buffer.from(JSON.stringify({
                 player1: {
                     id: this.players[0].id,
