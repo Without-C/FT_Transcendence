@@ -20,7 +20,8 @@ function handleMessage(fastify: FastifyInstance, channel: amqp.Channel, msg: amq
 const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
     if (!fastify.hasDecorator('amqpChannel')) {
         // 메시지 큐 연결
-        const connection = await amqp.connect('amqp://rabbitmq');
+        const amqpUrl = fastify.config.AMQP_URL;
+        const connection = await amqp.connect(amqpUrl);
         const channel = await connection.createChannel();
         var queue = 'hello';
         await channel.assertQueue(queue, { durable: false });
@@ -44,6 +45,6 @@ const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
             await connection.close();
         })
     }
-});
+}, { dependencies: ['env'] });
 
 export default amqpPlugin;
