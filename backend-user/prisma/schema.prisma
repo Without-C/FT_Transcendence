@@ -12,8 +12,8 @@ datasource db {
 
 model User {
   id         String  @id @default(cuid())
-  username   String?
-  avatar_url String?
+  username   String
+  avatar_url String
 
   oauth_id_42     String?
   oauth_id_github String?
