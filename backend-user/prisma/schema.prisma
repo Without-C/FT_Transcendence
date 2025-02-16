@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  id                String  @id @default(cuid())
-  username          String?
-  avatar_url        String?
+  id         String  @id @default(cuid())
+  username   String?
+  avatar_url String?
 
-  oauth_id_42       String?
-  oauth_id_github   String?
-  oauth_id_google   String?
+  oauth_id_42     String?
+  oauth_id_github String?
+  oauth_id_google String?
 }
