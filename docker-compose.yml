@@ -36,4 +36,33 @@ services:
     volumes:
       - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
+    environment:
+      - AMQP_URL=${AMQP_URL}
+    depends_on:
+      - rabbitmq
+    tty: true
+
+  backend-blockchain:
+    build: ./backend-blockchain
+    image: backend-blockchain
+    container_name: backend-blockchain
+    ports:
+      - "3002:3000"
+    volumes:
+      - ${PWD}/backend-blockchain:/app
+      - /app/node_modules
+    environment:
+      - AMQP_URL=${AMQP_URL}
+    depends_on:
+      - rabbitmq
+    tty: true
+
+  rabbitmq:
+    image: rabbitmq:4.0-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+    volumes:
+      - ${PWD}/backend-blockchain:/app
+      - /app/node_modules
     tty: true

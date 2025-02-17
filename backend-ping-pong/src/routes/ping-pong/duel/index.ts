@@ -7,7 +7,7 @@ import { Player } from "../../../duel/Player"
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     await fastify.register(websocket)
 
-    const matchManager = new MatchManager(2);
+    const matchManager = new MatchManager(fastify, 2);
 
     fastify.get('/ws', { websocket: true }, async (ws) => {
         const player = new Player(ws);
