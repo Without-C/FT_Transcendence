@@ -5,6 +5,7 @@ const prisma: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         await fastify.prisma.user.create({
             data: {
                 username: `user_${Math.random().toString(36).substring(2, 8)}`,
+                avatar_url: `avatar_url_${Math.random().toString(36).substring(2, 8)}`,
             },
         })
 
