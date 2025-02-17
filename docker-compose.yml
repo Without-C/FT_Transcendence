@@ -7,6 +7,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - proxy-log:/var/log/nginx
       - ${PWD}/frontend:/usr/share/nginx/html
 
   backend-user:
@@ -37,3 +38,14 @@ services:
       - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
     tty: true
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.17.2
+    container_name: logstash
+    volumes:
+      - ${PWD}/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - proxy-log:/var/log/nginx
+    tty: true
+
+volumes:
+  proxy-log:
