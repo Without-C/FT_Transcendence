@@ -44,7 +44,10 @@ services:
     container_name: logstash
     volumes:
       - ${PWD}/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ${PWD}/elk/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - proxy-log:/var/log/nginx
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     tty: true
 
   elasticsearch:
