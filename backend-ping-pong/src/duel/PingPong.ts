@@ -3,9 +3,12 @@ import { Rectangle } from "./Rectangle";
 import { Player } from "./Player";
 import { KeyState } from "./KeyState";
 import { v4 as uuidv4 } from 'uuid'
+import { FastifyInstance } from "fastify";
 
 export class PingPong {
+    private fastify: FastifyInstance;
     public id: string;
+    private is_playing: boolean = false;
     private players: Player[];
     private intervalId: NodeJS.Timeout | null = null;
 
@@ -71,13 +74,15 @@ export class PingPong {
     private player1_score = 0;
     private player2_score = 0;
 
-    constructor(players: Player[]) {
+    constructor(fastify: FastifyInstance, players: Player[]) {
+        this.fastify = fastify;
         this.id = 'pingpong-' + uuidv4();
         this.players = players;
-        this.run();
+        this.startGame();
     }
 
-    private run(): void {
+    private startGame(): void {
+        this.is_playing = true;
         this.startRound();
     }
 
@@ -184,6 +189,8 @@ export class PingPong {
     }
 
     private endGame(): void {
+        this.is_playing = false;
+
         let final_winner: string | null = null;
         if (this.player1_round_score > this.player2_round_score) {
             final_winner = "player1";
@@ -195,6 +202,21 @@ export class PingPong {
             type: "game_end",
             final_winner: final_winner,
         });
+
+        this.fastify.amqpChannel.sendToQueue('duel-result',
+            Buffer.from(JSON.stringify({
+                game_end_reason: "normal",
+                player1: {
+                    id: this.players[0].id,
+                    round_score: this.player1_round_score,
+                    result: final_winner === "player1" ? "winner" : "loser",
+                },
+                player2: {
+                    id: this.players[1].id,
+                    round_score: this.player2_round_score,
+                    result: final_winner === "player2" ? "winner" : "loser",
+                },
+            })));
     }
 
     private update(): void {
@@ -285,6 +307,10 @@ export class PingPong {
     }
 
     public onPlayerDisconnect(player: Player): void {
+        if (!this.is_playing) {
+            return;
+        }
+
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
@@ -297,6 +323,23 @@ export class PingPong {
                 });
             }
         });
+
+        const remainingPlayer = this.players.find(p => p.id !== player.id);
+
+        this.fastify.amqpChannel.sendToQueue('duel-result',
+            Buffer.from(JSON.stringify({
+                game_end_reason: "player_disconnected",
+                player1: {
+                    id: this.players[0].id,
+                    round_score: this.player1_round_score,
+                    result: (remainingPlayer && this.players[0].id === remainingPlayer.id) ? "winner" : "loser",
+                },
+                player2: {
+                    id: this.players[1].id,
+                    round_score: this.player2_round_score,
+                    result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
+                },
+            })));
     }
 
     private broadcast(message: any): void {
