@@ -26,6 +26,9 @@ services:
       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
       - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   backend-ping-pong:
@@ -40,7 +43,8 @@ services:
     environment:
       - AMQP_URL=${AMQP_URL}
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   backend-blockchain:
@@ -55,7 +59,8 @@ services:
     environment:
       - AMQP_URL=${AMQP_URL}
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   rabbitmq:
@@ -66,6 +71,11 @@ services:
     volumes:
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 10s
+      retries: 5
     tty: true
 
   frontend:
