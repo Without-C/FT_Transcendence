@@ -101,8 +101,18 @@ services:
     container_name: kibana
     ports:
       - "5601:5601"
-      # volumes:
-      # - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    volumes:
+      - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ${PWD}/elk/kibana//docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=kibana
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    entrypoint: [ "/usr/local/bin/docker-entrypoint.sh" ]
 
 volumes:
   proxy-log:
