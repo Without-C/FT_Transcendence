@@ -11,10 +11,8 @@ services:
     depends_on:
       backend-user:
         condition: service_healthy
-      backend-ping-pong:
-        condition: service_healthy
-      backend-blockchain:
-        condition: service_healthy
+      # backend-ping-pong: # condition: service_healthy
+      # backend-blockchain: # condition: service_healthy
 
   backend-user:
     build: ./backend-user
@@ -33,6 +31,11 @@ services:
       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
       - DATABASE_URL=${DATABASE_URL}
+    healthcheck:
+      test: wget -qO- http://localhost:3000/healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
       rabbitmq:
         condition: service_healthy
