@@ -78,6 +78,9 @@ services:
       - proxy-log:/var/log/nginx
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     tty: true
 
   elasticsearch:
