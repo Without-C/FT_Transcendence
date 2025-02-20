@@ -11,7 +11,8 @@ services:
     depends_on:
       backend-user:
         condition: service_healthy
-      # backend-ping-pong: # condition: service_healthy
+      backend-ping-pong:
+        condition: service_healthy
       # backend-blockchain: # condition: service_healthy
 
   backend-user:
@@ -52,6 +53,11 @@ services:
       - /app/node_modules
     environment:
       - AMQP_URL=${AMQP_URL}
+    healthcheck:
+      test: wget -qO- http://localhost:3000/healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
       rabbitmq:
         condition: service_healthy
