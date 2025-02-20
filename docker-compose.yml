@@ -9,12 +9,28 @@ services:
     volumes:
       - ${PWD}/frontend:/usr/share/nginx/html
     depends_on:
+      frontend:
+        condition: service_healthy
       backend-user:
         condition: service_healthy
       backend-ping-pong:
         condition: service_healthy
       backend-blockchain:
         condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend
+    volumes:
+      - ${PWD}/frontend:/app
+      - /app/node_modules
+    healthcheck:
+      test: wget -qO- http://frontend:5173/
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    tty: true
 
   backend-user:
     build: ./backend-user
@@ -98,13 +114,4 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    tty: true
-
-  frontend:
-    build: ./frontend
-    image: frontend
-    container_name: frontend
-    volumes:
-      - ${PWD}/frontend:/app
-      - /app/node_modules
     tty: true
