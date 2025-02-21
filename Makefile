@@ -14,8 +14,8 @@ clean :
 
 fclean : 
 	make clean
-	docker volume prune
+	docker volume prune -f
 
 re :
-	make down
+	make fclean
 	make all
