@@ -9,6 +9,29 @@ services:
     volumes:
       - proxy-log:/var/log/nginx
       - ${PWD}/frontend:/usr/share/nginx/html
+    depends_on:
+      frontend:
+        condition: service_healthy
+      backend-user:
+        condition: service_healthy
+      backend-ping-pong:
+        condition: service_healthy
+      backend-blockchain:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend
+    volumes:
+      - ${PWD}/frontend:/app
+      - /app/node_modules
+    healthcheck:
+      test: wget -qO- http://frontend:5173/
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    tty: true
 
   backend-user:
     build: ./backend-user
@@ -27,6 +50,14 @@ services:
       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
       - DATABASE_URL=${DATABASE_URL}
+    healthcheck:
+      test: wget -qO- http://localhost:3000/healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   backend-ping-pong:
@@ -40,8 +71,14 @@ services:
       - /app/node_modules
     environment:
       - AMQP_URL=${AMQP_URL}
+    healthcheck:
+      test: wget -qO- http://localhost:3000/healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   backend-blockchain:
@@ -55,8 +92,14 @@ services:
       - /app/node_modules
     environment:
       - AMQP_URL=${AMQP_URL}
+    healthcheck:
+      test: wget -qO- http://localhost:3000/healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     tty: true
 
   rabbitmq:
@@ -67,6 +110,11 @@ services:
     volumes:
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 10s
+      retries: 5
     tty: true
 
   logstash:
