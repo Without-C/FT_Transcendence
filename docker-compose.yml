@@ -158,6 +158,7 @@ services:
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=kibana
       - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     depends_on:
       elasticsearch:
         condition: service_healthy
