@@ -5,7 +5,7 @@ set -e
 curl -k -X POST "https://elasticsearch:9200/_security/user/kibana_system/_password" \
   -H "Content-Type: application/json" \
   -u elastic:$ELASTIC_PASSWORD \
-  -d '{"password": "kibana"}'
+  -d "{\"password\": \"$ELASTICSEARCH_PASSWORD\"}"
 
 # Run Kibana
 /usr/local/bin/kibana-docker "$@" &
