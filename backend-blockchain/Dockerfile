@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+RUN mkdir /var/log/backend-user
 
 EXPOSE 3000
 
