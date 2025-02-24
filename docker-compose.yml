@@ -40,6 +40,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - backend-user-log:/var/log/backend-user
       - ${PWD}/backend-user:/app
       - /app/node_modules
     environment:
@@ -67,6 +68,7 @@ services:
     ports:
       - "3001:3000"
     volumes:
+      - backend-ping-pong-log:/var/log/backend-ping-pong
       - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
     environment:
@@ -88,6 +90,7 @@ services:
     ports:
       - "3002:3000"
     volumes:
+      - backend-blockchain-log:/var/log/backend-blockchain
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
     environment:
@@ -124,6 +127,9 @@ services:
       - ${PWD}/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ${PWD}/elk/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - proxy-log:/var/log/nginx
+      - backend-user-log:/var/log/backend-user
+      - backend-ping-pong-log:/var/log/backend-ping-pong
+      - backend-blockchain-log:/var/log/backend-blockchain
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     depends_on:
@@ -166,3 +172,6 @@ services:
 
 volumes:
   proxy-log:
+  backend-user-log:
+  backend-ping-pong-log:
+  backend-blockchain-log:
