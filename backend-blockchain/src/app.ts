@@ -22,10 +22,11 @@ const options: AppOptions = {
     }, {
       level: 'trace',
       target: 'pino/file',
-      options: { destination: '/var/log/backend-user/app.log' }
+      options: { destination: '/var/log/backend-blockchain/app.log' }
     }]
   })),
 }
+
 const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
   opts
