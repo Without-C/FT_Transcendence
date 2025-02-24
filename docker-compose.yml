@@ -160,6 +160,7 @@ services:
       - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
       - ${PWD}/elk/kibana//docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
       - ${PWD}/elk/kibana/dashboard-proxy.ndjson:/elk/kibana/dashboard-proxy.ndjson:ro
+      - ${PWD}/elk/kibana/dashboard-backend.ndjson:/elk/kibana/dashboard-backend.ndjson:ro
     environment:
       - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=kibana_system
