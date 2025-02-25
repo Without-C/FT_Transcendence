@@ -1,17 +1,29 @@
 import { join } from 'node:path';
-import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
+import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
 import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
+import { pino } from 'pino'
 
 export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {
 
 }
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
+  logger: false,
+  loggerInstance: pino(pino.transport({
+    targets: [{
+      level: 'info',
+      target: 'pino-pretty'
+    }, {
+      level: 'trace',
+      target: 'pino/file',
+      options: { destination: '/var/log/backend-ping-pong/app.log' }
+    }]
+  })),
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
-    fastify,
-    opts
+  fastify,
+  opts
 ): Promise<void> => {
   // Place here your custom code!
 
