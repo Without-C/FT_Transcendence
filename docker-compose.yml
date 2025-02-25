@@ -145,6 +145,9 @@ services:
       - "9200:9200"
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - ${PWD}/elk/elasticsearch/docker-entrypoint.sh:/usr/local/bin/my-docker-entrypoint.sh:ro
+    entrypoint: [ "/usr/local/bin/my-docker-entrypoint.sh" ]
     healthcheck:
       test: [ "CMD", "curl", "-k", "https://localhost:9200" ]
       interval: 30s
@@ -158,7 +161,7 @@ services:
       - "5601:5601"
     volumes:
       - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-      - ${PWD}/elk/kibana//docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
+      - ${PWD}/elk/kibana/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
       - ${PWD}/elk/kibana/dashboard-proxy.ndjson:/elk/kibana/dashboard-proxy.ndjson:ro
       - ${PWD}/elk/kibana/dashboard-backend.ndjson:/elk/kibana/dashboard-backend.ndjson:ro
     environment:
