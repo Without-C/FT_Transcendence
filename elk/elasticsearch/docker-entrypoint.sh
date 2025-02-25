@@ -27,9 +27,15 @@ curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my_policy" \
         }
       },
       "cold": {
-        "min_age": "2m",
+        "min_age": "1m",
         "actions": {
           "freeze": {}
+        }
+      },
+      "delete": {
+        "min_age": "1m",
+        "actions": {
+          "delete": {}
         }
       }
     }
