@@ -1,7 +1,9 @@
 import { FastifyPluginAsync } from 'fastify'
 import axios from 'axios';
 import qs from 'qs';
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
 
 interface QueryString {
 	Querystring: {
@@ -32,10 +34,28 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			headers: {
 				Authorization: `Bearer ` + response.data.access_token
 			}
-		}); //요청 post -> response에 응답 담겨서 온다.
+		}); //요청 post -> accesstoken으로 유저 정보 받아오는 부분
 		//response.data
-		reply.send({ success: true, access_token: userinfo.data });
 
+		//유저가 한 명인지 확인
+		const existingUser = await prisma.user.findFirst({
+			where: { oauth_id_42: String(userinfo.data.id) },
+		});
+
+		//유저 존재하지 않는다면 새 유저 만들어서 저장
+		if (!existingUser) {
+			const newUser = await prisma.user.create({
+				data: {
+					oauth_id_42: String(userinfo.data.id), // 직접 ID 지정
+					username: userinfo.data.login,//인트라 아이디 저장
+					avatar_url: String(userinfo.data.image.link),//이미지 링크만 우선 저장
+				},
+			});
+			console.log('새로운 유저 생성:', newUser);
+		}
+		else
+			console.log('유저가 이미 존재합니다:', existingUser);
+		reply.redirect('http://localhost/');
 		return;
 	})
 }
