@@ -21,6 +21,7 @@
   "dependencies": {
     "@fastify/autoload": "^6.0.0",
     "@fastify/env": "^5.0.2",
+    "@fastify/jwt": "^9.0.4",
     "@fastify/sensible": "^6.0.0",
     "@prisma/client": "^6.3.1",
     "axios": "^1.7.9",
