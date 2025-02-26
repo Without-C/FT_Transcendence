@@ -36,7 +36,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			}
 		}); //요청 post -> accesstoken으로 유저 정보 받아오는 부분
 		//response.data
-
+		reply.send(userinfo.data);
 		//유저가 한 명인지 확인
 		const existingUser = await prisma.user.findFirst({
 			where: { oauth_id_42: String(userinfo.data.id) },
@@ -56,6 +56,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		else
 			console.log('유저가 이미 존재합니다:', existingUser);
 		reply.redirect('http://localhost/');
+		reply.
 		return;
 	})
 }
