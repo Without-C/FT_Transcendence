@@ -21,5 +21,9 @@ curl -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
   -H "kbn-xsrf: true" \
   -u elastic:$ELASTIC_PASSWORD \
   --form file=@/elk/kibana/dashboard-proxy.ndjson
+curl -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+  -H "kbn-xsrf: true" \
+  -u elastic:$ELASTIC_PASSWORD \
+  --form file=@/elk/kibana/dashboard-backend.ndjson
 
 wait $KIBANA_PID
