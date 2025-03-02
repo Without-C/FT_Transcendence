@@ -1,6 +1,7 @@
 import { Player } from "./Player";
 import { PingPong } from "./PingPong";
 import { FastifyInstance } from "fastify";
+import { AmqpMessageBrocker } from "./AmqpMessageBrocker";
 
 export class MatchManager {
     private fastify: FastifyInstance
@@ -20,7 +21,8 @@ export class MatchManager {
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const game = new PingPong(this.fastify, playerForMatch);
+            const messageBroker = new AmqpMessageBrocker(this.fastify);
+            const game = new PingPong(playerForMatch, messageBroker);
             playerForMatch.forEach(player => {
                 player.game = game;
             });
