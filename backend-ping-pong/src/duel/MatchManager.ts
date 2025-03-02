@@ -4,13 +4,11 @@ import { FastifyInstance } from "fastify";
 import { AmqpMessageBrocker } from "./AmqpMessageBrocker";
 
 export class MatchManager {
-    private fastify: FastifyInstance
     private waitingPlayers: Player[] = [];
     private games: Map<string, PingPong> = new Map();
     private requiredPlayers: number;
 
-    constructor(fastify: FastifyInstance, requirePlayers: number) {
-        this.fastify = fastify;
+    constructor(private fastify: FastifyInstance, requirePlayers: number) {
         this.requiredPlayers = requirePlayers;
     }
 
