@@ -29,6 +29,9 @@ export class GameManager {
     }
 
     private startGame(): void {
+        this.broadcast({
+            type: "game_start"
+        });
         this.isPlaying = true;
         this.startRound();
     }
