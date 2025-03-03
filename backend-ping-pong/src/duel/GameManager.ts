@@ -93,7 +93,7 @@ export class GameManager {
             winner: winner,
             round_score: {
                 player1: this.roundScores[0],
-                player2: this.roundScores[0],
+                player2: this.roundScores[1],
             }
         });
 
