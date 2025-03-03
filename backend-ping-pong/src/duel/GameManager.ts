@@ -25,7 +25,7 @@ export class GameManager implements IGameManager {
     private playerScores: number[] = [0, 0];
 
     constructor(players: Player[], private messageBroker: IMessageBroker) {
-        this.id = 'pingpong-' + uuidv4();
+        this.id = 'duel-' + uuidv4();
         this.players = players;
         this.onScore = this.onScore.bind(this);
         this.startGame();
