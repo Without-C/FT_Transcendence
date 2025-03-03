@@ -13,6 +13,7 @@ export class MatchManager {
     }
 
     public addPlayer(player: Player) {
+        player.send({ type: "wait" })
         this.waitingPlayers.push(player);
     }
 

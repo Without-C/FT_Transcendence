@@ -11,8 +11,6 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
     fastify.get('/ping-pong/duel/ws', { websocket: true }, async (ws) => {
         const player = new Player("player-" + uuidv4(), uuidv4().substring(0, 2), ws);
-        player.send({ type: "wait" })
-
         matchManager.addPlayer(player);
         matchManager.tryMatchmaking();
 
