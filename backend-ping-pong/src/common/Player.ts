@@ -1,4 +1,4 @@
-import { GameManager } from "../duel/GameManager";
+import { IGameManager } from "./IGameManager";
 import { KeyState } from "./KeyState";
 
 export class Player {
@@ -6,7 +6,7 @@ export class Player {
     public username: string;
     public ws: any;
     public keyState: KeyState;
-    public game: GameManager | null = null;
+    public game: IGameManager | null = null;
 
     constructor(id: string, username: string, ws: any) {
         this.id = id;

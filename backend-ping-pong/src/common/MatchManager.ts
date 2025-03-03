@@ -1,14 +1,14 @@
 import { Player } from "./Player";
-import { GameManager } from "../duel/GameManager";
-import { IMessageBroker } from "./IMessageBrocker";
+import { IGameManager } from "./IGameManager";
+import { IGameManagerFactory } from "./IGameManagerFactory";
 
 export class MatchManager {
     private waitingPlayers: Player[] = [];
-    private games: Map<string, GameManager> = new Map();
+    private games: Map<string, IGameManager> = new Map();
 
     constructor(
         private requiredPlayers: number,
-        private messageBroker: IMessageBroker
+        private gameManagerFactory: IGameManagerFactory,
     ) { }
 
     public addPlayer(player: Player) {
@@ -19,7 +19,7 @@ export class MatchManager {
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const game = new GameManager(playerForMatch, this.messageBroker);
+            const game = this.gameManagerFactory.createGameManager(playerForMatch);
             playerForMatch.forEach(player => {
                 player.game = game;
             });
@@ -30,10 +30,10 @@ export class MatchManager {
     public removePlayer(player: Player): void {
         this.waitingPlayers = this.waitingPlayers.filter(p => p.id !== player.id);
 
-        for (const [roomId, room] of this.games.entries()) {
-            if (room.hasPlayer(player)) {
-                room.onPlayerDisconnect(player);
-                this.games.delete(roomId);
+        for (const [gameId, game] of this.games.entries()) {
+            if (game.hasPlayer(player)) {
+                game.onPlayerDisconnect(player);
+                this.games.delete(gameId);
                 break;
             }
         }

@@ -2,8 +2,9 @@ import { Player } from "../common/Player";
 import { v4 as uuidv4 } from 'uuid'
 import { IMessageBroker } from "../common/IMessageBrocker";
 import { GameEngine } from "./GameEngine";
+import { IGameManager } from "../common/IGameManager";
 
-export class GameManager {
+export class GameManager implements IGameManager {
     public id: string;
     private isPlaying: boolean = false;
     private players: Player[];
