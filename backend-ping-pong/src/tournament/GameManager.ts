@@ -77,6 +77,7 @@ export class GameManager implements IGameManager {
         this.startGame3();
     }
 
+    // TODO: 승자를 결승에서 매치시키기
     private startGame3() {
         this.duelManager = new DuelManager([this.players[0], this.players[2]], this.players, this.onEndGame3);
         this.duelManager.startGame();
