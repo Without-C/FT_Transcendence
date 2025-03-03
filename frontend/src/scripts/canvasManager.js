@@ -79,3 +79,13 @@ function draw_final_winner(final_winner) {
 
 	ctx.fillText(final_winner, canvas.width / 2, canvas.height / 2);
 }
+
+function draw_username(username1, username2) {
+	ctx.font = "bold 30px Arial";
+	ctx.fillStyle = "white";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+
+	ctx.fillText(username1, canvas.width / 5, canvas.height / 8);
+	ctx.fillText(username2, canvas.width / 5 * 4, canvas.height / 8);
+}

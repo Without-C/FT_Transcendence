@@ -31,10 +31,13 @@ chatSocket.onmessage = function (e) {
 			let paddle1 = data.game_state.paddle1;
 			let paddle2 = data.game_state.paddle2;
 			let score = data.game_state.score;
+			let username1 = data.game_state.username.player1;
+			let username2 = data.game_state.username.player2;
 			draw_ball(ball.x, ball.y);
 			draw_paddle(paddle1.width, paddle1.height, paddle1.x, paddle1.y);
 			draw_paddle(paddle2.width, paddle2.height, paddle2.x, paddle2.y);
 			draw_score(score.player1, score.player2)
+			draw_username(username1, username2);
 			break;
 		case "round_end":
 			gameIsPlaying = false;

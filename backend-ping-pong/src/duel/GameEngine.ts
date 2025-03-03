@@ -96,6 +96,10 @@ export class GameEngine {
                     width: this.paddle2.width,
                     height: this.paddle2.height,
                 },
+                username: {
+                    player1: this.players[0].username,
+                    player2: this.players[1].username,
+                }
             });
         }, 1000 / 60);
     }
