@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from "fastify"
 import websocket from '@fastify/websocket'
 import { v4 as uuidv4 } from 'uuid'
-import { MatchManager } from "../duel/MatchManager"
+import { MatchManager } from "../utils/MatchManager"
 import { Player } from "../utils/Player"
 
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {

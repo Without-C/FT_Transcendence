@@ -1,7 +1,7 @@
-import { Player } from "../utils/Player";
+import { Player } from "./Player";
 import { FastifyInstance } from "fastify";
-import { AmqpMessageBrocker } from "./AmqpMessageBrocker";
-import { GameManager } from "./GameManager";
+import { AmqpMessageBrocker } from "../duel/AmqpMessageBrocker";
+import { GameManager } from "../duel/GameManager";
 
 export class MatchManager {
     private waitingPlayers: Player[] = [];
