@@ -114,12 +114,14 @@ export class GameManager {
             }
         });
 
-        if (this.currentRound < this.totalRounds) {
-            this.currentRound += 1;
-            this.startRound();
-        } else {
-            this.endGame();
-        }
+        setTimeout(() => {
+            if (this.currentRound < this.totalRounds) {
+                this.currentRound += 1;
+                this.startRound();
+            } else {
+                this.endGame();
+            }
+        }, 1000);
     }
 
     private endGame(): void {
