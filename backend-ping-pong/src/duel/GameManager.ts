@@ -89,7 +89,7 @@ export class GameManager {
         this.engine = null;
 
         this.roundScores[winnerIndex] += 1;
-        const winner = winnerIndex === 0 ? "player1" : "player2";
+        const winner = winnerIndex === 0 ? this.players[0].username : this.players[1].username;
 
         this.broadcast({
             type: "round_end",
@@ -111,7 +111,7 @@ export class GameManager {
     private endGame(): void {
         this.isPlaying = false;
 
-        const finalWinner = this.roundScores[0] > this.roundScores[1] ? "player1" : "player2";
+        const finalWinner = this.roundScores[0] > this.roundScores[1] ? this.players[0].username : this.players[1].username;
 
         this.broadcast({
             type: "game_end",
@@ -123,12 +123,12 @@ export class GameManager {
             player1: {
                 id: this.players[0].id,
                 round_score: this.roundScores[0],
-                result: finalWinner === "player1" ? "winner" : "loser",
+                result: finalWinner === this.players[0].username ? "winner" : "loser",
             },
             player2: {
                 id: this.players[1].id,
                 round_score: this.roundScores[1],
-                result: finalWinner === "player2" ? "winner" : "loser",
+                result: finalWinner === this.players[1].username ? "winner" : "loser",
             },
         });
     }

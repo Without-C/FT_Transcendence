@@ -1,15 +1,16 @@
 import { GameManager } from "./GameManager";
 import { KeyState } from "./KeyState";
-import { v4 as uuidv4 } from 'uuid'
 
 export class Player {
     public id: string;
+    public username: string;
     public ws: any;
     public keyState: KeyState;
     public game: GameManager | null = null;
 
-    constructor(ws: any) {
-        this.id = 'player-' + uuidv4();
+    constructor(id: string, username: string, ws: any) {
+        this.id = id;
+        this.username = username;
         this.ws = ws;
         this.keyState = new KeyState();
     }
