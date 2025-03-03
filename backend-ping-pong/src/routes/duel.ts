@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MatchManager } from "../common/MatchManager"
 import { Player } from "../common/Player"
 
-import { MessageBrocker } from "../duel/MessageBrocker"
+import { MessageBrocker } from "../duel/MessageBroker"
 import { GameManagerFactory } from "../duel/GameManagerFactory"
 
 const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
