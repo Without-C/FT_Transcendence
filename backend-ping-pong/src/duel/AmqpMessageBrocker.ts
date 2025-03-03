@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { IMessageBroker } from "./IMessageBrocker";
+import { IMessageBroker } from "../utils/IMessageBrocker";
 
 export class AmqpMessageBrocker implements IMessageBroker {
     constructor(private fastify: FastifyInstance) { }

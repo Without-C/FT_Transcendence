@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "../utils/Player";
 import { FastifyInstance } from "fastify";
 import { AmqpMessageBrocker } from "./AmqpMessageBrocker";
 import { GameManager } from "./GameManager";

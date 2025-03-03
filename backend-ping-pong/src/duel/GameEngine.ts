@@ -1,7 +1,7 @@
 import { Ball } from "./Ball";
-import { Rectangle } from "./Rectangle";
-import { KeyState } from "./KeyState";
-import { Player } from "./Player";
+import { Rectangle } from "../utils/Rectangle";
+import { KeyState } from "../utils/KeyState";
+import { Player } from "../utils/Player";
 
 export class GameEngine {
     private intervalId: NodeJS.Timeout | null = null;

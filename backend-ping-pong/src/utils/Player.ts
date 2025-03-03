@@ -1,4 +1,4 @@
-import { GameManager } from "./GameManager";
+import { GameManager } from "../duel/GameManager";
 import { KeyState } from "./KeyState";
 
 export class Player {
