@@ -25,7 +25,7 @@ a2. tournament_start    // 토너먼트 시작할 때       -> 한 번 전송
         c3. game_state  // 게임이 진행 중일 때      -> 1초에 60번 씩 전송
         c4. round_end   // 매 라운드가 끝난 직후    -> 한 번 전송
     b3. game_end        // 게임이 끝난 후           -> 한 번 전송
-a3. tournament_end      // 토너먼트 끝난 후후       -> 한 번 전송
+a3. tournament_end      // 토너먼트 끝난 후         -> 한 번 전송
 ```
 
 ```
