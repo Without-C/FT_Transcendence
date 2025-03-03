@@ -21,7 +21,7 @@ chatSocket.onmessage = function (e) {
 			break;
 		case "opponent_exit":
 			gameIsPlaying = false;
-			setCanvasMessage("Opponent exited", "gray");
+			setCanvasMessage(data.opponent_username + " exited!", "gray");
 			break;
 		case "game_state":
 			if (!gameIsPlaying) {

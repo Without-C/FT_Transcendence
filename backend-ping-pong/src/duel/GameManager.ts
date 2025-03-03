@@ -163,7 +163,10 @@ export class GameManager {
 
         this.players.forEach(p => {
             if (p.id !== disconnectedPlayer.id) {
-                p.send({ type: "opponent_exit" });
+                p.send({
+                    type: "opponent_exit",
+                    opponent_username: disconnectedPlayer.username
+                });
             }
         });
 
