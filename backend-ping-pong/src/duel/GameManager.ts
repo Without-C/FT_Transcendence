@@ -71,11 +71,8 @@ export class GameManager {
     }
 
     private onScore(scoringPlayerIndex: number): void {
-        console.log("flag1");
         this.playerScores[scoringPlayerIndex] += 1;
-        console.log("flag2");
         this.broadcast({ type: "score_update", score: { player1: this.playerScores[0], player2: this.playerScores[1] } });
-        console.log("flag3");
         if (this.playerScores[scoringPlayerIndex] >= this.targetScore) {
             this.endRound(scoringPlayerIndex);
         }
@@ -83,7 +80,7 @@ export class GameManager {
     }
 
     private endRound(winnerIndex: number): void {
-        this.engine?.stop();
+        this.engine!.stop();
         this.engine = null;
 
         this.roundScores[winnerIndex] += 1;
