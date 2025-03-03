@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { FastifyInstance } from "fastify";
-import { AmqpMessageBrocker } from "../duel/AmqpMessageBrocker";
+import { MessageBrocker } from "../duel/MessageBrocker";
 import { GameManager } from "../duel/GameManager";
 
 export class MatchManager {
@@ -20,7 +20,7 @@ export class MatchManager {
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const messageBroker = new AmqpMessageBrocker(this.fastify);
+            const messageBroker = new MessageBrocker(this.fastify);
             const game = new GameManager(playerForMatch, messageBroker);
             playerForMatch.forEach(player => {
                 player.game = game;

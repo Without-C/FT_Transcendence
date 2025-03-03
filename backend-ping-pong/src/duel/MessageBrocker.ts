@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { IMessageBroker } from "../utils/IMessageBrocker";
 
-export class AmqpMessageBrocker implements IMessageBroker {
+export class MessageBrocker implements IMessageBroker {
     constructor(private fastify: FastifyInstance) { }
 
     sendGameResult(message: any): void {
