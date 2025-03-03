@@ -51,15 +51,21 @@ export class GameManager {
             })
         )
 
-        let countdown = 3;
+        this.startCountdown(3, () => {
+            this.broadcast({ type: "round_start", });
+            this.engine!.start();
+        })
+    }
+
+    private startCountdown(duration: number, onComplete: () => void): void {
+        let count = duration;
         const countdownInterval = setInterval(() => {
-            if (countdown > 0) {
-                this.broadcast({ type: "countdown", countdown: countdown });
-                countdown -= 1;
+            if (count > 0) {
+                this.broadcast({ type: "countdown", countdown: count });
+                count -= 1;
             } else {
                 clearInterval(countdownInterval);
-                this.broadcast({ type: "round_start", });
-                this.engine!.start();
+                onComplete();
             }
         }, 1000);
     }
