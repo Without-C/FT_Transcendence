@@ -8,6 +8,7 @@ export class GameManager {
     private isPlaying: boolean = false;
     private players: Player[];
     private engine: GameEngine | null = null;
+    private countdownInterval: any = null;
 
     // 목표 점수
     private readonly targetScore = 3;
@@ -59,12 +60,13 @@ export class GameManager {
 
     private startCountdown(duration: number, onComplete: () => void): void {
         let count = duration;
-        const countdownInterval = setInterval(() => {
+        this.countdownInterval = setInterval(() => {
             if (count > 0) {
                 this.broadcast({ type: "countdown", countdown: count });
                 count -= 1;
             } else {
-                clearInterval(countdownInterval);
+                clearInterval(this.countdownInterval);
+                this.countdownInterval = null;
                 onComplete();
             }
         }, 1000);
@@ -147,8 +149,14 @@ export class GameManager {
             return;
         }
 
+        if (this.countdownInterval !== null) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+        }
+
         this.engine?.stop();
         this.engine = null;
+        this.isPlaying = false;
 
         this.players.forEach(p => {
             if (p.id !== disconnectedPlayer.id) {
