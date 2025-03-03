@@ -1,16 +1,15 @@
 import { Player } from "./Player";
-import { FastifyInstance } from "fastify";
-import { MessageBrocker } from "../duel/MessageBrocker";
 import { GameManager } from "../duel/GameManager";
+import { IMessageBroker } from "./IMessageBrocker";
 
 export class MatchManager {
     private waitingPlayers: Player[] = [];
     private games: Map<string, GameManager> = new Map();
-    private requiredPlayers: number;
 
-    constructor(private fastify: FastifyInstance, requirePlayers: number) {
-        this.requiredPlayers = requirePlayers;
-    }
+    constructor(
+        private requiredPlayers: number,
+        private messageBroker: IMessageBroker
+    ) { }
 
     public addPlayer(player: Player) {
         player.send({ type: "wait" })
@@ -20,8 +19,7 @@ export class MatchManager {
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const messageBroker = new MessageBrocker(this.fastify);
-            const game = new GameManager(playerForMatch, messageBroker);
+            const game = new GameManager(playerForMatch, this.messageBroker);
             playerForMatch.forEach(player => {
                 player.game = game;
             });

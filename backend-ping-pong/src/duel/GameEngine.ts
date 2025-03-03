@@ -1,4 +1,4 @@
-import { Ball } from "./Ball";
+import { Ball } from "../common/Ball";
 import { Rectangle } from "../common/Rectangle";
 import { KeyState } from "../common/KeyState";
 import { Player } from "../common/Player";
