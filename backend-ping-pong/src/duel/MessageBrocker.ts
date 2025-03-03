@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+
 import { IMessageBroker } from "../common/IMessageBrocker";
 
 export class MessageBrocker implements IMessageBroker {

@@ -1,7 +1,9 @@
-import { Player } from "../common/Player";
 import { v4 as uuidv4 } from 'uuid'
-import { IMessageBroker } from "../common/IMessageBrocker";
+
 import { GameEngine } from "./GameEngine";
+
+import { Player } from "../common/Player";
+import { IMessageBroker } from "../common/IMessageBrocker";
 import { IGameManager } from "../common/IGameManager";
 
 export class GameManager implements IGameManager {
