@@ -19,6 +19,7 @@ export class DuelManager {
 
     constructor(
         private players: Player[],
+        private spectator: Player[],
         private onEndDuel: (winner: string, roundScores: number[]) => void,
     ) {
         this.onScore = this.onScore.bind(this);
@@ -143,6 +144,10 @@ export class DuelManager {
 
     private broadcast(message: any): void {
         this.players.forEach(p => {
+            p.send(message);
+        });
+
+        this.spectator.forEach(p => {
             p.send(message);
         });
     }
