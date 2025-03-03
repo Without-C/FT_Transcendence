@@ -65,6 +65,13 @@ export class GameManager {
 
     private startCountdown(duration: number, onComplete: () => void): void {
         let count = duration;
+        this.broadcast({
+            type: "countdown",
+            countdown: count,
+            player1_username: this.players[0].username,
+            player2_username: this.players[1].username,
+        });
+        count -= 1;
         this.countdownInterval = setInterval(() => {
             if (count > 0) {
                 this.broadcast({
