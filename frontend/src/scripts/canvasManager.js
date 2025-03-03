@@ -13,7 +13,7 @@ function setCanvasMessage(message, background) {
 	ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 }
 
-function setCountdown(countdown) {
+function setCountdown(countdown, player1_username, player2_username) {
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -23,6 +23,7 @@ function setCountdown(countdown) {
 	ctx.textBaseline = "middle";
 
 	ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
+	ctx.fillText(player1_username + " vs " + player2_username, canvas.width / 2, canvas.height / 4);
 }
 
 function draw_ball(ball_x, ball_y, background) {

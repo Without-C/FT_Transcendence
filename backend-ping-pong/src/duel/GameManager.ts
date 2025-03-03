@@ -30,7 +30,9 @@ export class GameManager {
 
     private startGame(): void {
         this.broadcast({
-            type: "game_start"
+            type: "game_start",
+            player1_username: this.players[0].username,
+            player2_username: this.players[1].username,
         });
         this.isPlaying = true;
         this.startRound();
@@ -56,7 +58,7 @@ export class GameManager {
         )
 
         this.startCountdown(3, () => {
-            this.broadcast({ type: "round_start", });
+            this.broadcast({ type: "round_start" });
             this.engine!.start();
         })
     }
@@ -65,7 +67,12 @@ export class GameManager {
         let count = duration;
         this.countdownInterval = setInterval(() => {
             if (count > 0) {
-                this.broadcast({ type: "countdown", countdown: count });
+                this.broadcast({
+                    type: "countdown",
+                    countdown: count,
+                    player1_username: this.players[0].username,
+                    player2_username: this.players[1].username,
+                });
                 count -= 1;
             } else {
                 clearInterval(this.countdownInterval);
