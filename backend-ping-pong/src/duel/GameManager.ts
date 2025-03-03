@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Player } from "../common/Player";
 import { IMessageBroker } from "../common/IMessageBrocker";
 import { IGameManager } from "../common/IGameManager";
-import { DuelManager } from './DuelManager';
+import { DuelManager } from '../common/DuelManager';
 
 export class GameManager implements IGameManager {
     public id: string;

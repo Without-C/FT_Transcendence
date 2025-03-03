@@ -1,5 +1,5 @@
-import { Player } from "../common/Player";
-import { GameEngine } from "./GameEngine";
+import { Player } from "./Player";
+import { GameEngine } from "../duel/GameEngine";
 
 export class DuelManager {
     private engine: GameEngine | null = null;
