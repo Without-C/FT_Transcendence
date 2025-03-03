@@ -31,8 +31,7 @@ export class MatchManager {
         this.waitingPlayers = this.waitingPlayers.filter(p => p.id !== player.id);
 
         for (const [gameId, game] of this.games.entries()) {
-            if (game.hasPlayer(player)) {
-                game.onPlayerDisconnect(player);
+            if (game.onPlayerDisconnect(player)) {
                 this.games.delete(gameId);
                 break;
             }

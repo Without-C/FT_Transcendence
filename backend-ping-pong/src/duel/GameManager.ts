@@ -46,13 +46,13 @@ export class GameManager implements IGameManager {
         }
     }
 
-    public hasPlayer(player: Player): boolean {
-        return this.players.some(p => p.id === player.id);
-    }
+    public onPlayerDisconnect(disconnectedPlayer: Player): boolean {
+        if (!this.players.some(p => p.id === disconnectedPlayer.id)) {
+            return false;
+        }
 
-    public onPlayerDisconnect(disconnectedPlayer: Player): void {
         if (!this.isPlaying) {
-            return;
+            return true;
         }
         this.isPlaying = false;
         const roundScores = this.duelManager.haltGame();
@@ -81,5 +81,7 @@ export class GameManager implements IGameManager {
                 result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
             },
         });
+
+        return true;
     }
 }
