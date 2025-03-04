@@ -7,6 +7,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - proxy-log:/var/log/nginx
       - ${PWD}/frontend:/usr/share/nginx/html
     depends_on:
       frontend:
@@ -39,6 +40,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - backend-user-log:/var/log/backend-user
       - ${PWD}/backend-user:/app
       - /app/node_modules
     environment:
@@ -66,6 +68,7 @@ services:
     ports:
       - "3001:3000"
     volumes:
+      - backend-ping-pong-log:/var/log/backend-ping-pong
       - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
     environment:
@@ -87,6 +90,7 @@ services:
     ports:
       - "3002:3000"
     volumes:
+      - backend-blockchain-log:/var/log/backend-blockchain
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
     environment:
@@ -115,3 +119,64 @@ services:
       timeout: 10s
       retries: 5
     tty: true
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.17.2
+    container_name: logstash
+    volumes:
+      - ${PWD}/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ${PWD}/elk/logstash/backend.conf:/usr/share/logstash/pipeline/backend.conf
+      - ${PWD}/elk/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - proxy-log:/var/log/nginx
+      - backend-user-log:/var/log/backend-user
+      - backend-ping-pong-log:/var/log/backend-ping-pong
+      - backend-blockchain-log:/var/log/backend-blockchain
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    tty: true
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - ${PWD}/elk/elasticsearch/docker-entrypoint.sh:/usr/local/bin/my-docker-entrypoint.sh:ro
+    entrypoint: [ "/usr/local/bin/my-docker-entrypoint.sh" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-k", "https://localhost:9200" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.17.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ${PWD}/elk/kibana/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
+      - ${PWD}/elk/kibana/dashboard-proxy.ndjson:/elk/kibana/dashboard-proxy.ndjson:ro
+      - ${PWD}/elk/kibana/dashboard-backend.ndjson:/elk/kibana/dashboard-backend.ndjson:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    entrypoint: [ "/usr/local/bin/docker-entrypoint.sh" ]
+
+volumes:
+  proxy-log:
+  backend-user-log:
+  backend-ping-pong-log:
+  backend-blockchain-log:
