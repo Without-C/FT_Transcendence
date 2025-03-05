@@ -120,6 +120,11 @@ export class GameManager implements IGameManager {
             return true;
         }
         this.isPlaying = false;
+
+        // FIXME: 나가는 처리 어떻게 할 지는 더 고민해야함.
+        if (this.duelManager === null) {
+            return true;
+        }
         const roundScores = this.duelManager.haltGame();
 
         this.players.forEach(p => {
