@@ -27,18 +27,43 @@ function setCountdown(countdown, player1_username, player2_username) {
 }
 
 function setCountdownTournament(countdown, player1_username, player2_username, players, currentRound) {
-	console.log(players);
-	console.log(currentRound);
+	function drawLine(fromX, fromY, toX, toY) {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.stroke();
+	}
+
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-	ctx.font = "bold 60px Arial";
+	drawLine(200, 150, 400, 150);
+
+	drawLine(200, 150, 200, 200);
+	drawLine(400, 150, 400, 200);
+
+	drawLine(150, 200, 250, 200);
+	drawLine(350, 200, 450, 200);
+
+	drawLine(150, 200, 150, 250);
+	drawLine(250, 200, 250, 250);
+	drawLine(350, 200, 350, 250);
+	drawLine(450, 200, 450, 250);
+
+	// TODO: 어느 경기가 진행중인지도 표시하기
+
+	ctx.font = "bold 40px Arial";
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
 
-	ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
-	ctx.fillText(player1_username + " vs " + player2_username, canvas.width / 2, canvas.height / 4);
+	ctx.fillText(countdown, canvas.width / 2, canvas.height / 5);
+	
+	for (let i = 0; i < 4; i++) {
+		ctx.fillText(players[i], 150 + i * 100, 300);
+	}
 }
 
 function draw_ball(ball_x, ball_y, background) {
