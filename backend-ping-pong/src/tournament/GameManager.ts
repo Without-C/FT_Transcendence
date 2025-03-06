@@ -40,27 +40,9 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
-    private shufflePlayers(players: Player[]): Player[] {
-        const shuffled = [...players];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
-
-    private initMatches(players: Player[]): Player[][] {
-        const matches: Player[][] = [];
-        for (let i = 0; i < players.length; i += 2) {
-            matches.push([players[i], players[i + 1]]);
-        }
-        return matches;
-    }
-
     // TODO: 끝날 때 마다 중간 결과 보여주기
     // TODO: 중간마다 message queue에 보내지 말고 마지막에 모아서 보내기
     private onEndGame1(winner: string, roundScores: number[]): void {
-        this.isPlaying = false;
 
         this.messageBroker.sendGameResult({
             game_end_reason: "normal",
@@ -77,6 +59,29 @@ export class GameManager implements IGameManager {
         });
 
         this.startGame2();
+    }
+
+    private endTournament() {
+        this.isPlaying = false;
+
+        // TODO: Send game result to MQ
+    }
+
+    private shufflePlayers(players: Player[]): Player[] {
+        const shuffled = [...players];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    private initMatches(players: Player[]): Player[][] {
+        const matches: Player[][] = [];
+        for (let i = 0; i < players.length; i += 2) {
+            matches.push([players[i], players[i + 1]]);
+        }
+        return matches;
     }
 
     public onMessage(from: Player, message: any): void {
