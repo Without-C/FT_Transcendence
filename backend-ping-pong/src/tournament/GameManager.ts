@@ -49,6 +49,7 @@ export class GameManager implements IGameManager {
         const player1: Player = this.matches[this.currentRound][0];
         const player2: Player = this.matches[this.currentRound][1];
 
+        // FIXME: tournament에서 countdown할 때 맨 처음에 tournament 항목이 없어서 3이 안 나옴
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
