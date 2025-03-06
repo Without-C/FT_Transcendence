@@ -26,6 +26,21 @@ function setCountdown(countdown, player1_username, player2_username) {
 	ctx.fillText(player1_username + " vs " + player2_username, canvas.width / 2, canvas.height / 4);
 }
 
+function setCountdownTournament(countdown, player1_username, player2_username, players, currentRound) {
+	console.log(players);
+	console.log(currentRound);
+	ctx.fillStyle = "green";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	ctx.font = "bold 60px Arial";
+	ctx.fillStyle = "white";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+
+	ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
+	ctx.fillText(player1_username + " vs " + player2_username, canvas.width / 2, canvas.height / 4);
+}
+
 function draw_ball(ball_x, ball_y, background) {
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);

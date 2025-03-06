@@ -14,7 +14,13 @@ chatSocket.onmessage = function (e) {
 			setCanvasMessage("Waiting...", "black");
 			break;
 		case "countdown":
-			setCountdown(data.countdown, data.player1_username, data.player2_username);
+			setCountdownTournament(
+				data.countdown,
+				data.player1_username,
+				data.player2_username,
+				data.tournament.players,
+				data.tournament.currentRound
+			);
 			break;
 		case "round_start":
 			gameIsPlaying = true;
