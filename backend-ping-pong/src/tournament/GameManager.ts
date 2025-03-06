@@ -48,9 +48,6 @@ export class GameManager implements IGameManager {
     private startRound() {
         const player1: Player = this.matches[this.currentRound][0];
         const player2: Player = this.matches[this.currentRound][1];
-        const spectators: Player[] = this.players.filter(
-            player => player.id !== player1.id && player.id !== player2.id
-        );
 
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();

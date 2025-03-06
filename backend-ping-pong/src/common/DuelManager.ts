@@ -126,8 +126,8 @@ export class DuelManager {
                     player1_username: this.players[0].username,
                     player2_username: this.players[1].username,
                     tournament: {
-                        players: this.whole_players,
-                        currentRound: this.currentRound,
+                        players: this.whole_players.map(p => p.username),
+                        currentRound: this.currentMatch,
                     }
                 });
                 count -= 1;
