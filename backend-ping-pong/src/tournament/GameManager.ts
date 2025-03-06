@@ -11,16 +11,37 @@ export class GameManager implements IGameManager {
     public id: string;
     private isPlaying: boolean = false;
     private duelManager: DuelManager | null = null;
+    // TODO: 승자를 결승에서 매치시키기
+    private matches: (Player | null)[][] = [];
 
     // TODO: 시작할 때 대진표 보여주기
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
-        this.onEndGame1 = this.onEndGame1.bind(this);
-        this.onEndGame2 = this.onEndGame2.bind(this);
-        this.onEndGame3 = this.onEndGame3.bind(this);
+        this.players = this.shufflePlayers(this.players);
+        this.matches = this.initMatches(this.players);
+    }
 
-        this.startGame1();
+    private shufflePlayers(players: Player[]): Player[] {
+        const shuffled = [...players];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    private initMatches(players: Player[]): (Player | null)[][] {
+        const shuffledPlayers = players;
+        const matches: (Player | null)[][] = [];
+        for (let i = 0; i < shuffledPlayers.length; i += 2) {
+            if (i + 1 < shuffledPlayers.length) {
+                matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
+            } else {
+                matches.push([shuffledPlayers[i], null]);
+            }
+        }
+        return matches;
     }
 
     // TODO: 재귀로 만들기 (1, 2, 3)
