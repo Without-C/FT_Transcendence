@@ -6,7 +6,7 @@ export function renderPlayPage() {
 			CHOOSE PLAY MODE
 			</h2>
 		
-			<a href="#/play/1p1" data-link class="w-full bg-[#6C233D] text-left text-white rounded-l-lg xl:rounded-l-3xl p-6 lg:p-7 xl:p-8 2xl:p-9 cursor-pointer transition-transform duration-300  translate-x-[30px] hover:translate-x-[0px]">
+			<a href="#/play/1p1" data-link class="w-full bg-[#6C233D] text-left text-white rounded-l-lg xl:rounded-l-lg p-6 lg:p-7 xl:p-8 2xl:p-9 cursor-pointer transition-transform duration-300  translate-x-[30px] hover:translate-x-[0px]">
 			<div class="flex items-center gap-4">
 				<span class="text-5xl lg:text-8xl xl:text-13xl 2xl:text-17xl font-bold text-pink-300">1P1</span>
 				<div>
@@ -16,7 +16,7 @@ export function renderPlayPage() {
 			</div>
 			</a>
 		
-			<a href="#/play/tp" data-link class="w-full bg-green-800 text-left text-white rounded-l-lg xl:rounded-l-3xl p-6 lg:p-7 xl:p-8 2xl:p-9 cursor-pointer transition-transform duration-300  translate-x-[30px] hover:translate-x-[0px]">
+			<a href="#/play/tp" data-link class="w-full bg-green-800 text-left text-white rounded-l-lg xl:rounded-l-lg p-6 lg:p-7 xl:p-8 2xl:p-9 cursor-pointer transition-transform duration-300  translate-x-[30px] hover:translate-x-[0px]">
 			<div class="flex items-center gap-4">
 				<span class="text-5xl lg:text-8xl xl:text-13xl 2xl:text-17xl font-bold text-green-300">TP</span>
 				<div>
