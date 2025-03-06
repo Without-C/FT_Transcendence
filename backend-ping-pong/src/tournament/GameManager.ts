@@ -12,7 +12,7 @@ export class GameManager implements IGameManager {
     private isPlaying: boolean = false;
     private duelManager: DuelManager | null = null;
     // TODO: 승자를 결승에서 매치시키기
-    private matches: (Player | null)[][] = [];
+    private matches: Player[][] = [];
 
     // TODO: 시작할 때 대진표 보여주기
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
@@ -31,15 +31,10 @@ export class GameManager implements IGameManager {
         return shuffled;
     }
 
-    private initMatches(players: Player[]): (Player | null)[][] {
-        const shuffledPlayers = players;
-        const matches: (Player | null)[][] = [];
-        for (let i = 0; i < shuffledPlayers.length; i += 2) {
-            if (i + 1 < shuffledPlayers.length) {
-                matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
-            } else {
-                matches.push([shuffledPlayers[i], null]);
-            }
+    private initMatches(players: Player[]): Player[][] {
+        const matches: Player[][] = [];
+        for (let i = 0; i < players.length; i += 2) {
+            matches.push([players[i], players[i + 1]]);
         }
         return matches;
     }
