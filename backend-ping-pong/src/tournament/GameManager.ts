@@ -25,7 +25,6 @@ export class GameManager implements IGameManager {
     public id: string;
     private isPlaying: boolean = false;
     private duelManager: DuelManager | null = null;
-    // TODO: 승자를 결승에서 매치시키기
     private matches: Player[][] = [];
     private gameResults: GameResult[] = [];
     private currentRound: number = 0;
@@ -58,22 +57,36 @@ export class GameManager implements IGameManager {
     }
 
     // TODO: 끝날 때 마다 중간 결과 보여주기
-    private onEndRound(winner: string, roundScores: number[]): void {
+    private onEndRound(winner_username: string, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
             player1: {
                 id: this.players[0].id,
                 round_score: roundScores[0],
-                result: winner === this.players[0].username ? "winner" : "loser",
+                result: winner_username === this.players[0].username ? "winner" : "loser",
             },
             player2: {
                 id: this.players[1].id,
                 round_score: roundScores[1],
-                result: winner === this.players[1].username ? "winner" : "loser",
+                result: winner_username === this.players[1].username ? "winner" : "loser",
             },
         });
 
-        this.startGame2();
+        this.currentRound += 1;
+        const winner = this.getPlayer(this.players, winner_username);
+        switch (this.currentRound) {
+            case 1:
+                this.matches.push([winner!]);
+                this.startRound();
+                break;
+            case 2:
+                this.matches[2].push(winner!);
+                this.startRound();
+                break;
+            case 3:
+                this.endTournament();
+                break;
+        }
     }
 
     private endTournament() {
@@ -96,6 +109,10 @@ export class GameManager implements IGameManager {
             matches.push([players[i], players[i + 1]]);
         }
         return matches;
+    }
+
+    private getPlayer(players: Player[], username: string): Player | undefined {
+        return players.find(player => player.username === username);
     }
 
     public onMessage(from: Player, message: any): void {
