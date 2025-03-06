@@ -34,6 +34,8 @@ export class GameManager implements IGameManager {
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
+        this.onEndRound = this.onEndRound.bind(this);
+
         this.players = this.shufflePlayers(this.players);
         this.matches = this.initMatches(this.players);
 
@@ -51,12 +53,12 @@ export class GameManager implements IGameManager {
             player => player.id !== player1.id && player.id !== player2.id
         );
 
-        this.duelManager = new DuelManager([player1, player2], spectators, this.onEndGame1);
+        this.duelManager = new DuelManager([player1, player2], spectators, this.onEndRound);
         this.duelManager.startGame();
     }
 
     // TODO: 끝날 때 마다 중간 결과 보여주기
-    private onEndGame1(winner: string, roundScores: number[]): void {
+    private onEndRound(winner: string, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
             player1: {
