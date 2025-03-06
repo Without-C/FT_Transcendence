@@ -19,7 +19,8 @@ export class DuelManager {
 
     constructor(
         private players: Player[],
-        private spectator: Player[],
+        private whole_players: Player[],
+        private currentMatch: number,
         private onEndDuel: (winner: string, roundScores: number[]) => void,
     ) {
         this.onScore = this.onScore.bind(this);
@@ -124,6 +125,10 @@ export class DuelManager {
                     countdown: count,
                     player1_username: this.players[0].username,
                     player2_username: this.players[1].username,
+                    tournament: {
+                        players: this.whole_players,
+                        currentRound: this.currentRound,
+                    }
                 });
                 count -= 1;
             } else {
@@ -143,11 +148,7 @@ export class DuelManager {
     }
 
     private broadcast(message: any): void {
-        this.players.forEach(p => {
-            p.send(message);
-        });
-
-        this.spectator.forEach(p => {
+        this.whole_players.forEach(p => {
             p.send(message);
         });
     }

@@ -14,7 +14,7 @@ export class GameManager implements IGameManager {
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
         this.onEndDuel = this.onEndDuel.bind(this);
-        this.duelManager = new DuelManager(players, [], this.onEndDuel);
+        this.duelManager = new DuelManager(players, players, 0, this.onEndDuel);
         this.duelManager.startGame();
     }
 

@@ -52,7 +52,7 @@ export class GameManager implements IGameManager {
             player => player.id !== player1.id && player.id !== player2.id
         );
 
-        this.duelManager = new DuelManager([player1, player2], spectators, this.onEndRound);
+        this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
 
