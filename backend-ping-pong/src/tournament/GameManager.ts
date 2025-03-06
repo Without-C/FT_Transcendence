@@ -13,6 +13,7 @@ export class GameManager implements IGameManager {
     private duelManager: DuelManager | null = null;
     // TODO: 승자를 결승에서 매치시키기
     private matches: Player[][] = [];
+    private currentRound: number = 0;
 
     // TODO: 시작할 때 대진표 보여주기
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
@@ -20,6 +21,23 @@ export class GameManager implements IGameManager {
         this.isPlaying = true;
         this.players = this.shufflePlayers(this.players);
         this.matches = this.initMatches(this.players);
+
+        this.startTournament();
+    }
+
+    private startTournament() {
+        this.startRound();
+    }
+
+    private startRound() {
+        const player1: Player = this.matches[this.currentRound][0];
+        const player2: Player = this.matches[this.currentRound][1];
+        const spectators: Player[] = this.players.filter(
+            player => player.id !== player1.id && player.id !== player2.id
+        );
+
+        this.duelManager = new DuelManager([player1, player2], spectators, this.onEndGame1);
+        this.duelManager.startGame();
     }
 
     private shufflePlayers(players: Player[]): Player[] {
@@ -37,13 +55,6 @@ export class GameManager implements IGameManager {
             matches.push([players[i], players[i + 1]]);
         }
         return matches;
-    }
-
-    // TODO: 재귀로 만들기 (1, 2, 3)
-    // TODO: play중이지 않은 사람만 spectator에 넣기
-    private startGame1() {
-        this.duelManager = new DuelManager([this.players[0], this.players[1]], this.players, this.onEndGame1);
-        this.duelManager.startGame();
     }
 
     // TODO: 끝날 때 마다 중간 결과 보여주기
@@ -66,55 +77,6 @@ export class GameManager implements IGameManager {
         });
 
         this.startGame2();
-    }
-
-    private startGame2() {
-        this.duelManager = new DuelManager([this.players[2], this.players[3]], this.players, this.onEndGame2);
-        this.duelManager.startGame();
-    }
-
-    private onEndGame2(winner: string, roundScores: number[]): void {
-        this.isPlaying = false;
-
-        this.messageBroker.sendGameResult({
-            game_end_reason: "normal",
-            player1: {
-                id: this.players[0].id,
-                round_score: roundScores[0],
-                result: winner === this.players[0].username ? "winner" : "loser",
-            },
-            player2: {
-                id: this.players[1].id,
-                round_score: roundScores[1],
-                result: winner === this.players[1].username ? "winner" : "loser",
-            },
-        });
-
-        this.startGame3();
-    }
-
-    // TODO: 승자를 결승에서 매치시키기
-    private startGame3() {
-        this.duelManager = new DuelManager([this.players[0], this.players[2]], this.players, this.onEndGame3);
-        this.duelManager.startGame();
-    }
-
-    private onEndGame3(winner: string, roundScores: number[]): void {
-        this.isPlaying = false;
-
-        this.messageBroker.sendGameResult({
-            game_end_reason: "normal",
-            player1: {
-                id: this.players[0].id,
-                round_score: roundScores[0],
-                result: winner === this.players[0].username ? "winner" : "loser",
-            },
-            player2: {
-                id: this.players[1].id,
-                round_score: roundScores[1],
-                result: winner === this.players[1].username ? "winner" : "loser",
-            },
-        });
     }
 
     public onMessage(from: Player, message: any): void {
