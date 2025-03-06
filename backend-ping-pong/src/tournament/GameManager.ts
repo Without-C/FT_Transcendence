@@ -5,6 +5,20 @@ import { IMessageBroker } from "../common/IMessageBrocker";
 import { IGameManager } from "../common/IGameManager";
 import { DuelManager } from '../common/DuelManager';
 
+type GameResult = {
+    game_end_reason: string,
+    player1: {
+        id: string,
+        round_score: number,
+        result: string,
+    },
+    player2: {
+        id: string,
+        round_score: number,
+        result: string,
+    },
+}
+
 // FIXME: Duel 끝날 때마다 누가 이겼는지 보여주는 창이 아마 마지막에만 나오는 것 같음
 // TODO: 중간에 나가는거 잘 처리하기
 export class GameManager implements IGameManager {
@@ -13,6 +27,7 @@ export class GameManager implements IGameManager {
     private duelManager: DuelManager | null = null;
     // TODO: 승자를 결승에서 매치시키기
     private matches: Player[][] = [];
+    private gameResults: GameResult[] = [];
     private currentRound: number = 0;
 
     // TODO: 시작할 때 대진표 보여주기
@@ -41,10 +56,8 @@ export class GameManager implements IGameManager {
     }
 
     // TODO: 끝날 때 마다 중간 결과 보여주기
-    // TODO: 중간마다 message queue에 보내지 말고 마지막에 모아서 보내기
     private onEndGame1(winner: string, roundScores: number[]): void {
-
-        this.messageBroker.sendGameResult({
+        this.gameResults.push({
             game_end_reason: "normal",
             player1: {
                 id: this.players[0].id,
@@ -63,8 +76,7 @@ export class GameManager implements IGameManager {
 
     private endTournament() {
         this.isPlaying = false;
-
-        // TODO: Send game result to MQ
+        this.messageBroker.sendGameResult(this.gameResults);
     }
 
     private shufflePlayers(players: Player[]): Player[] {
