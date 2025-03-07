@@ -36,11 +36,11 @@ export async function renderMyPage() {
 		  </div>
 	  
 		  <div class="relative p-5 m-3 border-3 border-[#375433] w-full">
-			<h3 class="absolute top-0 left-0 bg-[#375433] text-lg font-bold px-3 rounded-br-lg">📋 FRIENDS LIST</h3>
+			<h3 class="absolute top-0 left-0 bg-[#375433] text-lg font-bold px-3 py-1 rounded-br-lg">📋 FRIENDS LIST</h3>
 			<div class="flex justify-center items-center border-b-2 border-[#375433] pb-4 ">
 			  <div class="flex items-center bg-[#162113] px-2 rounded">
-				<input type="text" placeholder="SEARCH" class="text-white outline-none">
-				<span>🔍</span>
+				<input id="search" type="text" name="username" placeholder="SEARCH" maxlength="10" class="text-white outline-none">
+				<button id="searchOrDelete"></button>
 			  </div>
 			</div>
 			<ul id="friendList" class="space-y-3 pt-4"></ul>
@@ -48,9 +48,11 @@ export async function renderMyPage() {
 	  
 		  <div class="relative p-5 m-3 border-3 border-[#375433] w-full">
 			<div class="absolute top-0 left-0 flex justify-center items-center gap-4 pb-2">
-				<h3 class="bg-[#375433] text-lg font-bold px-3 rounded-br-lg">⭐ MATCH HISTORY</h3>
-				<button id="single">1P1</button>
-				<button id="tournament">TP</button>
+				<h3 class="bg-[#375433] text-lg font-bold px-3 py-1 rounded-br-lg">⭐ MATCH HISTORY</h3>
+				<div>
+					<button id="single">1P1</button>
+					<button id="tournament">TP</button>
+				</div>
 			</div>
 			<ul id="gameList" class="space-y-3 pt-10"></ul>
 		  </div>
@@ -61,10 +63,14 @@ export async function renderMyPage() {
 			const gameListElement = document.getElementById("gameList");
 			const singleButton = document.querySelector("#single");
 			const tournamentButton = document.querySelector("#tournament");
+			const searchElement = document.getElementById("search");
 
 			// friendList 랜더링
 			const renderFriendList = () => {
 				friendListElement.innerHTML = "";
+				const searchIcon = document.querySelector("#searchOrDelete");
+				searchIcon.textContent = "🔍";
+
 				user.following.forEach((friend, idx) => {
 					const friendList = document.createElement("li");
 					friendList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
@@ -122,7 +128,7 @@ export async function renderMyPage() {
 					if((single.player1.username === user.username && single.player1.result === "winner") ||
 						(single.player2.username === user.username && single.player2.result === "winner")) {
 							result.className = "text-blue-400 font-bold";
-							result.textContent = "WIN";
+							result.textContent = "WIN!";
 					}
 					else {
 						result.className = "text-red-400 font-bold";
@@ -164,7 +170,7 @@ export async function renderMyPage() {
 					if((tournament.game[2].player1.username === user.username && tournament.game[2].player1.result === "winner") ||
 						(tournament.game[2].player2.username === user.username && tournament.game[2].player2.result === "winner")) {
 							result.className = "text-blue-400 font-bold";
-							result.textContent = "WIN";
+							result.textContent = "WIN!";
 					}
 					else {
 						result.className = "text-red-400 font-bold";
@@ -200,8 +206,27 @@ export async function renderMyPage() {
 				});
 			};
 
+
+			// search 랜더링
+			const renderSearch = (search = '') => {
+				friendListElement.innerHTML = "";
+				const searchIcon = document.querySelector("#searchOrDelete");
+				searchIcon?.addEventListener("click", () => {
+					searchElement.value = ''; 
+					renderFriendList();
+				});
+				searchIcon.textContent = "❌";
+				if(search == '') {
+					renderFriendList();
+				}
+			};
+
 			singleButton?.addEventListener("click", renderSingleList);
 			tournamentButton?.addEventListener("click", renderTournamentList);
+			searchElement?.addEventListener("input", search => {
+				const keyword = (search.target as HTMLInputElement).value;
+				renderSearch(keyword);
+			});
 			
 			renderFriendList();
 			renderSingleList();

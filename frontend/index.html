@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>시영없는 시영팀</title>
-	<script type="module" src="./src/main.ts"></script>
-	<script src="./src/scripts/auth.js" defer></script>
-	<link href="/src/styles.css" rel="stylesheet">
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>시영없는 시영팀</title>
+		<script type="module" src="./src/main.ts"></script>
+		<script src="./src/scripts/auth.js" defer></script>
+		<link href="/src/styles.css" rel="stylesheet">
+	</head>
 
-<body>
-	<div>
-		<nav class="h-30 bg-gradient-to-r from-[#80a759] from-0% via-[#537f3c] via-70% to-[#20531d] to-100% p-3 flex justify-start">
-			<img class="w-90 px-1" src="src/pong.svg">
-			<a href="#/play" data-link class="font-bold text-gray-100 p-8 text-xl">PLAY</a>
-			<a href="#/mypage" data-link class="font-bold text-gray-100 p-8 text-xl">MYPAGE</a>
-			<a href="#/signin" data-link class="font-bold text-gray-100 p-8 text-xl">SIGNIN</a>
-		</nav>
-	</div>
+	<body>
+		<div class="relative flex flex-col items-start h-30 bg-gradient-to-r from-[#80a759] from-0% via-[#537f3c] via-70% to-[#20531d] to-100% p-3 flex justify-start">
+			<div class="flex flex-row items-center">
+				<img class="w-90 px-1" src="src/images/pong.svg">
+				<nav>
+					<a href="#/play" data-link class="font-bold text-gray-100 p-8 text-xl">PLAY</a>
+					<a href="#/mypage" data-link class="font-bold text-gray-100 p-8 text-xl">MYPAGE</a>
+					<a href="#/signin" data-link class="font-bold text-gray-100 p-8 text-xl">SIGNIN</a>
+				</nav>
+			</div>
+			<img class="absolute bottom-0 left-0 w-700" src="src/images/tree.svg">
+		</div>
 
-	<div class="bg-black text-gray-200" id="app"></div>
-</body>
+		<div class="bg-black text-gray-200" id="app"></div>
+	</body>
 
 </html>
