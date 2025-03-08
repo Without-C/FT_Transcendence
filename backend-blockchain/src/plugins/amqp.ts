@@ -35,8 +35,8 @@ declare module 'fastify' {
 //     },
 // };
 
-// 메시지(게임 결과)를 받을 때마다 호출되는 함수
-function handleMessage(fastify: FastifyInstance, channel: amqp.Channel, msg: amqp.ConsumeMessage) {
+// 메시지(duel 게임 결과)를 받을 때마다 호출되는 함수
+function handleDuelMessage(fastify: FastifyInstance, channel: amqp.Channel, msg: amqp.ConsumeMessage) {
     // 메시지 처리
     fastify.log.info("%s", msg.content.toString());
     // fastify.log.info("%s", msg.content.toJSON());
@@ -44,6 +44,39 @@ function handleMessage(fastify: FastifyInstance, channel: amqp.Channel, msg: amq
     // 게임 결과를 블록체인에 무사히 올렸으면 메시지 큐에게 ack 전송
     channel.ack(msg);
 }
+
+// [
+//     {
+//       "game_end_reason": "normal",
+//       "player1": {
+//         "id": "player-52db1b24-f6cb-4af8-a431-a27b8d036368",
+//         "round_score": 3,
+//         "result": "winner"
+//       },
+//       "player2": {
+//         "id": "player-899f9407-1aff-427f-9f69-f5406dd5cbc4",
+//         "round_score": 0,
+//         "result": "loser"
+//       }
+//     },
+//     {
+//        생략
+//     },
+//     {
+//        생략
+//     }
+//   ]
+
+// 메시지(tournament 게임 결과)를 받을 때마다 호출되는 함수
+function handleTournamentMessage(fastify: FastifyInstance, channel: amqp.Channel, msg: amqp.ConsumeMessage) {
+    // 메시지 처리
+    fastify.log.info("%s", msg.content.toString());
+    // fastify.log.info("%s", msg.content.toJSON());
+
+    // 게임 결과를 블록체인에 무사히 올렸으면 메시지 큐에게 ack 전송
+    channel.ack(msg);
+}
+
 
 const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
     if (!fastify.hasDecorator('amqpChannel')) {
@@ -53,14 +86,24 @@ const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
         const channel = await connection.createChannel();
         await channel.assertQueue('duel-result', { durable: false });
 
-        // 메시지(게임 결과)를 받았을 때 처리할 함수 등록
+        // 메시지(duel 게임 결과)를 받았을 때 처리할 함수 등록
         channel.consume('duel-result', function (msg) {
             // consumer 연결이 끊긴 경우 msg가 null이 들어올 수 있어 예외처리
             if (!msg) {
                 fastify.log.warn("Consumer cancelled");
                 return;
             }
-            handleMessage(fastify, channel, msg);
+            handleDuelMessage(fastify, channel, msg);
+        });
+
+        // 메시지(tournament 게임 결과)를 받았을 때 처리할 함수 등록
+        channel.consume('tournament-result', function (msg) {
+            // consumer 연결이 끊긴 경우 msg가 null이 들어올 수 있어 예외처리
+            if (!msg) {
+                fastify.log.warn("Consumer cancelled");
+                return;
+            }
+            handleTournamentMessage(fastify, channel, msg);
         });
 
         // fastify의 다른 곳에서 메시지 큐를 사용할 수 있도록 channel을 등록
