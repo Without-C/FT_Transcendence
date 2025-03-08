@@ -26,19 +26,44 @@ function setCountdown(countdown, player1_username, player2_username) {
 	ctx.fillText(player1_username + " vs " + player2_username, canvas.width / 2, canvas.height / 4);
 }
 
+// TODO: 대진표 보여주면서 양쪽에 누구인지 닉네임도 띄워주기
+// TODO: 1, 2경기가 마무리 되면 다름에 대진표 보여줄 때 이긴 사람도 출력해주기
 function setCountdownTournament(countdown, player1_username, player2_username, players, currentRound) {
 	function drawLine(fromX, fromY, toX, toY) {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(fromX, fromY);
-        ctx.lineTo(toX, toY);
-        ctx.stroke();
+		ctx.beginPath();
+		ctx.moveTo(fromX, fromY);
+		ctx.lineTo(toX, toY);
+		ctx.stroke();
+	}
+
+	function highlightLine(currentRound) {
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = 2;
+		switch (currentRound) {
+			case 0:
+				drawLine(150, 200, 250, 200);
+				drawLine(150, 200, 150, 250);
+				drawLine(250, 200, 250, 250);
+				break;
+			case 1:
+				drawLine(350, 200, 450, 200);
+				drawLine(350, 200, 350, 250);
+				drawLine(450, 200, 450, 250);
+
+				break;
+			case 2:
+				drawLine(200, 150, 400, 150);
+				drawLine(200, 150, 200, 200);
+				drawLine(400, 150, 400, 200);
+				break;
+		}
 	}
 
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+	ctx.strokeStyle = "white";
+	ctx.lineWidth = 2;
 	drawLine(200, 150, 400, 150);
 
 	drawLine(200, 150, 200, 200);
@@ -52,7 +77,8 @@ function setCountdownTournament(countdown, player1_username, player2_username, p
 	drawLine(350, 200, 350, 250);
 	drawLine(450, 200, 450, 250);
 
-	// TODO: 어느 경기가 진행중인지도 표시하기
+	// 어느 경기가 진행중인지 표시
+	highlightLine(currentRound);
 
 	ctx.font = "bold 40px Arial";
 	ctx.fillStyle = "white";
@@ -60,7 +86,7 @@ function setCountdownTournament(countdown, player1_username, player2_username, p
 	ctx.textBaseline = "middle";
 
 	ctx.fillText(countdown, canvas.width / 2, canvas.height / 5);
-	
+
 	for (let i = 0; i < 4; i++) {
 		ctx.fillText(players[i], 150 + i * 100, 300);
 	}
