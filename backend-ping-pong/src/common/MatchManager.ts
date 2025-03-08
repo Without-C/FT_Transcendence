@@ -1,26 +1,25 @@
 import { Player } from "./Player";
-import { PingPong } from "./PingPong";
-import { FastifyInstance } from "fastify";
+import { IGameManager } from "./IGameManager";
+import { IGameManagerFactory } from "./IGameManagerFactory";
 
 export class MatchManager {
-    private fastify: FastifyInstance
     private waitingPlayers: Player[] = [];
-    private games: Map<string, PingPong> = new Map();
-    private requiredPlayers: number;
+    private games: Map<string, IGameManager> = new Map();
 
-    constructor(fastify: FastifyInstance, requirePlayers: number) {
-        this.fastify = fastify;
-        this.requiredPlayers = requirePlayers;
-    }
+    constructor(
+        private requiredPlayers: number,
+        private gameManagerFactory: IGameManagerFactory,
+    ) { }
 
     public addPlayer(player: Player) {
+        player.send({ type: "wait" })
         this.waitingPlayers.push(player);
     }
 
     public tryMatchmaking(): void {
         if (this.waitingPlayers.length >= this.requiredPlayers) {
             const playerForMatch = this.waitingPlayers.splice(0, this.requiredPlayers);
-            const game = new PingPong(this.fastify, playerForMatch);
+            const game = this.gameManagerFactory.createGameManager(playerForMatch);
             playerForMatch.forEach(player => {
                 player.game = game;
             });
@@ -31,10 +30,9 @@ export class MatchManager {
     public removePlayer(player: Player): void {
         this.waitingPlayers = this.waitingPlayers.filter(p => p.id !== player.id);
 
-        for (const [roomId, room] of this.games.entries()) {
-            if (room.hasPlayer(player)) {
-                room.onPlayerDisconnect(player);
-                this.games.delete(roomId);
+        for (const [gameId, game] of this.games.entries()) {
+            if (game.onPlayerDisconnect(player)) {
+                this.games.delete(gameId);
                 break;
             }
         }

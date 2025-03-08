@@ -15,7 +15,7 @@ export function render1P1PlayPage() {
 function loadCanvasScripts() {
 	const scripts = [
 		"./src/scripts/canvasManager.js",
-		"./src/scripts/websocketManager.js",
+		"./src/scripts/1p1_websocketManager.js",
 		"./src/scripts/keyManager.js"
 	];
 
