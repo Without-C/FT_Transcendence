@@ -29,7 +29,6 @@ export class GameManager implements IGameManager {
     private gameResults: GameResult[] = [];
     private currentRound: number = 0;
 
-    // TODO: 시작할 때 대진표 보여주기
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
@@ -55,7 +54,6 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
-    // TODO: 끝날 때 마다 중간 결과 보여주기
     private onEndRound(winner_username: string, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
