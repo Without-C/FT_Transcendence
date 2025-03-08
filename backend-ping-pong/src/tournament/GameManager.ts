@@ -40,8 +40,8 @@ export class GameManager implements IGameManager {
         this.startTournament();
     }
 
-    // TODO: 토너먼트 시작할 때 tournament_start 보내야 함
     private startTournament() {
+        this.broadcast({ type: "tournament_start" });
         this.startRound();
     }
 
@@ -86,9 +86,9 @@ export class GameManager implements IGameManager {
         }
     }
 
-    // TODO: 토너먼트 끝날 때 tournament_end 보내야 함
     private endTournament() {
         this.isPlaying = false;
+        this.broadcast({ type: "tournament_end" });
         this.messageBroker.sendGameResult(this.gameResults);
     }
 
@@ -165,5 +165,11 @@ export class GameManager implements IGameManager {
         });
 
         return true;
+    }
+
+    private broadcast(message: any): void {
+        this.players.forEach(p => {
+            p.send(message);
+        });
     }
 }
