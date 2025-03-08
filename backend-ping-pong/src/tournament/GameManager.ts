@@ -51,6 +51,7 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
+    // FIXME: player id와 winner, loser가 잘 못 반환됨
     private onEndRound(winner_username: string, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
