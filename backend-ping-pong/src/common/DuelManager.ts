@@ -116,6 +116,10 @@ export class DuelManager {
             countdown: count,
             player1_username: this.players[0].username,
             player2_username: this.players[1].username,
+            tournament: {
+                players: this.whole_players.map(p => p.username),
+                currentRound: this.currentMatch,
+            }
         });
         count -= 1;
         this.countdownInterval = setInterval(() => {
