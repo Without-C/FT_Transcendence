@@ -19,8 +19,6 @@ type GameResult = {
     },
 }
 
-// FIXME: Duel 끝날 때마다 누가 이겼는지 보여주는 창이 아마 마지막에만 나오는 것 같음
-// TODO: 중간에 나가는거 잘 처리하기
 export class GameManager implements IGameManager {
     public id: string;
     private isPlaying: boolean = false;
@@ -49,7 +47,6 @@ export class GameManager implements IGameManager {
         const player1: Player = this.matches[this.currentRound][0];
         const player2: Player = this.matches[this.currentRound][1];
 
-        // FIXME: tournament에서 countdown할 때 맨 처음에 tournament 항목이 없어서 3이 안 나옴
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
