@@ -16,11 +16,11 @@ interface QueryString {
 
 const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(jwt, {
-		secret: "asdasdf"
+		secret: "my-secret"
 	})
 	
 	await fastify.register(cookie, {
-		secret: "asdasdf", // 쿠키 서명에 사용할 비밀 키
+		secret: "my-secret", // 쿠키 서명에 사용할 비밀 키
 		parseOptions: {}  // 쿠키 파싱 옵션
 	});
 	
