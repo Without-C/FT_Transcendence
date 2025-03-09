@@ -19,6 +19,7 @@ clean :
 
 fclean : 
 	make clean
+	rm -rf backend-user/uploads
 	docker volume prune -f
 
 re :

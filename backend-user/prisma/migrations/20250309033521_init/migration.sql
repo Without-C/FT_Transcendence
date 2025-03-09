@@ -1,8 +1,7 @@
 /*
   Warnings:
 
-  - Made the column `avatar_url` on table `User` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `username` on table `User` required. This step will fail if there are existing NULL values in that column.
+  - You are about to drop the column `avatar_url` on the `User` table. All the data in the column will be lost.
 
 */
 -- RedefineTables

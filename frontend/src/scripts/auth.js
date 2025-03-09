@@ -17,9 +17,9 @@ if (username) {
 	username_element.textContent = username;
 }
 
-const avatar_url = getCookie("avatar_url");
-const avatar_element = document.getElementById("avatar-element");
-if (avatar_url) {
-	avatar_element.src = "/api/user/avatars/" + avatar_url;
-	console.log(avatar_element.src);
-}
+//const avatar_url = getCookie("avatar_url");
+//const avatar_element = document.getElementById("avatar-element");
+//if (avatar_url) {
+//	avatar_element.src = "/api/user/avatars/" + avatar_url;
+//	console.log(avatar_element.src);
+//}
