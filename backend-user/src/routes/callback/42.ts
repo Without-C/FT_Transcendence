@@ -68,27 +68,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 				String(userinfo.data.id),
 				uploadsDir
 			  );
-			/* 
-			try {
-				// URL에서 이미지 파일을 다운로드
-				const imageResponse = await axios({
-					url: userinfo.data.image.link,
-					method: 'GET',
-					responseType: 'arraybuffer', // 바이너리 데이터로 받기
-				});
-			
-				// 파일명은 URL에서 추출하고, `uploads` 폴더에 저장
-				const fileName = `${userinfo.data.id}.jpg`;
-				const filePath = path.join(uploadsDir, fileName);
-			
-				// 파일을 로컬 서버에 저장
-				fs.writeFileSync(filePath, imageResponse.data);
-				console.log('이미지 저장 완료:', filePath);
-			}
-			catch (error) {
-				console.error('이미지 저장 실패:', error);
-			}
-			*/
+
 			const newUser = await fastify.prisma.user.create({
 				data: {
 					username: userinfo.data.login,//인트라 아이디 저장
@@ -96,7 +76,6 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 				},
 			});
 			console.log('새로운 유저 생성:', newUser);
-			
 		}
 		else
 			console.log('유저가 이미 존재합니다:', existingUser);
