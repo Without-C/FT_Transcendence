@@ -4,7 +4,7 @@ import {renderSignInPage} from "./pages/signinpage.ts";
 import {render1P1PlayPage} from "./pages/1p1_playpage.ts";
 import {renderTPPlayPage} from "./pages/tp_playpage.ts";
 
-export function render() {
+export async function render() {
 	const app = document.getElementById("app");
 	if(!app) return;
 
@@ -24,7 +24,7 @@ export function render() {
 			app.innerHTML = renderPlayPage();
 		}
 	} else if(mainRoute === "mypage") {
-		app.innerHTML = renderMyPage();
+		app.innerHTML = await renderMyPage();
 	} else if(mainRoute === "signin") {
 		app.innerHTML = renderSignInPage();	
 	} else {
@@ -32,9 +32,9 @@ export function render() {
 	}
 }
 
-window.addEventListener("hashchange", () => {
-	render();
+window.addEventListener("hashchange", async () => {
+	await render();
 });
-window.addEventListener("DOMContentLoaded", () => {
-	render();
+window.addEventListener("DOMContentLoaded", async () => {
+	await render();
 });

@@ -1,0 +1,207 @@
+{
+	"user": {
+		"username": "somilee",
+		"profileImg": "https://avatars.githubusercontent.com/u/117346967?v=4",
+		"following": [
+			{ "username": "younghoc", "online": 1 },
+			{ "username": "yeoshin", "online": 0 },
+			{ "username": "jjhang", "online": 1 }
+		],
+		"followers": ["jimchoi", "jongmlee", "jooh", "hyeongsh"]
+	},
+	"game": {
+		"history": {
+			"single": [
+				{
+					"game_end_reason": "normal",
+					"player1": {
+						"username": "somilee",
+						"round_score": 2,
+						"result": "winner"
+					},
+					"player2": {
+						"username": "jjhang",
+						"round_score": 1,
+						"result": "loser"
+					},
+					"date": "2025-02-02"
+				},
+				{
+					"game_end_reason": "normal",
+					"player1": {
+						"username": "younghoc",
+						"round_score": 3,
+						"result": "winner"
+					},
+					"player2": {
+						"username": "somilee",
+						"round_score": 2,
+						"result": "loser"
+					},
+					"date": "2025-03-02"
+				},
+				{
+					"game_end_reason": "normal",
+					"player1": {
+						"username": "yeoshin",
+						"round_score": 10,
+						"result": "loser"
+					},
+					"player2": {
+						"username": "jjhang",
+						"round_score": 11,
+						"result": "winner"
+					},
+					"date": "2025-03-06"
+				},
+				{
+					"game_end_reason": "normal",
+					"player1": {
+						"username": "somilee",
+						"round_score": 2,
+						"result": "winner"
+					},
+					"player2": {
+						"username": "jjhang",
+						"round_score": 1,
+						"result": "loser"
+					},
+					"date": "2025-03-07"
+				}
+			],
+			"tournament": [
+				{
+					"date": "2025-03-02",
+					"game": [
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "somilee",
+							"round_score": 2,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "jjhang",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "younghoc",
+							"round_score": 11,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "yeoshin",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "somilee",
+							"round_score": 5,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "yeonghoc",
+							"round_score": 4,
+							"result": "loser"
+							}
+						}
+					]
+				},
+				{
+					"date": "2025-03-03",
+					"game": [
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "somilee",
+							"round_score": 2,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "jjhang",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "younghoc",
+							"round_score": 11,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "yeoshin",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "yeonghoc",
+							"round_score": 5,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "somilee",
+							"round_score": 4,
+							"result": "loser"
+							}
+						}
+					]
+				},				{
+					"date": "2025-03-04",
+					"game": [
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "somilee",
+							"round_score": 2,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "jjhang",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "younghoc",
+							"round_score": 11,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "yeoshin",
+							"round_score": 1,
+							"result": "loser"
+							}
+						},
+						{
+							"game_end_reason": "normal",
+							"player1": {
+							"username": "somilee",
+							"round_score": 5,
+							"result": "winner"
+							},
+							"player2": {
+							"username": "yeonghoc",
+							"round_score": 4,
+							"result": "loser"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}
