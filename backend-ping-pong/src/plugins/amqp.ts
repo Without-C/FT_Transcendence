@@ -15,6 +15,7 @@ const amqpPlugin: FastifyPluginAsync = fp(async (fastify) => {
         const connection = await amqp.connect(amqpUrl);
         const channel = await connection.createChannel();
         await channel.assertQueue('duel-result', { durable: false });
+        await channel.assertQueue('tournament-result', { durable: false });
 
         // fastify의 다른 곳에서 메시지 큐를 사용할 수 있도록 channel을 등록
         fastify.decorate('amqpChannel', channel);

@@ -2,6 +2,7 @@ import {renderPlayPage} from "./pages/playpage.ts";
 import {renderMyPage} from "./pages/mypage.ts";
 import {renderSignInPage} from "./pages/signinpage.ts";
 import {render1P1PlayPage} from "./pages/1p1_playpage.ts";
+import {renderTPPlayPage} from "./pages/tp_playpage.ts";
 
 export function render() {
 	const app = document.getElementById("app");
@@ -18,7 +19,7 @@ export function render() {
 		} else if(subRoute === "mp") {
 			// app.innerHTML = renderMPPlayPage();
 		} else if(subRoute === "tp") {
-			// app.innerHTML = renderTPPlayPage();
+			app.innerHTML = renderTPPlayPage();
 		} else {
 			app.innerHTML = renderPlayPage();
 		}
