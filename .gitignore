@@ -1,3 +1,4 @@
 .env
 .DS_Store
+backend-user/uploads
 .vscode/
