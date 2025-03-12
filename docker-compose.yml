@@ -52,7 +52,7 @@ services:
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
       - DATABASE_URL=${DATABASE_URL}
     healthcheck:
-      test: wget -qO- http://localhost:3000/healthcheck
+      test: wget -qO- http://127.0.0.1:3000/healthcheck
       interval: 10s
       timeout: 10s
       retries: 5
@@ -74,7 +74,7 @@ services:
     environment:
       - AMQP_URL=${AMQP_URL}
     healthcheck:
-      test: wget -qO- http://localhost:3000/healthcheck
+      test: wget -qO- http://127.0.0.1:3000/healthcheck
       interval: 10s
       timeout: 10s
       retries: 5
@@ -96,7 +96,7 @@ services:
     environment:
       - AMQP_URL=${AMQP_URL}
     healthcheck:
-      test: wget -qO- http://localhost:3000/healthcheck
+      test: wget -qO- http://127.0.0.1:3000/healthcheck
       interval: 10s
       timeout: 10s
       retries: 5
