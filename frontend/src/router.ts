@@ -2,6 +2,7 @@ import {renderPlayPage} from "./pages/playpage.ts";
 import {renderMyPage} from "./pages/mypage.ts";
 import {renderSignInPage} from "./pages/signinpage.ts";
 import {render1P1PlayPage} from "./pages/1p1_playpage.ts";
+import {renderTPPlayPage} from "./pages/tp_playpage.ts";
 
 export async function render() {
 	const app = document.getElementById("app");
@@ -16,7 +17,7 @@ export async function render() {
 		if(subRoute === "1p1") {
 			app.innerHTML = render1P1PlayPage();
 		} else if(subRoute === "tp") {
-			// app.innerHTML = renderTPPlayPage();
+			app.innerHTML = renderTPPlayPage();
 		} else {
 			app.innerHTML = renderPlayPage();
 		}
