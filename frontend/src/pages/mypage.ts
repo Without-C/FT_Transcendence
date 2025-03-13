@@ -17,19 +17,26 @@ export async function renderMyPage() {
 		<div class="flex flex-col items-center lg:flex-row lg:items-start lg:justify-center lg:gap-10 p-6 min-h-screen bg-black text-white">
 
 		<section class="flex flex-col items-center gap-4 pt-20">
+
 		  <div class="relative">
-			<img src="${user.profileImg}" 
-				class="w-40 h-40 rounded-full" alt="profile">
-			<button class="absolute bottom-2 right-2 bg-[#375433] px-2.5 py-1 rounded-full">✎</button>
+			<img src="${user.profileImg}" class="w-40 h-40 rounded-full" alt="profile">
+			<input type="file" id="fileInput" accept="image/*" class="hidden">
+			<button id="profileImg" class="absolute bottom-2 right-2 bg-[#375433] px-2.5 py-1 rounded-full">✎</button>
 		  </div>
-		  <div class="flex flex-row gap-5">
-			<h2 class="text-3xl font-bold text-[#9CCA95]">${user.username}</h2>
-			<button class="text-xl text-[#9CCA95] rounded-full">✎</button>
+
+		  <div id="username" class="flex flex-row gap-5">
+			<div id="currentUsername" class="flex flex-row gap-5 hidden">
+				<input id="usernameInput" type="text" maxlength="10" class="bg-[#162113] text-3xl font-bold text-[#9CCA95] px-2 w-50 rounded">
+				<button id="currentUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
+			</div>
+			<div id="changedUsername" class="flex flex-row gap-5">
+				<h2 class="text-3xl font-bold text-[#9CCA95]">${user.username}</h2>
+				<button id="changedUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
+			</div>
 		  </div>
 		</section>
 	  
 		<section class="flex flex-col w-full max-w-3xl">
-	  
 		  <div class="flex justify-end gap-4 text-[#9CCA95]">
 			<span><strong>131</strong> followers</span>
 			<span><strong>120</strong> following</span>
@@ -64,6 +71,7 @@ export async function renderMyPage() {
 			const singleButton = document.querySelector("#single");
 			const tournamentButton = document.querySelector("#tournament");
 			const searchElement = document.getElementById("search");
+			const profileImgButton = document.getElementById("profileImg");
 
 			// friendList 랜더링
 			const renderFriendList = () => {
@@ -80,7 +88,7 @@ export async function renderMyPage() {
 					friendList?.appendChild(index);
 
 					const name = document.createElement("span");
-					name.textContent = `${friend.username}`
+					name.textContent = `${friend.username}`.padEnd(10, " ");
 					friendList?.appendChild(name);
 
 					const online = document.createElement("span");
@@ -117,22 +125,18 @@ export async function renderMyPage() {
 					const singlePlayList = document.createElement("li");
 					singlePlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
 
-					const index = document.createElement("span");
-					index.textContent = `#${idx + 1}`;
-					singlePlayList.appendChild(index);
-					
-					index.textContent = `#${idx + 1}`;
-					singlePlayList.appendChild(index);
-
 					const result = document.createElement("span");
+					result.style.whiteSpace = "pre"; 
 					if((single.player1.username === user.username && single.player1.result === "winner") ||
 						(single.player2.username === user.username && single.player2.result === "winner")) {
-							result.className = "text-blue-400 font-bold";
-							result.textContent = "WIN!";
+							result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
+							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+												`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
 					}
 					else {
-						result.className = "text-red-400 font-bold";
-						result.textContent = "LOSE";
+						result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
+						result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+											`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
 					}
 					singlePlayList.appendChild(result);
 
@@ -141,12 +145,14 @@ export async function renderMyPage() {
 					singlePlayList.appendChild(date);
 
 					const players = document.createElement("span");
-					players.textContent = `${single.player1.username} vs ${single.player2.username}`;
+					players.style.whiteSpace = "pre"; 
+					players.textContent = `${single.player1.username.padStart(10, " ")} vs ${single.player2.username.padEnd(10, " ")}`;
 					singlePlayList.appendChild(players);
 
 					const score = document.createElement("span");
+					score.style.whiteSpace = "pre"; 
 					score.classList.add("font-bold");
-					score.textContent = `${single.player1.round_score} : ${single.player2.round_score}`;
+					score.textContent = `${single.player1.round_score.toString().padStart(2, " ")} : ${single.player2.round_score.toString().padEnd(2, " ")}`;
 					singlePlayList.appendChild(score);
 
 					gameListElement?.appendChild(singlePlayList);
@@ -162,19 +168,18 @@ export async function renderMyPage() {
 					const tournamentPlayList = document.createElement("li");
 					tournamentPlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
 
-					const index = document.createElement("span");
-					index.textContent = `#${idx + 1}`;
-					tournamentPlayList.appendChild(index);
-
 					const result = document.createElement("span");
+					result.style.whiteSpace = "pre";
 					if((tournament.game[2].player1.username === user.username && tournament.game[2].player1.result === "winner") ||
 						(tournament.game[2].player2.username === user.username && tournament.game[2].player2.result === "winner")) {
-							result.className = "text-blue-400 font-bold";
-							result.textContent = "WIN!";
+							result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
+							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+												`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
 					}
 					else {
-						result.className = "text-red-400 font-bold";
-						result.textContent = "LOSE";
+						result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
+						result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+											`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
 					}
 					tournamentPlayList.appendChild(result);
 
@@ -188,13 +193,15 @@ export async function renderMyPage() {
 					const results = document.createElement("div");
 					results.className = "flex flex-col";
 
-					tournament.game.forEach(round => {
+					tournament.game.forEach((round, idx) => {
 						const player = document.createElement("span");
 						const result = document.createElement("span");
+						player.style.whiteSpace = "pre";
+						result.style.whiteSpace = "pre";
 						result.classList.add("font-bold");
 
-						player.textContent = `${round.player1.username} vs ${round.player2.username}`;
-						result.textContent = `${round.player1.round_score} : ${round.player2.round_score}`;
+						player.textContent = `R${idx + 1} :   ${round.player1.username} vs ${round.player2.username}`;
+						result.textContent = `${round.player1.round_score.toString().padStart(2, " ")} : ${round.player2.round_score.toString().padEnd(2, " ")}`;
 
 						players?.appendChild(player);
 						results?.appendChild(result);
@@ -226,6 +233,25 @@ export async function renderMyPage() {
 			searchElement?.addEventListener("input", search => {
 				const keyword = (search.target as HTMLInputElement).value;
 				renderSearch(keyword);
+			});
+			profileImgButton?.addEventListener("click", () => {
+				document.getElementById("fileInput")?.click();
+			})
+			
+			//username 변경 랜더링
+			const currentUsernameInput = document.getElementById("currentUsernameInput");
+			const changedUsernameInput = document.getElementById("changedUsernameInput");
+
+			document.getElementById("currentUsernameInput")?.addEventListener("click" , () => {
+				const newName = document.getElementById("usernameInput"); //빈문자열인지 확인
+				newName.value = '';
+				document.getElementById("currentUsername")?.classList.toggle("hidden");
+				document.getElementById("changedUsername")?.classList.toggle("hidden");
+			});
+
+			document.getElementById("changedUsernameInput")?.addEventListener("click", () => {
+				document.getElementById("currentUsername")?.classList.toggle("hidden");
+				document.getElementById("changedUsername")?.classList.toggle("hidden");
 			});
 			
 			renderFriendList();

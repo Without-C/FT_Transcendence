@@ -15,8 +15,6 @@ export async function render() {
 	if(mainRoute === "play") {
 		if(subRoute === "1p1") {
 			app.innerHTML = render1P1PlayPage();
-		} else if(subRoute === "mp") {
-			// app.innerHTML = renderMPPlayPage();
 		} else if(subRoute === "tp") {
 			// app.innerHTML = renderTPPlayPage();
 		} else {
@@ -24,7 +22,7 @@ export async function render() {
 		}
 	} else if(mainRoute === "mypage") {
 		app.innerHTML = await renderMyPage();
-	} else if(mainRoute === "signin") {
+	} else if(mainRoute === "signin" || mainRoute === "") {
 		app.innerHTML = renderSignInPage();	
 	} else {
 		app.innerHTML = "<h1>404 - 페이지를 찾을 수 없음</h1>";
