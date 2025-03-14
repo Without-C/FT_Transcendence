@@ -111,16 +111,19 @@ export class GameManager implements IGameManager {
     }
 
     public onPlayerDisconnect(disconnectedPlayer: Player): boolean {
+        // 이 게임에 속해있지 않은 유저라면 return
         if (!this.players.some(p => p.id === disconnectedPlayer.id)) {
             return false;
         }
 
+        // 게임이 이미 끝난 상태라면 return
         if (!this.isPlaying) {
             return true;
         }
-        this.isPlaying = false;
 
         // TODO: 이 유저가 지금 플레이중이라면 종료하고 다음 게임 시작
+        // TODO: 이게 마지막 게임이었다면 종료
+
         if (this.duelManager === null) {
             return true;
         }
