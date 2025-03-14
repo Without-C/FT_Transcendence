@@ -60,8 +60,10 @@ export class GameManager implements IGameManager {
         // 시작하기 전에 이 유저가 살아있는지 확인
         if (!player1.getIsAlive()) {
             this.onEndRound(player2, [0, 0], "player_disconnected")
+            return;
         } else if (!player2.getIsAlive()) {
             this.onEndRound(player1, [0, 0], "player_disconnected")
+            return;
         }
 
         // 게임 생성 후 시작
