@@ -1,3 +1,5 @@
+import { GameResult } from "./GameResult";
+
 export interface IMessageBroker {
-    sendGameResult(message: any): void;
+    sendGameResult(message: GameResult[]): void;
 }

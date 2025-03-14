@@ -16,12 +16,11 @@ export class DuelManager {
     // 점수
     private playerScores: number[] = [0, 0];
 
-
     constructor(
         private players: Player[],
         private whole_players: Player[],
         private currentMatch: number,
-        private onEndDuel: (winner: string, roundScores: number[]) => void,
+        private onEndDuel: (winner: Player, roundScores: number[]) => void,
     ) {
         this.onScore = this.onScore.bind(this);
     }
@@ -36,11 +35,11 @@ export class DuelManager {
     }
 
     private endGame(): void {
-        const finalWinner = this.roundScores[0] > this.roundScores[1] ? this.players[0].username : this.players[1].username;
+        const finalWinner = this.roundScores[0] > this.roundScores[1] ? this.players[0] : this.players[1];
 
         this.broadcast({
             type: "game_end",
-            final_winner: finalWinner,
+            final_winner: finalWinner.username,
         });
 
         this.onEndDuel(finalWinner, this.roundScores);
