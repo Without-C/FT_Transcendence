@@ -18,7 +18,7 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
-    private onEndDuel(winner: string, roundScores: number[]): void {
+    private onEndDuel(winner: Player, roundScores: number[]): void {
         this.isPlaying = false;
 
         this.messageBroker.sendGameResult([{
@@ -26,12 +26,12 @@ export class GameManager implements IGameManager {
             player1: {
                 id: this.players[0].id,
                 round_score: roundScores[0],
-                result: winner === this.players[0].username ? "winner" : "loser",
+                result: winner.username === this.players[0].username ? "winner" : "loser",
             },
             player2: {
                 id: this.players[1].id,
                 round_score: roundScores[1],
-                result: winner === this.players[1].username ? "winner" : "loser",
+                result: winner.username === this.players[1].username ? "winner" : "loser",
             },
         }]);
     }
