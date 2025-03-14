@@ -26,6 +26,7 @@ export class GameManager implements IGameManager {
     private matches: Player[][] = [];
     private gameResults: GameResult[] = [];
     private currentRound: number = 0;
+    private currentPlayers: Player[] = [];
 
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
         this.id = 'duel-' + uuidv4();
@@ -47,28 +48,30 @@ export class GameManager implements IGameManager {
         const player1: Player = this.matches[this.currentRound][0];
         const player2: Player = this.matches[this.currentRound][1];
 
+        this.currentPlayers.length = 0;
+        this.currentPlayers.push(player1);
+        this.currentPlayers.push(player2);
+
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
 
-    // FIXME: player id와 winner, loser가 잘 못 반환됨
-    private onEndRound(winner_username: string, roundScores: number[]): void {
+    private onEndRound(winner: Player, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
             player1: {
-                id: this.players[0].id,
+                id: this.currentPlayers[0].id,
                 round_score: roundScores[0],
-                result: winner_username === this.players[0].username ? "winner" : "loser",
+                result: winner.username === this.currentPlayers[0].username ? "winner" : "loser",
             },
             player2: {
-                id: this.players[1].id,
+                id: this.currentPlayers[1].id,
                 round_score: roundScores[1],
-                result: winner_username === this.players[1].username ? "winner" : "loser",
+                result: winner.username === this.currentPlayers[1].username ? "winner" : "loser",
             },
         });
 
         this.currentRound += 1;
-        const winner = this.getPlayer(this.players, winner_username);
         switch (this.currentRound) {
             case 1:
                 this.matches.push([winner!]);
@@ -105,10 +108,6 @@ export class GameManager implements IGameManager {
             matches.push([players[i], players[i + 1]]);
         }
         return matches;
-    }
-
-    private getPlayer(players: Player[], username: string): Player | undefined {
-        return players.find(player => player.username === username);
     }
 
     public onMessage(from: Player, message: any): void {
