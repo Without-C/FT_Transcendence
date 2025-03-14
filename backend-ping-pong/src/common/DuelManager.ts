@@ -16,7 +16,6 @@ export class DuelManager {
     // 점수
     private playerScores: number[] = [0, 0];
 
-
     constructor(
         private players: Player[],
         private whole_players: Player[],
