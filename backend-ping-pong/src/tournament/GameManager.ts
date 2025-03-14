@@ -29,12 +29,30 @@ export class GameManager implements IGameManager {
     private currentPlayers: Player[] = [];
 
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
+
+        function shufflePlayers(players: Player[]): Player[] {
+            const shuffled = [...players];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initMatches(players: Player[]): Player[][] {
+            const matches: Player[][] = [];
+            for (let i = 0; i < players.length; i += 2) {
+                matches.push([players[i], players[i + 1]]);
+            }
+            return matches;
+        }
+
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
         this.onEndRound = this.onEndRound.bind(this);
 
-        this.players = this.shufflePlayers(this.players);
-        this.matches = this.initMatches(this.players);
+        this.players = shufflePlayers(this.players);
+        this.matches = initMatches(this.players);
 
         this.startTournament();
     }
@@ -91,23 +109,6 @@ export class GameManager implements IGameManager {
         this.isPlaying = false;
         this.broadcast({ type: "tournament_end" });
         this.messageBroker.sendGameResult(this.gameResults);
-    }
-
-    private shufflePlayers(players: Player[]): Player[] {
-        const shuffled = [...players];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
-
-    private initMatches(players: Player[]): Player[][] {
-        const matches: Player[][] = [];
-        for (let i = 0; i < players.length; i += 2) {
-            matches.push([players[i], players[i + 1]]);
-        }
-        return matches;
     }
 
     public onMessage(from: Player, message: any): void {
