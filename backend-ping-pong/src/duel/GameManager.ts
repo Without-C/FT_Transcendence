@@ -84,4 +84,8 @@ export class GameManager implements IGameManager {
 
         return true;
     }
+
+    public getAlivePlayerNumber(): number {
+        return this.players.filter(player => player.getIsAlive()).length;
+    }
 }

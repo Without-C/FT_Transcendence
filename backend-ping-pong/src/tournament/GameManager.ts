@@ -104,6 +104,7 @@ export class GameManager implements IGameManager {
 
     private endTournament() {
         this.isPlaying = false;
+        // TODO: 여기서 누가 이겼는지 알려주기
         this.broadcast({ type: "tournament_end" });
         this.messageBroker.sendGameResult(this.gameResults);
     }
@@ -122,7 +123,6 @@ export class GameManager implements IGameManager {
         return this.currentPlayers.some(currentPlayer => currentPlayer.id === player.id);
     }
 
-    // FIXME: 두번째 게임 하는 중 플래이어가 나가면 에러
     public onPlayerDisconnect(disconnectedPlayer: Player): boolean {
         // 이 게임에 속해있지 않은 유저라면 return
         if (!this.players.some(p => p.id === disconnectedPlayer.id)) {
@@ -163,5 +163,9 @@ export class GameManager implements IGameManager {
         this.players.forEach(p => {
             p.send(message);
         });
+    }
+
+    public getAlivePlayerNumber(): number {
+        return this.currentPlayers.filter(player => player.getIsAlive()).length;
     }
 }
