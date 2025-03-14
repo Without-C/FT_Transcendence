@@ -135,7 +135,7 @@ export class GameManager implements IGameManager {
 
         const remainingPlayer = this.players.find(p => p.id !== disconnectedPlayer.id);
 
-        this.messageBroker.sendGameResult({
+        this.messageBroker.sendGameResult([{
             game_end_reason: "player_disconnected",
             player1: {
                 id: this.players[0].id,
@@ -147,7 +147,7 @@ export class GameManager implements IGameManager {
                 round_score: roundScores[1],
                 result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
             },
-        });
+        }]);
 
         return true;
     }

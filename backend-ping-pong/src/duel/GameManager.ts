@@ -21,7 +21,7 @@ export class GameManager implements IGameManager {
     private onEndDuel(winner: string, roundScores: number[]): void {
         this.isPlaying = false;
 
-        this.messageBroker.sendGameResult({
+        this.messageBroker.sendGameResult([{
             game_end_reason: "normal",
             player1: {
                 id: this.players[0].id,
@@ -33,7 +33,7 @@ export class GameManager implements IGameManager {
                 round_score: roundScores[1],
                 result: winner === this.players[1].username ? "winner" : "loser",
             },
-        });
+        }]);
     }
 
     public onMessage(from: Player, message: any): void {
@@ -68,7 +68,7 @@ export class GameManager implements IGameManager {
 
         const remainingPlayer = this.players.find(p => p.id !== disconnectedPlayer.id);
 
-        this.messageBroker.sendGameResult({
+        this.messageBroker.sendGameResult([{
             game_end_reason: "player_disconnected",
             player1: {
                 id: this.players[0].id,
@@ -80,7 +80,7 @@ export class GameManager implements IGameManager {
                 round_score: roundScores[1],
                 result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
             },
-        });
+        }]);
 
         return true;
     }
