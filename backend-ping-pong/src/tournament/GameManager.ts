@@ -151,7 +151,10 @@ export class GameManager implements IGameManager {
         //     }
         // });
 
-        this.onEndRound(disconnectedPlayer, roundScores, "player_disconnected")
+        const winner = this.currentPlayers.find(player =>
+            player.id !== disconnectedPlayer.id);
+        this.onEndRound(winner!, roundScores, "player_disconnected")
+
         return true;
     }
 
