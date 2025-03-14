@@ -110,6 +110,10 @@ export class GameManager implements IGameManager {
         }
     }
 
+    public isPlayingUser(player: Player): boolean {
+        return this.currentPlayers.some(currentPlayer => currentPlayer.id === player.id);
+    }
+
     public onPlayerDisconnect(disconnectedPlayer: Player): boolean {
         // 이 게임에 속해있지 않은 유저라면 return
         if (!this.players.some(p => p.id === disconnectedPlayer.id)) {
@@ -121,36 +125,40 @@ export class GameManager implements IGameManager {
             return true;
         }
 
+        // 이 유저가 플레이 중이지 않다면 return
+        if (!this.isPlayingUser(disconnectedPlayer)) {
+            return true;
+        }
+
         // TODO: 이 유저가 지금 플레이중이라면 종료하고 다음 게임 시작
         // TODO: 이게 마지막 게임이었다면 종료
 
-        if (this.duelManager === null) {
-            return true;
-        }
-        const roundScores = this.duelManager.haltGame();
+        // 현재 진행중인 게임 종료
+        const roundScores = this.duelManager!.haltGame();
 
-        this.players.forEach(p => {
-            if (p.id !== disconnectedPlayer.id) {
-                p.send({
-                    type: "opponent_exit",
-                    opponent_username: disconnectedPlayer.username
-                });
-            }
-        });
+        // 나갔다고 broadcast
+        // this.players.forEach(p => {
+        //     if (p.id !== disconnectedPlayer.id) {
+        //         p.send({
+        //             type: "opponent_exit",
+        //             opponent_username: disconnectedPlayer.username
+        //         });
+        //     }
+        // });
 
-        const remainingPlayer = this.players.find(p => p.id !== disconnectedPlayer.id);
+        const remainingPlayer = this.currentPlayers.find(p => p.id !== disconnectedPlayer.id);
 
         this.messageBroker.sendGameResult([{
             game_end_reason: "player_disconnected",
             player1: {
-                id: this.players[0].id,
+                id: this.currentPlayers[0].id,
                 round_score: roundScores[0],
-                result: (remainingPlayer && this.players[0].id === remainingPlayer.id) ? "winner" : "loser",
+                result: (remainingPlayer && this.currentPlayers[0].id === remainingPlayer.id) ? "winner" : "loser",
             },
             player2: {
-                id: this.players[1].id,
+                id: this.currentPlayers[1].id,
                 round_score: roundScores[1],
-                result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
+                result: (remainingPlayer && this.currentPlayers[1].id === remainingPlayer.id) ? "winner" : "loser",
             },
         }]);
 
