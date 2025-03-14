@@ -63,9 +63,9 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
-    private onEndRound(winner: Player, roundScores: number[]): void {
+    private onEndRound(winner: Player, roundScores: number[], reason: string): void {
         this.gameResults.push({
-            game_end_reason: "normal",
+            game_end_reason: reason,
             player1: {
                 id: this.currentPlayers[0].id,
                 round_score: roundScores[0],

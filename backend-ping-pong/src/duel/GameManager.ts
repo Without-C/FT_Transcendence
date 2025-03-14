@@ -18,11 +18,11 @@ export class GameManager implements IGameManager {
         this.duelManager.startGame();
     }
 
-    private onEndDuel(winner: Player, roundScores: number[]): void {
+    private onEndDuel(winner: Player, roundScores: number[], reason: string): void {
         this.isPlaying = false;
 
         this.messageBroker.sendGameResult([{
-            game_end_reason: "normal",
+            game_end_reason: reason,
             player1: {
                 id: this.players[0].id,
                 round_score: roundScores[0],
