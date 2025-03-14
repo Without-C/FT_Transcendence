@@ -52,6 +52,9 @@ chatSocket.onmessage = function (e) {
 		case "game_end":
 			draw_final_winner(data.final_winner);
 			break;
+		case "tournament_end":
+			draw_final_winner(data.winner);
+			break;
 	}
 };
 
