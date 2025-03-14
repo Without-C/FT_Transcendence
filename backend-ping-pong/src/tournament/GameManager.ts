@@ -81,11 +81,11 @@ export class GameManager implements IGameManager {
         this.currentRound += 1;
         switch (this.currentRound) {
             case 1:
-                this.matches.push([winner!]);
+                this.matches.push([winner]);
                 this.startRound();
                 break;
             case 2:
-                this.matches[2].push(winner!);
+                this.matches[2].push(winner);
                 this.startRound();
                 break;
             case 3:
