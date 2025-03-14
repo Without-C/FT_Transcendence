@@ -8,7 +8,7 @@ import { GameResult } from '../common/GameResult';
 
 export class GameManager implements IGameManager {
     public id: string;
-    private isPlaying: boolean = false;
+    private isPlaying: boolean = true;
     private duelManager: DuelManager | null = null;
     private matches: Player[][] = [];
     private gameResults: GameResult[] = [];
@@ -35,7 +35,6 @@ export class GameManager implements IGameManager {
         }
 
         this.id = 'duel-' + uuidv4();
-        this.isPlaying = true;
         this.onEndRound = this.onEndRound.bind(this);
 
         this.players = shufflePlayers(this.players);
