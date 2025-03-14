@@ -59,9 +59,11 @@ export class GameManager implements IGameManager {
 
         // 시작하기 전에 이 유저가 살아있는지 확인
         if (!player1.getIsAlive()) {
+            this.broadcastPlayerExit(player1);
             this.onEndRound(player2, [0, 0], "player_disconnected")
             return;
         } else if (!player2.getIsAlive()) {
+            this.broadcastPlayerExit(player2);
             this.onEndRound(player1, [0, 0], "player_disconnected")
             return;
         }
@@ -142,19 +144,15 @@ export class GameManager implements IGameManager {
         // 현재 진행중인 게임 종료
         const roundScores = this.duelManager!.haltGame();
 
-        // TODO: 나갔다고 broadcast
-        // this.players.forEach(p => {
-        //     if (p.id !== disconnectedPlayer.id) {
-        //         p.send({
-        //             type: "opponent_exit",
-        //             opponent_username: disconnectedPlayer.username
-        //         });
-        //     }
-        // });
+        // 상대방이 나갔다고 알림
+        this.broadcastPlayerExit(disconnectedPlayer);
 
-        const winner = this.currentPlayers.find(player =>
-            player.id !== disconnectedPlayer.id);
-        this.onEndRound(winner!, roundScores, "player_disconnected")
+        // 1초 뒤 다음 게임 시작
+        setTimeout(() => {
+            const winner = this.currentPlayers.find(player =>
+                player.id !== disconnectedPlayer.id);
+            this.onEndRound(winner!, roundScores, "player_disconnected")
+        }, 1000)
 
         return true;
     }
@@ -162,6 +160,17 @@ export class GameManager implements IGameManager {
     private broadcast(message: any): void {
         this.players.forEach(p => {
             p.send(message);
+        });
+    }
+
+    private broadcastPlayerExit(disconnectedPlayer: Player) {
+        this.players.forEach(p => {
+            if (p.id !== disconnectedPlayer.id) {
+                p.send({
+                    type: "opponent_exit",
+                    opponent_username: disconnectedPlayer.username
+                });
+            }
         });
     }
 
