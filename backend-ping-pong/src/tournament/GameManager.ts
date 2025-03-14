@@ -57,8 +57,14 @@ export class GameManager implements IGameManager {
         this.currentPlayers.push(player1);
         this.currentPlayers.push(player2);
 
-        // TODO: 시작하기 전에 이 유저가 살아있는지 확인
+        // 시작하기 전에 이 유저가 살아있는지 확인
+        if (!player1.getIsAlive()) {
+            this.onEndRound(player2, [0, 0], "player_disconnected")
+        } else if (!player2.getIsAlive()) {
+            this.onEndRound(player1, [0, 0], "player_disconnected")
+        }
 
+        // 게임 생성 후 시작
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
