@@ -57,6 +57,8 @@ export class GameManager implements IGameManager {
         this.currentPlayers.push(player1);
         this.currentPlayers.push(player2);
 
+        // TODO: 시작하기 전에 이 유저가 살아있는지 확인
+
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
@@ -118,7 +120,7 @@ export class GameManager implements IGameManager {
         }
         this.isPlaying = false;
 
-        // FIXME: 나가는 처리 어떻게 할 지는 더 고민해야함.
+        // TODO: 이 유저가 지금 플레이중이라면 종료하고 다음 게임 시작
         if (this.duelManager === null) {
             return true;
         }
