@@ -99,15 +99,14 @@ export class GameManager implements IGameManager {
                 this.startRound();
                 break;
             case 3:
-                this.endTournament();
+                this.endTournament(winner);
                 break;
         }
     }
 
-    private endTournament() {
+    private endTournament(winner: Player) {
         this.isPlaying = false;
-        // TODO: 여기서 누가 이겼는지 알려주기
-        this.broadcast({ type: "tournament_end" });
+        this.broadcast({ type: "tournament_end", winner: winner.username });
         this.messageBroker.sendGameResult(this.gameResults);
     }
 
