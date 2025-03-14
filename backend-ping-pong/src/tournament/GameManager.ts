@@ -4,20 +4,7 @@ import { Player } from "../common/Player";
 import { IMessageBroker } from "../common/IMessageBrocker";
 import { IGameManager } from "../common/IGameManager";
 import { DuelManager } from '../common/DuelManager';
-
-type GameResult = {
-    game_end_reason: string,
-    player1: {
-        id: string,
-        round_score: number,
-        result: string,
-    },
-    player2: {
-        id: string,
-        round_score: number,
-        result: string,
-    },
-}
+import { GameResult } from '../common/GameResult';
 
 export class GameManager implements IGameManager {
     public id: string;
