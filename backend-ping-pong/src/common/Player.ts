@@ -7,6 +7,7 @@ export class Player {
     public ws: any;
     public keyState: KeyState;
     public game: IGameManager | null = null;
+    private isAlive: boolean = true;
 
     constructor(id: string, username: string, ws: any) {
         this.id = id;
@@ -17,5 +18,13 @@ export class Player {
 
     public send(message: any): void {
         this.ws.send(JSON.stringify(message))
+    }
+
+    public getIsAlive(): boolean {
+        return this.isAlive;
+    }
+
+    public die() {
+        this.isAlive = false;
     }
 }

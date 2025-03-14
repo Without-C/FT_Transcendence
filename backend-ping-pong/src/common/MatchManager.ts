@@ -32,7 +32,9 @@ export class MatchManager {
 
         for (const [gameId, game] of this.games.entries()) {
             if (game.onPlayerDisconnect(player)) {
-                this.games.delete(gameId);
+                if (game.getAlivePlayerNumber() == 0) {
+                    this.games.delete(gameId);
+                }
                 break;
             }
         }
