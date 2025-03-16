@@ -28,6 +28,7 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         });
 
         ws.on('close', async () => {
+            player.die();
             matchManager.removePlayer(player);
         });
     })

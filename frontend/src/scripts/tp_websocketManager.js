@@ -27,7 +27,7 @@ chatSocket.onmessage = function (e) {
 			break;
 		case "opponent_exit":
 			gameIsPlaying = false;
-			setCanvasMessage(data.opponent_username + " exited!", "gray");
+			setCanvasMessage(data.opponent_username + " exited!", "#007010");
 			break;
 		case "game_state":
 			if (!gameIsPlaying) {
@@ -51,6 +51,9 @@ chatSocket.onmessage = function (e) {
 			break;
 		case "game_end":
 			draw_final_winner(data.final_winner);
+			break;
+		case "tournament_end":
+			draw_final_winner(data.winner);
 			break;
 	}
 };

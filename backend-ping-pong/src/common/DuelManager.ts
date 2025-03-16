@@ -20,7 +20,7 @@ export class DuelManager {
         private players: Player[],
         private whole_players: Player[],
         private currentMatch: number,
-        private onEndDuel: (winner: Player, roundScores: number[]) => void,
+        private onEndDuel: (winner: Player, roundScores: number[], reason: string) => void,
     ) {
         this.onScore = this.onScore.bind(this);
     }
@@ -42,7 +42,7 @@ export class DuelManager {
             final_winner: finalWinner.username,
         });
 
-        this.onEndDuel(finalWinner, this.roundScores);
+        this.onEndDuel(finalWinner, this.roundScores, "normal");
     }
 
     public haltGame(): number[] {
