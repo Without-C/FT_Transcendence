@@ -4,20 +4,7 @@ import { Player } from "../common/Player";
 import { IMessageBroker } from "../common/IMessageBrocker";
 import { IGameManager } from "../common/IGameManager";
 import { DuelManager } from '../common/DuelManager';
-
-type GameResult = {
-    game_end_reason: string,
-    player1: {
-        id: string,
-        round_score: number,
-        result: string,
-    },
-    player2: {
-        id: string,
-        round_score: number,
-        result: string,
-    },
-}
+import { GameResult } from '../common/GameResult';
 
 export class GameManager implements IGameManager {
     public id: string;
@@ -26,14 +13,33 @@ export class GameManager implements IGameManager {
     private matches: Player[][] = [];
     private gameResults: GameResult[] = [];
     private currentRound: number = 0;
+    private currentPlayers: Player[] = [];
 
     constructor(private players: Player[], private messageBroker: IMessageBroker) {
+
+        function shufflePlayers(players: Player[]): Player[] {
+            const shuffled = [...players];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initMatches(players: Player[]): Player[][] {
+            const matches: Player[][] = [];
+            for (let i = 0; i < players.length; i += 2) {
+                matches.push([players[i], players[i + 1]]);
+            }
+            return matches;
+        }
+
         this.id = 'duel-' + uuidv4();
         this.isPlaying = true;
         this.onEndRound = this.onEndRound.bind(this);
 
-        this.players = this.shufflePlayers(this.players);
-        this.matches = this.initMatches(this.players);
+        this.players = shufflePlayers(this.players);
+        this.matches = initMatches(this.players);
 
         this.startTournament();
     }
@@ -47,28 +53,30 @@ export class GameManager implements IGameManager {
         const player1: Player = this.matches[this.currentRound][0];
         const player2: Player = this.matches[this.currentRound][1];
 
+        this.currentPlayers.length = 0;
+        this.currentPlayers.push(player1);
+        this.currentPlayers.push(player2);
+
         this.duelManager = new DuelManager([player1, player2], this.players, this.currentRound, this.onEndRound);
         this.duelManager.startGame();
     }
 
-    // FIXME: player id와 winner, loser가 잘 못 반환됨
-    private onEndRound(winner_username: string, roundScores: number[]): void {
+    private onEndRound(winner: Player, roundScores: number[]): void {
         this.gameResults.push({
             game_end_reason: "normal",
             player1: {
-                id: this.players[0].id,
+                id: this.currentPlayers[0].id,
                 round_score: roundScores[0],
-                result: winner_username === this.players[0].username ? "winner" : "loser",
+                result: winner.username === this.currentPlayers[0].username ? "winner" : "loser",
             },
             player2: {
-                id: this.players[1].id,
+                id: this.currentPlayers[1].id,
                 round_score: roundScores[1],
-                result: winner_username === this.players[1].username ? "winner" : "loser",
+                result: winner.username === this.currentPlayers[1].username ? "winner" : "loser",
             },
         });
 
         this.currentRound += 1;
-        const winner = this.getPlayer(this.players, winner_username);
         switch (this.currentRound) {
             case 1:
                 this.matches.push([winner!]);
@@ -88,27 +96,6 @@ export class GameManager implements IGameManager {
         this.isPlaying = false;
         this.broadcast({ type: "tournament_end" });
         this.messageBroker.sendGameResult(this.gameResults);
-    }
-
-    private shufflePlayers(players: Player[]): Player[] {
-        const shuffled = [...players];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
-
-    private initMatches(players: Player[]): Player[][] {
-        const matches: Player[][] = [];
-        for (let i = 0; i < players.length; i += 2) {
-            matches.push([players[i], players[i + 1]]);
-        }
-        return matches;
-    }
-
-    private getPlayer(players: Player[], username: string): Player | undefined {
-        return players.find(player => player.username === username);
     }
 
     public onMessage(from: Player, message: any): void {
@@ -148,7 +135,7 @@ export class GameManager implements IGameManager {
 
         const remainingPlayer = this.players.find(p => p.id !== disconnectedPlayer.id);
 
-        this.messageBroker.sendGameResult({
+        this.messageBroker.sendGameResult([{
             game_end_reason: "player_disconnected",
             player1: {
                 id: this.players[0].id,
@@ -160,7 +147,7 @@ export class GameManager implements IGameManager {
                 round_score: roundScores[1],
                 result: (remainingPlayer && this.players[1].id === remainingPlayer.id) ? "winner" : "loser",
             },
-        });
+        }]);
 
         return true;
     }
