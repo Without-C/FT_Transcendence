@@ -43,4 +43,20 @@ curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my_policy" \
 }
 '
 
+curl -X PUT curl -X PUT "https://localhost:9200/_index_template/proxy-template" \
+  -u "elastic:${ELASTIC_PASSWORD}" \
+  -H 'Content-Type: application/json' \
+  -k \
+  -d'
+{
+  "index_patterns": ["proxy-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "my-policy",
+      "index.lifecycle.rollover_alias": "proxy"
+    }
+  }
+}
+'
+
 wait $ES_PID
