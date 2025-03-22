@@ -4,8 +4,8 @@ services:
     image: proxy
     container_name: proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "4433:443"
     volumes:
       - proxy-log:/var/log/nginx
       - ${PWD}/frontend:/usr/share/nginx/html
@@ -145,6 +145,7 @@ services:
       - "9200:9200"
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - node.store.allow_mmap=false
     volumes:
       - ${PWD}/elk/elasticsearch/docker-entrypoint.sh:/usr/local/bin/my-docker-entrypoint.sh:ro
     entrypoint: [ "/usr/local/bin/my-docker-entrypoint.sh" ]
