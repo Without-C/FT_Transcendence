@@ -1,4 +1,4 @@
-import { setCanvasMessage } from "../scripts/canvasManager";
+import { initCanvas, setCanvasMessage } from "../scripts/canvasManager";
 import { initWebSocket } from "../scripts/websocketManager";
 import { setupKeyListeners } from "../scripts/keyManager";
 
@@ -12,7 +12,7 @@ export function render1P1PlayPage(): string {
 	setTimeout(() => {
 	  const canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
 	  if (!canvas) return;
-
+	  initCanvas();
 	  setCanvasMessage("Waiting...", "black");
 	  initWebSocket();
 	  setupKeyListeners();

@@ -1,8 +1,13 @@
-// 🔹 캔버스 및 컨텍스트 가져오기
-const canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+let canvas: HTMLCanvasElement;
+let ctx: CanvasRenderingContext2D;
 
-// 🔹 캔버스 메시지 설정
+// 🔹 캔버스와 컨텍스트 초기화 (DOM 렌더 후 호출 필수)
+export function initCanvas(): void {
+  canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
+  ctx = canvas.getContext("2d")!;
+}
+
+// 🔹 메시지 표시
 export function setCanvasMessage(message: string, background: string): void {
   ctx.fillStyle = background;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -15,7 +20,7 @@ export function setCanvasMessage(message: string, background: string): void {
   ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 }
 
-// 🔹 카운트다운 표시
+// 🔹 카운트다운
 export function setCountdown(countdown: number, player1: string, player2: string): void {
   ctx.fillStyle = "green";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -29,7 +34,7 @@ export function setCountdown(countdown: number, player1: string, player2: string
   ctx.fillText(`${player1} vs ${player2}`, canvas.width / 2, canvas.height / 4);
 }
 
-// 🔹 토너먼트 카운트다운 표시
+// 🔹 토너먼트 카운트다운
 export function setCountdownTournament(
   countdown: number,
   player1: string,
@@ -84,7 +89,6 @@ export function setCountdownTournament(
   drawLine(350, 200, 350, 250);
   drawLine(450, 200, 450, 250);
 
-  // 어느 경기가 진행중인지 표시
   highlightLine(currentRound);
 
   ctx.font = "bold 20px Arial";
@@ -134,7 +138,7 @@ export function drawScore(player1Score: number, player2Score: number): void {
   ctx.fillText(player2Score.toString(), canvas.width * (3 / 5), 50);
 }
 
-// 🔹 라운드 승리자 표시
+// 🔹 라운드 승리자
 export function drawWinner(winner: string, player1Score: number, player2Score: number): void {
   ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -149,7 +153,7 @@ export function drawWinner(winner: string, player1Score: number, player2Score: n
   ctx.fillText(player2Score.toString(), canvas.width * (4 / 5), 200);
 }
 
-// 🔹 최종 승리자 표시
+// 🔹 최종 승리자
 export function drawFinalWinner(finalWinner: string): void {
   ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -162,7 +166,7 @@ export function drawFinalWinner(finalWinner: string): void {
   ctx.fillText(finalWinner, canvas.width / 2, canvas.height / 2);
 }
 
-// 🔹 플레이어 이름 표시
+// 🔹 플레이어 이름
 export function drawUsername(username1: string, username2: string): void {
   ctx.font = "bold 30px Arial";
   ctx.fillStyle = "white";
