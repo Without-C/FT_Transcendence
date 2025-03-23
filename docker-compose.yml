@@ -125,7 +125,9 @@ services:
     container_name: logstash
     volumes:
       - ${PWD}/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ${PWD}/elk/logstash/backend.conf:/usr/share/logstash/pipeline/backend.conf
+      - ${PWD}/elk/logstash/backend-user.conf:/usr/share/logstash/pipeline/backend-user.conf
+      - ${PWD}/elk/logstash/backend-ping-pong.conf:/usr/share/logstash/pipeline/backend-ping-pong.conf
+      - ${PWD}/elk/logstash/backend-blockchain.conf:/usr/share/logstash/pipeline/backend-blockchain.conf
       - ${PWD}/elk/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - proxy-log:/var/log/nginx
       - backend-user-log:/var/log/backend-user
