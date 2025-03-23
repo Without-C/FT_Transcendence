@@ -10,8 +10,16 @@ until curl -u "elastic:${ELASTIC_PASSWORD}" -k -s "https://localhost:9200/_clust
   sleep 5
 done
 
+curl -X PUT "https://localhost:9200/_cluster/settings" -u "elastic:${ELASTIC_PASSWORD}" -k -H 'Content-Type: application/json' -d'
+{
+  "persistent" : {
+    "indices.lifecycle.poll_interval": "1m" 
+  }
+}
+'
+
 # Apply a policy
-curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my-policy" \
+curl -X PUT "https://localhost:9200/_ilm/policy/my-policy" \
   -u "elastic:${ELASTIC_PASSWORD}" \
   -H 'Content-Type: application/json' \
   -k \
@@ -43,7 +51,7 @@ curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my-policy" \
 }
 '
 
-curl -X PUT curl -X PUT "https://localhost:9200/_index_template/proxy-template" \
+curl -X PUT "https://localhost:9200/_index_template/proxy-template" \
   -u "elastic:${ELASTIC_PASSWORD}" \
   -H 'Content-Type: application/json' \
   -k \
