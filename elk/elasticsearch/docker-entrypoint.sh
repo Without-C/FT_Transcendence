@@ -37,7 +37,11 @@ curl -X PUT "https://localhost:9200/_ilm/policy/my-policy" \
       "cold": {
         "min_age": "1m",
         "actions": {
-          "freeze": {}
+          "freeze": {},
+          "allocate": {
+            "number_of_replicas": 0
+          }
+
         }
       },
       "delete": {
@@ -61,7 +65,8 @@ curl -X PUT "https://localhost:9200/_index_template/proxy-template" \
   "template": {
     "settings": {
       "index.lifecycle.name": "my-policy",
-      "index.lifecycle.rollover_alias": "proxy"
+      "index.lifecycle.rollover_alias": "proxy",
+      "index.number_of_replicas": 0
     }
   }
 }
