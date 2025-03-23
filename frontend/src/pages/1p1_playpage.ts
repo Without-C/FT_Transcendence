@@ -1,5 +1,5 @@
 import { initCanvas, setCanvasMessage } from "../scripts/canvasManager";
-import { initWebSocket } from "../scripts/websocketManager";
+import { socketManager } from "../scripts/websocketManager";
 import { setupKeyListeners } from "../scripts/keyManager";
 
 export function render1P1PlayPage(): string {
@@ -8,29 +8,20 @@ export function render1P1PlayPage(): string {
 		<canvas id="ping-ping" width="600" height="400"></canvas>
 	  </div>
 	`;
-
+  
 	setTimeout(() => {
-	  const canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
-	  if (!canvas) return;
+	  // ✅ DOM 렌더 완료 후 실행
 	  initCanvas();
 	  setCanvasMessage("Waiting...", "black");
-	  initWebSocket();
+	  // ✅ 1v1 전용 웹소켓 연결
+	  socketManager.connect("duel");  
+	  // ✅ 키 리스너 등록
 	  setupKeyListeners();
 	}, 0);
+  
 	return template;
 }
 
-// function loadCanvasScripts() {
-// 	const scripts = [
-// 		"./src/scripts/canvasManager.js",
-// 		"./src/scripts/1p1_websocketManager.js",
-// 		"./src/scripts/keyManager.js"
-// 	];
-
-// 	scripts.forEach(src => {
-// 		const script = document.createElement("script");
-// 		script.src = src;
-// 		script.defer = true;
-// 		document.body.appendChild(script);
-// 	});
-// }
+export function cleanup1P1PlayPage(): void {
+	socketManager.disconnect(); // WebSocket 종료
+}

@@ -1,25 +1,25 @@
-import { sendKeyState } from "./websocketManager";
-
-const keyState: Record<string, boolean> = {};
+import { socketManager } from "./websocketManager";
 
 export function setupKeyListeners(): void {
-  document.addEventListener("keydown", (event: KeyboardEvent) => {
+  const keyState: Record<string, boolean> = {};
+
+  document.addEventListener("keydown", (event) => {
     if (!keyState[event.key]) {
       keyState[event.key] = true;
-      sendKeyState(event.key, "press");
+      socketManager.sendKeyState(event.key, "press");
     }
   });
 
-  document.addEventListener("keyup", (event: KeyboardEvent) => {
+  document.addEventListener("keyup", (event) => {
     keyState[event.key] = false;
-    sendKeyState(event.key, "release");
+    socketManager.sendKeyState(event.key, "release");
   });
 
   window.addEventListener("blur", () => {
     for (const key in keyState) {
       if (keyState[key]) {
         keyState[key] = false;
-        sendKeyState(key, "release");
+        socketManager.sendKeyState(key, "release");
       }
     }
   });

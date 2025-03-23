@@ -1,19 +1,5 @@
-import {
-  setCanvasMessage,
-  setCountdown,
-  drawBall,
-  drawPaddle,
-  drawScore,
-  drawUsername,
-  drawWinner,
-  drawFinalWinner,
-} from "../scripts/canvasManager";
+type KeyState = "press" | "release";
 
-// 🔹 전역 변수: 현재 게임 상태 여부
-let gameIsPlaying: boolean = false;
-let chatSocket: WebSocket;
- 
-// 🔹 메시지 구조 정의
 interface GameState {
   ball: { x: number; y: number };
   paddle1: { width: number; height: number; x: number; y: number };
@@ -34,13 +20,64 @@ interface WebSocketMessage {
   final_winner?: string;
 }
 
-// 🔹 WebSocket 생성 함수
-export function initWebSocket(): void {
-  chatSocket = new WebSocket(`ws://${window.location.host}/api/ping-pong/duel/ws`);
+import {
+  setCanvasMessage,
+  setCountdown,
+  drawBall,
+  drawPaddle,
+  drawScore,
+  drawUsername,
+  drawWinner,
+  drawFinalWinner,
+} from "../scripts/canvasManager";
 
-  chatSocket.onmessage = (event: MessageEvent) => {
-    const data: WebSocketMessage = JSON.parse(event.data);
+class SocketManager {
+  private static instance: SocketManager;
+  private socket!: WebSocket;
+  private isConnected = false;
+  private gameIsPlaying = false;
+  private mode: "duel" | "tournament" | "spectator" = "duel";
 
+  private constructor() {}
+
+  public static getInstance(): SocketManager {
+    if (!SocketManager.instance) {
+      SocketManager.instance = new SocketManager();
+    }
+    return SocketManager.instance;
+  }
+
+  public connect(mode: "duel" | "tournament" | "spectator" = "duel"): void {
+    if (this.isConnected && this.socket.readyState <= 1) {
+      console.log("✅ WebSocket already connected.");
+      return;
+    }
+
+    this.mode = mode;
+    const wsUrl = `ws://${window.location.host}/api/ping-pong/${mode}/ws`;
+    this.socket = new WebSocket(wsUrl);
+
+    this.socket.onopen = () => {
+      console.log(`✅ WebSocket connected [${mode} mode]`);
+      this.isConnected = true;
+    };
+
+    this.socket.onmessage = (event: MessageEvent) => {
+      const data: WebSocketMessage = JSON.parse(event.data);
+      this.handleMessage(data);
+    };
+
+    this.socket.onclose = () => {
+      console.warn("⚠️ WebSocket closed.");
+      this.isConnected = false;
+    };
+
+    this.socket.onerror = (e) => {
+      console.error("❌ WebSocket error:", e);
+    };
+  }
+
+  private handleMessage(data: WebSocketMessage): void {
     switch (data.type) {
       case "wait":
         setCanvasMessage("Waiting...", "black");
@@ -51,16 +88,16 @@ export function initWebSocket(): void {
         }
         break;
       case "round_start":
-        gameIsPlaying = true;
+        this.gameIsPlaying = true;
         break;
       case "opponent_exit":
-        gameIsPlaying = false;
+        this.gameIsPlaying = false;
         if (data.opponent_username) {
           setCanvasMessage(`${data.opponent_username} exited!`, "gray");
         }
         break;
       case "game_state":
-        if (!gameIsPlaying || !data.game_state) break;
+        if (!this.gameIsPlaying || !data.game_state) break;
         const { ball, paddle1, paddle2, score, username } = data.game_state;
         drawBall(ball.x, ball.y);
         drawPaddle(paddle1.width, paddle1.height, paddle1.x, paddle1.y);
@@ -69,7 +106,7 @@ export function initWebSocket(): void {
         drawUsername(username.player1, username.player2);
         break;
       case "round_end":
-        gameIsPlaying = false;
+        this.gameIsPlaying = false;
         if (data.winner && data.round_score) {
           drawWinner(data.winner, data.round_score.player1, data.round_score.player2);
         }
@@ -80,16 +117,28 @@ export function initWebSocket(): void {
         }
         break;
     }
-  };
+  }
 
-  chatSocket.onclose = () => {
-    console.error("WebSocket closed unexpectedly");
-  };
-}
+  public disconnect(): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.close();
+      this.isConnected = false;
+      console.log("🔌 WebSocket manually disconnected.");
+    }
+  }
+  
 
-// 🔹 키 입력 상태를 서버로 전송
-export function sendKeyState(key: string, state: "press" | "release"): void {
-  if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
-    chatSocket.send(JSON.stringify({ action: "key", key, state }));
+  public sendKeyState(key: string, state: KeyState): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify({ action: "key", key, state }));
+    } else {
+      console.warn("❌ Cannot send key state, socket not open.");
+    }
+  }
+
+  public getCurrentMode(): "duel" | "tournament" | "spectator" {
+    return this.mode;
   }
 }
+
+export const socketManager = SocketManager.getInstance();
