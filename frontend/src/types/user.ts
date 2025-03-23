@@ -17,8 +17,12 @@ export type FollowingUser  = {
 export type FollowingResponse = FollowingUser[] | {};
 
 // 팔로워 목록 -> number로 받아오기로 하지 않았나
+// export type FollowResponse = {
+// 	following_username: string;
+// };
+
 export type FollowResponse = {
-	following_username: string;
+	following_number: number;
 };
 
 // 유저 검색 목록 받아오기
