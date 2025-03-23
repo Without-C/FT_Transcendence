@@ -11,7 +11,7 @@ until curl -u "elastic:${ELASTIC_PASSWORD}" -k -s "https://localhost:9200/_clust
 done
 
 # Apply a policy
-curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my_policy" \
+curl -X PUT curl -X PUT "https://localhost:9200/_ilm/policy/my-policy" \
   -u "elastic:${ELASTIC_PASSWORD}" \
   -H 'Content-Type: application/json' \
   -k \
