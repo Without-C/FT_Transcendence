@@ -72,4 +72,55 @@ curl -X PUT "https://localhost:9200/_index_template/proxy-template" \
 }
 '
 
+curl -X PUT "https://localhost:9200/_index_template/backend-user-template" \
+  -u "elastic:${ELASTIC_PASSWORD}" \
+  -H 'Content-Type: application/json' \
+  -k \
+  -d'
+{
+  "index_patterns": ["backend-user-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "my-policy",
+      "index.lifecycle.rollover_alias": "backend-user",
+      "index.number_of_replicas": 0
+    }
+  }
+}
+'
+
+curl -X PUT "https://localhost:9200/_index_template/backend-ping-pong-template" \
+  -u "elastic:${ELASTIC_PASSWORD}" \
+  -H 'Content-Type: application/json' \
+  -k \
+  -d'
+{
+  "index_patterns": ["backend-ping-pong-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "my-policy",
+      "index.lifecycle.rollover_alias": "backend-ping-pong",
+      "index.number_of_replicas": 0
+    }
+  }
+}
+'
+
+curl -X PUT "https://localhost:9200/_index_template/backend-blockchain-template" \
+  -u "elastic:${ELASTIC_PASSWORD}" \
+  -H 'Content-Type: application/json' \
+  -k \
+  -d'
+{
+  "index_patterns": ["backend-blockchain-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "my-policy",
+      "index.lifecycle.rollover_alias": "backend-blockchain",
+      "index.number_of_replicas": 0
+    }
+  }
+}
+'
+
 wait $ES_PID
