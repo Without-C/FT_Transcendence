@@ -1,4 +1,3 @@
-
 export async function renderMyPage() {
 	try{
 		const userResponse = await fetch("http://localhost:4000/user");
@@ -30,7 +29,7 @@ export async function renderMyPage() {
 				<button id="currentUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
 			</div>
 			<div id="changedUsername" class="flex flex-row gap-5">
-				<h2 class="text-3xl font-bold text-[#9CCA95]">${user.username}</h2>
+				<h2 class="text-[3vw] font-bold text-[#9CCA95]">${user.username}</h2>
 				<button id="changedUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
 			</div>
 		  </div>
@@ -42,9 +41,9 @@ export async function renderMyPage() {
 			<span><strong>120</strong> following</span>
 		  </div>
 	  
-		  <div class="relative p-5 m-3 border-3 border-[#375433] w-full">
-			<h3 class="absolute top-0 left-0 bg-[#375433] text-lg font-bold px-3 py-1 rounded-br-lg">📋 FRIENDS LIST</h3>
-			<div class="flex justify-center items-center border-b-2 border-[#375433] pb-4 ">
+		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
+			<h3 class="absolute top-0 left-0 bg-[#375433] text-[1.1vw] font-bold px-3 py-1 rounded-br-lg">📋 FRIENDS LIST</h3>
+			<div class="flex justify-center items-center border-b-2 border-[#375433] pb-4">
 			  <div class="flex items-center bg-[#162113] px-2 rounded">
 				<input id="search" type="text" name="username" placeholder="SEARCH" maxlength="10" class="text-white outline-none">
 				<button id="searchOrDelete"></button>
@@ -53,9 +52,9 @@ export async function renderMyPage() {
 			<ul id="friendList" class="space-y-3 pt-4"></ul>
 		  </div>
 	  
-		  <div class="relative p-5 m-3 border-3 border-[#375433] w-full">
+		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
 			<div class="absolute top-0 left-0 flex justify-center items-center gap-4 pb-2">
-				<h3 class="bg-[#375433] text-lg font-bold px-3 py-1 rounded-br-lg">⭐ MATCH HISTORY</h3>
+				<h3 class="bg-[#375433] text-[1.1vw] font-bold px-3 py-1 rounded-br-lg">⭐ MATCH HISTORY</h3>
 				<div>
 					<button id="single">1P1</button>
 					<button id="tournament">TP</button>
