@@ -2,3 +2,5 @@
 .DS_Store
 backend-user/uploads
 .vscode/
+monk-server
+my-server

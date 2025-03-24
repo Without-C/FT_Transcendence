@@ -73,7 +73,7 @@ async function testApis() {
 	console.log("✅ logout() 성공");
 
   } catch (error) {
-    console.error("❌ 에러 발생:", error.error_msg);
+    console.error("❌ 에러 발생:", error instanceof Error ? error.message : error);
   }
 }
 
