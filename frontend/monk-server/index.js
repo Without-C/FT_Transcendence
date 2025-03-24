@@ -5,12 +5,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ GET: 유저 이름
+// ✅ 유저 관련 API
 app.get("/api/user/mypage/username", (req, res) => {
   res.json({ username: "somilee" });
 });
 
-// ✅ PATCH: 유저 이름 변경
 app.patch("/api/user/mypage/username", (req, res) => {
   const { username } = req.body;
   if (!username) {
@@ -22,12 +21,10 @@ app.patch("/api/user/mypage/username", (req, res) => {
   res.status(200).json({});
 });
 
-// ✅ GET: 프로필 이미지
 app.get("/api/user/mypage/avatar", (req, res) => {
   res.json({ avatar_url: "https://placekitten.com/200/200" });
 });
 
-// ✅ PATCH: 프로필 이미지 변경
 app.patch("/api/user/mypage/avatar", (req, res) => {
   const { avatar_url } = req.body;
   if (!avatar_url) {
@@ -39,7 +36,6 @@ app.patch("/api/user/mypage/avatar", (req, res) => {
   res.status(200).json({});
 });
 
-// ✅ GET: 팔로잉 목록
 app.get("/api/user/mypage/following", (req, res) => {
   res.json([
     { username: "younghoc", online: 1 },
@@ -48,12 +44,10 @@ app.get("/api/user/mypage/following", (req, res) => {
   ]);
 });
 
-// ✅ GET: 팔로워 수 (임시)
 app.get("/api/user/mypage/followers", (req, res) => {
   res.json({ following_username: "somilee" });
 });
 
-// ✅ POST: 팔로우
 app.post("/api/user/mypage/follow", (req, res) => {
   const { follow_username } = req.body;
   if (!follow_username) {
@@ -62,7 +56,6 @@ app.post("/api/user/mypage/follow", (req, res) => {
   res.status(200).json({});
 });
 
-// ✅ DELETE: 언팔로우
 app.delete("/api/user/mypage/unfollow", (req, res) => {
   const { unfollow_username } = req.body;
   if (!unfollow_username) {
@@ -71,7 +64,6 @@ app.delete("/api/user/mypage/unfollow", (req, res) => {
   res.status(200).json({});
 });
 
-// ✅ GET: 유저 검색
 app.get("/api/user/mypage/search", (req, res) => {
   const keyword = req.query.searching_user;
   if (!keyword) {
@@ -84,6 +76,72 @@ app.get("/api/user/mypage/search", (req, res) => {
   ];
   const result = users.filter(user => user.username.startsWith(keyword));
   res.status(200).json(result.length ? result : {});
+});
+
+// ✅ 게임 관련 API
+app.get("/api/game/history", (req, res) => {
+  const { playmode } = req.query;
+  console.log("👉 GET /api/game/history", playmode); // ✅ 디버깅 추가
+
+  if (playmode === "single") {
+    return res.status(200).json([
+      {
+        game_end_reason: "normal",
+        player1: {
+          username: "somilee",
+          round_score: 2,
+          result: "winner"
+        },
+        player2: {
+          username: "jjhang",
+          round_score: 1,
+          result: "loser"
+        },
+        date: "2025-03-02"
+      },
+      {
+        game_end_reason: "normal",
+        player1: {
+          username: "somilee",
+          round_score: 2,
+          result: "winner"
+        },
+        player2: {
+          username: "yeoshin",
+          round_score: 0,
+          result: "loser"
+        },
+        date: "2025-03-03"
+      }
+    ]);
+  }
+
+  if (playmode === "tournament") {
+    return res.status(200).json([
+      {
+        date: "2025-03-02",
+        game: [
+          {
+            game_end_reason: "normal",
+            player1: { username: "somilee", round_score: 2, result: "winner" },
+            player2: { username: "jjhang", round_score: 1, result: "loser" }
+          },
+          {
+            game_end_reason: "normal",
+            player1: { username: "somilee", round_score: 2, result: "winner" },
+            player2: { username: "yeoshin", round_score: 1, result: "loser" }
+          },
+          {
+            game_end_reason: "normal",
+            player1: { username: "somilee", round_score: 2, result: "winner" },
+            player2: { username: "younghoc", round_score: 1, result: "loser" }
+          }
+        ]
+      }
+    ]);
+  }
+
+  return res.status(400).json({ error_code: 999, error_msg: "invalid playmode" });
 });
 
 app.listen(4000, () => {
