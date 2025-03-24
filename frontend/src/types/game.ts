@@ -27,4 +27,4 @@ export type TournamentGameHistoryItem = {
 	game: [GameRound, GameRound, GameRound];
 }
 
-export type ToutnamentGameResponse = TournamentGameHistoryItem[] | {};
+export type TournamentGameResponse = TournamentGameHistoryItem[] | {};

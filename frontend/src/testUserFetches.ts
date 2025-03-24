@@ -10,8 +10,18 @@ import {
   searchUsers
 } from "./api/user";
 
-async function testUserApis() {
+import {
+	fetchSingleGames,
+	fetchTournamentGames
+} from "./api/game";
+
+import {
+	logout
+} from "./api/auth";
+
+async function testApis() {
   try {
+	//user API 확인
     console.log("🧪 fetchAvatar()");
     const avatar = await fetchAvatar();
     console.log("✅ avatar_url:", avatar.avatar_url);
@@ -47,9 +57,24 @@ async function testUserApis() {
     console.log('🧪 searchUsers("j")');
     const results = await searchUsers("j");
     console.log("✅ searchUsers:", results);
+
+	//game API 확인
+	console.log('🧪 fetchSingleGames');
+	const single = await fetchSingleGames();
+	console.log("✅ 1vs1:", single);
+
+	console.log('🧪 fetchTournamentGames');
+	const tournament = await fetchTournamentGames();
+	console.log("✅ 토너먼트:", tournament);
+
+	//auth API 확인
+	console.log("🧪 logout()");
+	await logout();
+	console.log("✅ logout() 성공");
+
   } catch (error) {
-    console.error("❌ 에러 발생:");
+    console.error("❌ 에러 발생:", error.error_msg);
   }
 }
 
-testUserApis();
+testApis();

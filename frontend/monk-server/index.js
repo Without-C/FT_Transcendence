@@ -2,7 +2,10 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:8080", // 프론트엔드 주소에 맞게 설정
+  credentials: true
+}));
 app.use(express.json());
 
 // ✅ 유저 관련 API
@@ -81,36 +84,20 @@ app.get("/api/user/mypage/search", (req, res) => {
 // ✅ 게임 관련 API
 app.get("/api/game/history", (req, res) => {
   const { playmode } = req.query;
-  console.log("👉 GET /api/game/history", playmode); // ✅ 디버깅 추가
+  console.log("👉 GET /api/game/history", playmode);
 
   if (playmode === "single") {
     return res.status(200).json([
       {
         game_end_reason: "normal",
-        player1: {
-          username: "somilee",
-          round_score: 2,
-          result: "winner"
-        },
-        player2: {
-          username: "jjhang",
-          round_score: 1,
-          result: "loser"
-        },
+        player1: { username: "somilee", round_score: 2, result: "winner" },
+        player2: { username: "jjhang", round_score: 1, result: "loser" },
         date: "2025-03-02"
       },
       {
         game_end_reason: "normal",
-        player1: {
-          username: "somilee",
-          round_score: 2,
-          result: "winner"
-        },
-        player2: {
-          username: "yeoshin",
-          round_score: 0,
-          result: "loser"
-        },
+        player1: { username: "somilee", round_score: 2, result: "winner" },
+        player2: { username: "yeoshin", round_score: 0, result: "loser" },
         date: "2025-03-03"
       }
     ]);
@@ -142,6 +129,33 @@ app.get("/api/game/history", (req, res) => {
   }
 
   return res.status(400).json({ error_code: 999, error_msg: "invalid playmode" });
+});
+
+// ✅ 인증 관련 API
+app.get("/api/auth/login/:provider", (req, res) => {
+  const { provider } = req.params;
+  console.log(`🔁 Redirecting to ${provider} login...`);
+  res.redirect(`http://localhost:4000/api/auth/callback/${provider}`);
+});
+
+app.get("/api/auth/callback/:provider", (req, res) => {
+  const { provider } = req.params;
+  console.log(`✅ Received ${provider} login callback`);
+  res.cookie("token", "mock-jwt-token", { httpOnly: true });
+  res.status(200).send(`<h2>✅ ${provider} 로그인 성공 (쿠키 발급됨)</h2>`);
+});
+
+app.delete("/api/auth/logout", (req, res) => {
+  console.log("👋 로그아웃 요청");
+  res.clearCookie("token");
+  res.status(200).json({});
+});
+
+app.get("/api/auth/me", (req, res) => {
+  if (!req.headers.cookie?.includes("token")) {
+    return res.status(401).json({ error_code: 401, error_msg: "Unauthorized" });
+  }
+  res.status(200).json({ username: "somilee" });
 });
 
 app.listen(4000, () => {
