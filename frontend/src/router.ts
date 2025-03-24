@@ -41,6 +41,3 @@ export async function render() {
 window.addEventListener("hashchange", async () => {
 	await render();
 });
-window.addEventListener("DOMContentLoaded", async () => {
-	await render();
-});
