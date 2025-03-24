@@ -1,35 +1,6 @@
-type KeyState = "press" | "release";
-
-interface GameState {
-  ball: { x: number; y: number };
-  paddle1: { width: number; height: number; x: number; y: number };
-  paddle2: { width: number; height: number; x: number; y: number };
-  score: { player1: number; player2: number };
-  username: { player1: string; player2: string };
-}
-
-interface WebSocketMessage {
-  type: string;
-  countdown?: number;
-  player1_username?: string;
-  player2_username?: string;
-  opponent_username?: string;
-  game_state?: GameState;
-  winner?: string;
-  round_score?: { player1: number; player2: number };
-  final_winner?: string;
-}
-
-import {
-  setCanvasMessage,
-  setCountdown,
-  drawBall,
-  drawPaddle,
-  drawScore,
-  drawUsername,
-  drawWinner,
-  drawFinalWinner,
-} from "../scripts/canvasManager";
+import { setGameState } from "./canvas/stateManager";
+import { WebSocketMessage, KeyState } from "./types";
+import { handleGameEvent } from "./screens/screenManager";
 
 class SocketManager {
   private static instance: SocketManager;
@@ -78,44 +49,33 @@ class SocketManager {
   }
 
   private handleMessage(data: WebSocketMessage): void {
-    switch (data.type) {
-      case "wait":
-        setCanvasMessage("Waiting...", "black");
-        break;
-      case "countdown":
-        if (data.countdown !== undefined && data.player1_username && data.player2_username) {
-          setCountdown(data.countdown, data.player1_username, data.player2_username);
-        }
-        break;
-      case "round_start":
-        this.gameIsPlaying = true;
-        break;
-      case "opponent_exit":
-        this.gameIsPlaying = false;
-        if (data.opponent_username) {
-          setCanvasMessage(`${data.opponent_username} exited!`, "gray");
-        }
-        break;
-      case "game_state":
-        if (!this.gameIsPlaying || !data.game_state) break;
-        const { ball, paddle1, paddle2, score, username } = data.game_state;
-        drawBall(ball.x, ball.y);
-        drawPaddle(paddle1.width, paddle1.height, paddle1.x, paddle1.y);
-        drawPaddle(paddle2.width, paddle2.height, paddle2.x, paddle2.y);
-        drawScore(score.player1, score.player2);
-        drawUsername(username.player1, username.player2);
-        break;
-      case "round_end":
-        this.gameIsPlaying = false;
-        if (data.winner && data.round_score) {
-          drawWinner(data.winner, data.round_score.player1, data.round_score.player2);
-        }
-        break;
-      case "game_end":
-        if (data.final_winner) {
-          drawFinalWinner(data.final_winner);
-        }
-        break;
+    // 1️⃣ 상태 전환을 ScreenManager에 위임
+    handleGameEvent(data.type, data);
+
+    // 2️⃣ 실시간 게임 상태 업데이트
+    if (data.type === "game_state" && data.game_state && this.gameIsPlaying) {
+      setGameState(data.game_state);
+    }
+
+    // 3️⃣ 라운드 결과 로그
+    if (data.type === "round_end" && data.winner && data.round_score) {
+      console.log(
+        `🏁 Round End - Winner: ${data.winner}, Score: ${data.round_score.player1} : ${data.round_score.player2}`
+      );
+      // TODO: setRoundResult() GUI 출력
+    }
+
+    // 4️⃣ 최종 승자 로그
+    if (data.type === "game_end" && data.final_winner) {
+      console.log(`🏆 Final Winner: ${data.final_winner}`);
+      // TODO: setFinalWinner() GUI 출력
+    }
+
+    // 5️⃣ 게임 시작/종료 상태
+    if (data.type === "round_start") {
+      this.gameIsPlaying = true;
+    } else if (data.type === "opponent_exit") {
+      this.gameIsPlaying = false;
     }
   }
 
@@ -126,7 +86,6 @@ class SocketManager {
       console.log("🔌 WebSocket manually disconnected.");
     }
   }
-  
 
   public sendKeyState(key: string, state: KeyState): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
