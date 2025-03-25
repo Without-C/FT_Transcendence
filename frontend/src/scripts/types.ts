@@ -7,6 +7,7 @@ export interface GameState {
   paddle1: { width: number; height: number; x: number; y: number; z: number };
   paddle2: { width: number; height: number; x: number; y: number; z: number };
   score: { player1: number; player2: number };
+  wins: {player1: number; player2: number };
   username: { player1: string; player2: string };
 }
 
