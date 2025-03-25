@@ -1,11 +1,15 @@
-// guiCountdown.ts
 import * as GUI from "@babylonjs/gui";
 import { Scene } from "@babylonjs/core";
 
-let guiTexture: GUI.AdvancedDynamicTexture;
+let guiTexture: GUI.AdvancedDynamicTexture | null = null;
 let countdownTextBlock: GUI.TextBlock | null = null;
 
 export function setupCountdownGUI(scene: Scene): void {
+  // 기존 GUI 제거
+  if (guiTexture) {
+    guiTexture.dispose();
+  }
+
   guiTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("countdownUI", true, scene);
 
   countdownTextBlock = new GUI.TextBlock("countdownText", "");
@@ -19,20 +23,14 @@ export function setupCountdownGUI(scene: Scene): void {
   guiTexture.addControl(countdownTextBlock);
 }
 
-export function setCountdownText(value: string): void {
+export function setCountdownText(text: string): void {
   if (countdownTextBlock) {
-    countdownTextBlock.text = value;
+    countdownTextBlock.text = text;
   }
 }
 
-export function clearCountdownText(): void {
-  if (countdownTextBlock) {
-    countdownTextBlock.text = "";
-  }
-}
-
-export function disposeCountdownGUI(): void {
-  countdownTextBlock?.dispose();
-  countdownTextBlock = null;
+export function clearCountdownGUI(): void {
   guiTexture?.dispose();
+  guiTexture = null;
+  countdownTextBlock = null;
 }

@@ -3,12 +3,32 @@ import { Screen } from "./Screen";
 import { WaitingScreen } from "./WaitingScreen";
 import { CountingScreen } from "./CountingScreen";
 import { PlayScreen } from "./PlayScreen";
-// import { DisconnectedScreen } from "./DisconnectedScreen";
-// import { GameOverScreen } from "./GameOverScreen"; // 향후 확장 가능
+import { OpponentExitScreen } from "./OpponentExitScreen";
+import { GameOverScreen } from "./GameOverScreen";
 
 import { WebSocketMessage } from "../types";
 
 let currentScreen: Screen | null = null;
+let usernames = { player1: "", player2: "" };
+let initialScore = { player1: 0, player2: 0 };
+
+export function setPlayerInfo(name1: string, name2: string): void {
+  usernames.player1 = name1;
+  usernames.player2 = name2;
+}
+
+export function setInitialScore(score1: number, score2: number): void {
+  initialScore.player1 = score1;
+  initialScore.player2 = score2;
+}
+
+export function getPlayerInfo() {
+  return usernames;
+}
+
+export function getInitialScore() {
+  return initialScore;
+}
 
 export function changeScreen(newScreen: Screen): void {
   if (
@@ -44,20 +64,25 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
       break;
 
     case "countdown":
-      changeScreen(new CountingScreen(data.countdown ?? 5));
+      if (data.countdown && data.player1_username && data.player2_username) {
+        setPlayerInfo(data.player1_username, data.player2_username);
+        setInitialScore(0, 0); // 초기화 or 서버 값
+        changeScreen(new CountingScreen());
+      }
       break;
 
     case "round_start":
       changeScreen(new PlayScreen());
       break;
 
-    // case "opponent_exit":
-    //   changeScreen(new DisconnectedScreen(data.opponent_username ?? "opponent"));
-    //   break;
+      case "opponent_exit":
+        changeScreen(new OpponentExitScreen(data.opponent_username ?? "Opponent"));
+        break;
 
-    // 향후 확장:
-    // case "game_end":
-    //   changeScreen(new GameOverScreen(data.final_winner ?? "???"));
-    //   break;
+        case "game_end":
+          if (data.final_winner) {
+            changeScreen(new GameOverScreen(data.final_winner));
+          }
+          break;
   }
 }

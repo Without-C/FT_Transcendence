@@ -1,35 +1,31 @@
 import { Screen } from "./Screen";
+import { getScene } from "../canvas/engineCore";
 import {
   setupCountdownGUI,
   setCountdownText,
-  clearCountdownText,
-  disposeCountdownGUI
+  clearCountdownGUI,
 } from "../canvas/guiCountdown";
-import { getScene } from "../canvas/engineCore";
 import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
 import { changeScreen } from "./screenManager";
 import { PlayScreen } from "./PlayScreen";
 
 export class CountingScreen extends Screen {
-  private countdown: number;
+  private countdown = 3;
   private timerId: ReturnType<typeof setInterval> | null = null;
-  private isComplete = false;
-
-  constructor(initialCount: number = 5) {
-    super();
-    this.countdown = initialCount;
-  }
 
   enter(): void {
-    // 오브젝트 숨기기
+    console.log("[CountingScreen] enter");
+
+    // 게임 오브젝트 숨기기
     getBallMesh().setEnabled(false);
     getPaddle1Mesh().setEnabled(false);
     getPaddle2Mesh().setEnabled(false);
 
-    // GUI 초기화
+    // GUI 세팅
     setupCountdownGUI(getScene());
     setCountdownText(this.countdown.toString());
 
+    // 물리 시간 기반 카운트다운
     this.timerId = setInterval(() => {
       this.countdown--;
 
@@ -37,21 +33,14 @@ export class CountingScreen extends Screen {
         setCountdownText(this.countdown.toString());
       } else {
         setCountdownText("START!");
-        this.isComplete = true;
         this.clearTimer();
 
         setTimeout(() => {
-          clearCountdownText();
-          disposeCountdownGUI();
+          clearCountdownGUI();
           changeScreen(new PlayScreen());
         }, 1000);
       }
     }, 1000);
-  }
-
-  exit(): void {
-    this.clearTimer();
-    disposeCountdownGUI();
   }
 
   private clearTimer(): void {
@@ -61,7 +50,11 @@ export class CountingScreen extends Screen {
     }
   }
 
-  update(_delta: number): void {}
+  exit(): void {
+    this.clearTimer();
+    clearCountdownGUI();
+  }
 
+  update(_delta: number): void {}
   render(): void {}
 }

@@ -1,8 +1,8 @@
 // guiManager.ts
 import { Scene } from "@babylonjs/core";
 import { setupWaitingGUI, disposeWaitingGUI } from "./guiWaiting";
-import { setupCountdownGUI, disposeCountdownGUI } from "./guiCountdown";
-// import { setupScoreboardGUI, disposeScoreboardGUI } from "./guiScoreboard";
+import { setupCountdownGUI, clearCountdownGUI } from "./guiCountdown";
+import { setupScoreboardGUI, disposeScoreboardGUI } from "./guiScoreboard";
 
 // 현재 설정된 화면 상태 저장
 let currentScreen: "waiting" | "countdown" | "play" | null = null;
@@ -21,16 +21,16 @@ export function setupGUIFor(screen: "waiting" | "countdown" | "play", scene: Sce
     case "countdown":
       setupCountdownGUI(scene);
       break;
-    // case "play":
-    //   setupScoreboardGUI(scene);
-    //   break;
+    case "play":
+      setupScoreboardGUI(scene);
+      break;
   }
 }
 
 // 🧼 모든 GUI 정리 (다음 GUI 진입 전에 호출)
 export function clearGUI(): void {
   disposeWaitingGUI();
-  disposeCountdownGUI();
-//   disposeScoreboardGUI();
+  clearCountdownGUI();
+  disposeScoreboardGUI();
   currentScreen = null;
 }
