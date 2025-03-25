@@ -1,73 +1,36 @@
-import * as GUI from "@babylonjs/gui";
+// guiManager.ts
 import { Scene } from "@babylonjs/core";
+import { setupWaitingGUI, disposeWaitingGUI } from "./guiWaiting";
+import { setupCountdownGUI, disposeCountdownGUI } from "./guiCountdown";
+// import { setupScoreboardGUI, disposeScoreboardGUI } from "./guiScoreboard";
 
-let guiTexture: GUI.AdvancedDynamicTexture;
-let messageTextBlock: GUI.TextBlock;
-let countdownTextBlock: GUI.TextBlock;
+// 현재 설정된 화면 상태 저장
+let currentScreen: "waiting" | "countdown" | "play" | null = null;
 
-// 정렬 enum export
-export const HAlign = {
-	LEFT: GUI.Control.HORIZONTAL_ALIGNMENT_LEFT,
-	CENTER: GUI.Control.HORIZONTAL_ALIGNMENT_CENTER,
-	RIGHT: GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT,
-  };
-  
-  export const VAlign = {
-	TOP: GUI.Control.VERTICAL_ALIGNMENT_TOP,
-	CENTER: GUI.Control.VERTICAL_ALIGNMENT_CENTER,
-	BOTTOM: GUI.Control.VERTICAL_ALIGNMENT_BOTTOM,
-  };
-  
+// 📦 GUI 초기화 (스크린 전환 시 호출)
+export function setupGUIFor(screen: "waiting" | "countdown" | "play", scene: Scene) {
+  if (currentScreen === screen) return; // 이미 설정된 상태면 무시
 
-export function setupGUI(scene: Scene): void {
-	guiTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
+  clearGUI(); // 기존 GUI 제거
+  currentScreen = screen;
 
-	messageTextBlock = new GUI.TextBlock();
-	messageTextBlock.color = "white";
-	messageTextBlock.fontSize = 36;
-	messageTextBlock.outlineColor = "black";
-	messageTextBlock.outlineWidth = 2;
-	messageTextBlock.text = "";
-	messageTextBlock.textHorizontalAlignment = HAlign.CENTER;
-	messageTextBlock.textVerticalAlignment = VAlign.CENTER;
-	messageTextBlock.top = "0px";
-	guiTexture.addControl(messageTextBlock);
-
-	countdownTextBlock = new GUI.TextBlock();
-	countdownTextBlock.color = "white";
-	countdownTextBlock.fontSize = 96;
-	countdownTextBlock.outlineColor = "black";
-	countdownTextBlock.outlineWidth = 4;
-	countdownTextBlock.text = "";
-	countdownTextBlock.textHorizontalAlignment = HAlign.CENTER;
-	countdownTextBlock.textVerticalAlignment = VAlign.CENTER;
-	guiTexture.addControl(countdownTextBlock);
+  switch (screen) {
+    case "waiting":
+      setupWaitingGUI(scene);
+      break;
+    case "countdown":
+      setupCountdownGUI(scene);
+      break;
+    // case "play":
+    //   setupScoreboardGUI(scene);
+    //   break;
+  }
 }
 
-export function setCanvasMessage(message: string): void {
-	if (messageTextBlock) {
-		messageTextBlock.text = message;
-	}
-}
-
-export function setMessageAlignment(
-	horizontal: number = HAlign.CENTER,
-	vertical: number = VAlign.CENTER
-): void {
-	if (!messageTextBlock) return;
-	messageTextBlock.textHorizontalAlignment = horizontal;
-	messageTextBlock.textVerticalAlignment = vertical;
-}
-
-export function setCountdown(countdown: number): void {
-	if (!countdownTextBlock) return;
-
-	if (countdown > 0) {
-		countdownTextBlock.text = countdown.toString();
-	} else {
-		countdownTextBlock.text = "START!";
-		setTimeout(() => {
-			countdownTextBlock.text = "";
-		}, 1000);
-	}
+// 🧼 모든 GUI 정리 (다음 GUI 진입 전에 호출)
+export function clearGUI(): void {
+  disposeWaitingGUI();
+  disposeCountdownGUI();
+//   disposeScoreboardGUI();
+  currentScreen = null;
 }
