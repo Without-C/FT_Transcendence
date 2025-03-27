@@ -234,17 +234,61 @@ export async function renderMyPage() {
 
 
 			// search 랜더링
-			const renderSearch = (search = '') => {
+			const renderSearch = async (search = '') => {
 				friendListElement.innerHTML = "";
-				const searchIcon = document.querySelector("#searchOrDelete");
+				const searchIcon = document.querySelector("#searchOrDelete") as HTMLButtonElement;
+				searchIcon.textContent = "❌";
 				searchIcon?.addEventListener("click", () => {
 					searchElement.value = ''; 
 					renderFriendList();
 				});
-				searchIcon.textContent = "❌";
 				if(search == '') {
 					renderFriendList();
 				}
+				//render serchFriendList
+				
+				const keyUsers = await searchUsers(searchElement.value);
+				keyUsers.forEach((friend, idx) => {
+					const friendList = document.createElement("li");
+					friendList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
+
+					const index = document.createElement("span");
+					index.textContent = `#${idx + 1}`;
+					friendList?.appendChild(index);
+
+					const name = document.createElement("span");
+					name.textContent = `${friend.username}`.padEnd(10, " ");
+					friendList?.appendChild(name);
+
+					const online = document.createElement("span");
+					online.textContent = `${friend.online}`
+					friendList?.appendChild(online);
+	
+					const unfollowBtn = document.createElement("button");
+					unfollowBtn.className = "border-1 border-[#9CCA95] text-[#9CCA95] px-7 py-1 rounded-2xl";
+					if(friend.following == 0) {
+						unfollowBtn.textContent = "Follow";
+					} else {
+						unfollowBtn.textContent = "Unfollow";
+					}
+					friendList?.appendChild(unfollowBtn);
+					unfollowBtn.addEventListener("click", async () => {
+						try{
+							if(unfollowBtn.textContent == "Unfollow") {
+								await unfollowUser(friend.username);
+								unfollowBtn.textContent = "Follow"
+							} else {
+								await followUser(friend.username);
+								unfollowBtn.textContent = "Unfollow"
+							}
+						} catch(error) {
+							console.error(" 언팔로우 실패");
+						}
+					});
+					friendList.appendChild(unfollowBtn);
+	
+					document.getElementById("friendList")?.appendChild(friendList);
+				});
 			};
 
 			singleButton?.addEventListener("click", renderSingleList);
