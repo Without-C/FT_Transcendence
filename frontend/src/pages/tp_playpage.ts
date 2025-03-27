@@ -6,7 +6,7 @@
 // 	`;
 
 //     setTimeout(() => {
-//         loadCanvasScripts();
+//         loadCanvasScripts();w
 //     }, 0);
 
 //     return template;
