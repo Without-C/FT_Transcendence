@@ -55,8 +55,8 @@ export async function renderMyPage() {
 	  
 		<section class="flex flex-col w-full max-w-3xl">
 		  <div class="flex justify-end gap-4 text-[#9CCA95]">
-			<span><strong>131</strong> followers</span>
-			<span><strong>120</strong> following</span>
+			<span><strong>${following.length}</strong> followers</span>
+			<span><strong>${follower.follower_number}</strong> following</span>
 		  </div>
 	  
 		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
@@ -118,8 +118,13 @@ export async function renderMyPage() {
 					friendList?.appendChild(unfollowBtn);
 					unfollowBtn.addEventListener("click", async () => {
 						try{
-							await unfollowUser(friend.username);
-							renderFriendList();
+							if(unfollowBtn.textContent == "Unfollow") {
+								await unfollowUser(friend.username);
+								unfollowBtn.textContent = "Follow"
+							} else {
+								await followUser(friend.username);
+								unfollowBtn.textContent = "Unfollow"
+							}
 						} catch(error) {
 							console.error(" 언팔로우 실패");
 						}
@@ -141,8 +146,8 @@ export async function renderMyPage() {
 
 					const result = document.createElement("span");
 					result.style.whiteSpace = "pre"; 
-					if((single.player1.username === fetchUsername() && single.player1.result === "winner") ||
-						(single.player2.username === fetchUsername() && single.player2.result === "winner")) {
+					if((single.player1.username === username.username && single.player1.result === "winner") ||
+						(single.player2.username === username.username && single.player2.result === "winner")) {
 							result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
 							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
 												`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
@@ -184,8 +189,8 @@ export async function renderMyPage() {
 
 					const result = document.createElement("span");
 					result.style.whiteSpace = "pre";
-					if((tournament.game[2].player1.username === fetchUsername() && tournament.game[2].player1.result === "winner") ||
-						(tournament.game[2].player2.username === fetchUsername() && tournament.game[2].player2.result === "winner")) {
+					if((tournament.game[2].player1.username === username.username && tournament.game[2].player1.result === "winner") ||
+						(tournament.game[2].player2.username === username.username && tournament.game[2].player2.result === "winner")) {
 							result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
 							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
 												`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;

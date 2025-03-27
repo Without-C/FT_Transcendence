@@ -25,7 +25,7 @@ app.patch("/api/user/mypage/username", (req, res) => {
 });
 
 app.get("/api/user/mypage/avatar", (req, res) => {
-  res.json({ avatar_url: "https://placekitten.com/200/200" });
+  res.json({ avatar_url: "https://ecimg.cafe24img.com/pg493b81297356041/redweek11/web/upload/ezst/image/ez-image-contents-1x5f0mb-1-1yussdb-3.jpg?v=1693831332500" });
 });
 
 app.patch("/api/user/mypage/avatar", (req, res) => {
@@ -48,7 +48,7 @@ app.get("/api/user/mypage/following", (req, res) => {
 });
 
 app.get("/api/user/mypage/followers", (req, res) => {
-  res.json({ following_username: "somilee" });
+  res.json({ follower_number: 2 });
 });
 
 app.post("/api/user/mypage/follow", (req, res) => {

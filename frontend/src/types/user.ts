@@ -22,7 +22,7 @@ export type FollowingResponse = FollowingUser[] | {};
 // };
 
 export type FollowResponse = {
-	following_number: number;
+	follower_number: number;
 };
 
 // 유저 검색 목록 받아오기
