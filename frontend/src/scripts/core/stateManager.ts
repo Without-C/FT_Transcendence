@@ -1,5 +1,5 @@
 // stateManager.ts
-import { GameState } from "../types";
+import { GameState } from "./types";
 
 let currentGameState: GameState | null = null;
 let isGameStarted: boolean = false;

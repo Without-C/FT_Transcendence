@@ -1,11 +1,11 @@
 import { Screen } from "./Screen";
-import { getScene } from "../canvas/engineCore";
+import { getScene } from "../core/engineCore";
 import {
   setupCountdownGUI,
   setCountdownText,
   clearCountdownGUI,
-} from "../canvas/guiCountdown";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
+} from "./gui/guiCountdown";
+import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 import { changeScreen } from "./screenManager";
 import { PlayScreen } from "./PlayScreen";
 

@@ -1,6 +1,6 @@
-import { setGameState } from "./canvas/stateManager";
-import { WebSocketMessage, KeyState } from "./types";
-import { handleGameEvent } from "./screens/screenManager";
+import { setGameState } from "../core/stateManager";
+import { WebSocketMessage, KeyState } from "../core/types";
+import { handleGameEvent } from "../screens/screenManager";
 
 class SocketManager {
   private static instance: SocketManager;

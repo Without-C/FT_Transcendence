@@ -1,14 +1,14 @@
 import { Screen } from "./Screen";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
-import { getScene } from "../canvas/engineCore";
+import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
+import { getScene } from "../core/engineCore";
 import {
   setupScoreboardGUI,
   setUsernames,
   updateScoreboard,
   updateRoundWins,
   disposeScoreboardGUI
-} from "../canvas/guiScoreboard";
-import { getGameState } from "../canvas/stateManager";
+} from "./gui/guiScoreboard";
+import { getGameState } from "../core/stateManager";
 
 let prevScore = { player1: -1, player2: -1 };
 let prevWins = { player1: -1, player2: -1 };

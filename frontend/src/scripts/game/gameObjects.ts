@@ -6,7 +6,7 @@ import {
     StandardMaterial,
     Scene
   } from "@babylonjs/core";
-  import { GameState } from "../types";
+  import { GameState } from "../core/types";
   
   let ballMesh: Mesh;
   let paddle1Mesh: Mesh;

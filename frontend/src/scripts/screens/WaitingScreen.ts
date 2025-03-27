@@ -1,7 +1,7 @@
 import { Screen } from "./Screen";
-import { getScene } from "../canvas/engineCore";
-import { setupWaitingGUI, setWaitingMessage, disposeWaitingGUI } from "../canvas/guiWaiting";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
+import { getScene } from "../core/engineCore";
+import { setupWaitingGUI, setWaitingMessage, disposeWaitingGUI } from "./gui/guiWaiting";
+import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 
 export class WaitingScreen extends Screen {
   enter(): void {

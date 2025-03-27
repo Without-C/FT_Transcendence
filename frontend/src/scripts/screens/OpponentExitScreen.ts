@@ -1,11 +1,11 @@
 import { Screen } from "./Screen";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
-import { getScene } from "../canvas/engineCore";
+import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
+import { getScene } from "../core/engineCore";
 import {
   setupMessageGUI,
   setCanvasMessage,
   disposeMessageGUI
-} from "../canvas/guiMessage"; // GUI 모듈에서 메시지 전용 관리
+} from "./gui/guiMessage"; // GUI 모듈에서 메시지 전용 관리
 
 export class OpponentExitScreen extends Screen {
   private opponentName: string;

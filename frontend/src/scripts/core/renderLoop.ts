@@ -1,6 +1,6 @@
-import { getEngine, getScene } from "./engineCore";
+import { getEngine, getScene } from "../core/engineCore";
 import { hasGameStarted, getGameState } from "./stateManager";
-import { updateGameObjects } from "./gameObjects";
+import { updateGameObjects } from "../game/gameObjects";
 import { updateCurrentScreen, renderCurrentScreen } from "../screens/screenManager";
 
 export function startRenderLoop(): void {

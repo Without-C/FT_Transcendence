@@ -1,11 +1,11 @@
 import { Screen } from "./Screen";
-import { getScene } from "../canvas/engineCore";
+import { getScene } from "../core/engineCore";
 import {
   setupMessageGUI,
   setCanvasMessage,
   disposeMessageGUI
-} from "../canvas/guiMessage";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../canvas/gameObjects";
+} from "./gui/guiMessage";
+import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 
 export class GameOverScreen extends Screen {
   private winner: string;

@@ -6,7 +6,7 @@ import { PlayScreen } from "./PlayScreen";
 import { OpponentExitScreen } from "./OpponentExitScreen";
 import { GameOverScreen } from "./GameOverScreen";
 
-import { WebSocketMessage } from "../types";
+import { WebSocketMessage } from "../core/types";
 
 let currentScreen: Screen | null = null;
 let usernames = { player1: "", player2: "" };
