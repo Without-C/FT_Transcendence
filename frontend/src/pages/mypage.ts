@@ -245,8 +245,7 @@ export async function renderMyPage() {
 				if(search == '') {
 					renderFriendList();
 				}
-				//render serchFriendList
-				
+
 				const keyUsers = await searchUsers(searchElement.value);
 				keyUsers.forEach((friend, idx) => {
 					const friendList = document.createElement("li");
@@ -329,4 +328,3 @@ export async function renderMyPage() {
 		return "<h1>❌ 사용자 정보를 불러올 수 없습니다.</h1>";
 	}
 }
-// json-server --watch frontend/my-server/db.json --port 4000
