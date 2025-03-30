@@ -1,4 +1,4 @@
-import { socketManager } from "./websocketManager";
+import { socketManager } from "../network/websocketManager";
 
 export function setupKeyListeners(): void {
   const keyState: Record<string, boolean> = {};
