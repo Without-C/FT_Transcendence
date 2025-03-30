@@ -32,15 +32,12 @@ export async function render() {
 	} else if(mainRoute === "mypage") {
 		app.innerHTML = await renderMyPage();
 	} else if(mainRoute === "signin" || mainRoute === "") {
-		app.innerHTML = renderSignInPage();	
+		app.innerHTML = await renderSignInPage();	
 	} else {
 		app.innerHTML = "<h1>404 - 페이지를 찾을 수 없음</h1>";
 	}
 }
 
 window.addEventListener("hashchange", async () => {
-	await render();
-});
-window.addEventListener("DOMContentLoaded", async () => {
 	await render();
 });
