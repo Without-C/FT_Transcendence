@@ -5,9 +5,10 @@ import {
   setCountdownText,
   clearCountdownGUI,
 } from "./gui/guiCountdown";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 import { changeScreen } from "./screenManager";
 import { PlayScreen } from "./PlayScreen";
+import { hideGameObjects } from "../game/gameObjects";
+import { getGameState, setPendingGameState } from "../core/stateManager";
 
 export class CountingScreen extends Screen {
   private countdown = 3;
@@ -16,16 +17,22 @@ export class CountingScreen extends Screen {
   enter(): void {
     console.log("[CountingScreen] enter");
 
-    // 게임 오브젝트 숨기기
-    getBallMesh().setEnabled(false);
-    getPaddle1Mesh().setEnabled(false);
-    getPaddle2Mesh().setEnabled(false);
+    // 🎮 게임 오브젝트 숨김
+    hideGameObjects();
 
-    // GUI 세팅
+    // 🧠 상태 저장
+    const state = getGameState();
+    if (state) {
+      setPendingGameState(state);
+    } else {
+      console.warn("[CountingScreen] 저장할 게임 상태가 없습니다.");
+    }
+
+    // 🖥️ GUI 세팅
     setupCountdownGUI(getScene());
     setCountdownText(this.countdown.toString());
 
-    // 물리 시간 기반 카운트다운
+    // ⏱️ 물리 시간 기반 카운트다운
     this.timerId = setInterval(() => {
       this.countdown--;
 

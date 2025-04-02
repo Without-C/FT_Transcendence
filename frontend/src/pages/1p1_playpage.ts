@@ -1,6 +1,6 @@
-import { initCanvas, resetCanvas } from "../scripts/canvas/canvasManager";
-import { socketManager } from "../scripts/websocketManager";
-import { setupKeyListeners } from "../scripts/keyManager";
+import { initCanvas, resetCanvas } from "../scripts/core/canvasManager";
+import { socketManager } from "../scripts/network/websocketManager";
+import { setupKeyListeners } from "../scripts/input/keyManager";
 
 export function render1P1PlayPage(): string {
   const template = `

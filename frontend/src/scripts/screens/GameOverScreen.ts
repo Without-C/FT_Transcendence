@@ -5,7 +5,6 @@ import {
   setCanvasMessage,
   disposeMessageGUI
 } from "./gui/guiMessage";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 
 export class GameOverScreen extends Screen {
   private winner: string;
@@ -19,9 +18,6 @@ export class GameOverScreen extends Screen {
     console.log("[GameOverScreen] enter");
 
     // 게임 오브젝트 비활성화
-    getBallMesh().setEnabled(false);
-    getPaddle1Mesh().setEnabled(false);
-    getPaddle2Mesh().setEnabled(false);
 
     // 메시지 GUI 출력
     setupMessageGUI(getScene());
