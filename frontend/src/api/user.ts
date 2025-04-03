@@ -6,7 +6,7 @@ import { handleApiError } from "@/utils/handleApiError";
  * @returns avatar_url(string)이 담긴 객체
  */
 export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
-	const res = await fetch("api/user/mypage/avatar");
+	const res = await fetch("http://localhost:4000/api/user/mypage/avatar");
 
 	if(!res.ok) { //400
 		await handleApiError(res, "프로필 이미지 가져오기 실패");
@@ -21,7 +21,7 @@ export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
  * @returns username(string)이 담긴 객체
  */
 export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
-	const res = await fetch("api/user/mypage/username");
+	const res = await fetch("http://localhost:4000/api/user/mypage/username");
 
 	if(!res.ok) {
 		await handleApiError(res, "유저 이름 가져오기 실패");
@@ -36,7 +36,7 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
  * @param newAvatarUrl 새로 변경할 프로필 이미지 URL
  */
 export async function updateAvatar(newAvatarUrl: string): Promise<void> {
-	const res = await fetch("api/user/mypage/avatar", {
+	const res = await fetch("http://localhost:4000/pi/user/mypage/avatar", {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
@@ -54,7 +54,7 @@ export async function updateAvatar(newAvatarUrl: string): Promise<void> {
  * @param newUsername 새로 설정할 유저 이름
  */
 export async function updateUsername(newUsername: string): Promise<void> {
-	const res = await fetch("api/user/mypage/username", {
+	const res = await fetch("http://localhost:4000/api/user/mypage/username", {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
@@ -72,7 +72,7 @@ export async function updateUsername(newUsername: string): Promise<void> {
  * @returns username과 online 상태가 담긴 유저 배열 or 빈 객체 -> online은 일단 모두 1
  */
 export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
-	const res = await fetch("api/user/mypage/following");
+	const res = await fetch("http://localhost:4000/api/user/mypage/following");
 
 	if(!res.ok) {
 		await handleApiError(res, "팔로잉 목록 가져오기 실패");
@@ -86,7 +86,7 @@ export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
  * @returns following_number(number)이 담긴 객체
  */
 export async function fetchFollow(): Promise<UserTypes.FollowResponse> {
-	const res = await fetch("api/user/mypage/followers");
+	const res = await fetch("http://localhost:4000/api/user/mypage/followers");
 
 	if(!res.ok) {
 		await handleApiError(res, "팔로워 명수 가져오기 실패");
@@ -101,7 +101,7 @@ export async function fetchFollow(): Promise<UserTypes.FollowResponse> {
  * @param username 팔로우할 유저 이름
  */
 export async function followUser(username: string): Promise<void> {
-	const res = await fetch("api/user/mypage/follow", {
+	const res = await fetch("http://localhost:4000/api/user/mypage/follow", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -119,7 +119,7 @@ export async function followUser(username: string): Promise<void> {
  * @param username 언팔로우할 유저 이름
  */
 export async function unfollowUser(username: string): Promise<void> {
-	const res = await fetch("api/user/mypage/unfollow", {
+	const res = await fetch("http://localhost:4000/api/user/mypage/unfollow", {
 		method: "DELETE",
 		headers: {
 			"Content-Type": "application/json",
@@ -139,7 +139,7 @@ export async function unfollowUser(username: string): Promise<void> {
  */
 export async function searchUsers(keyword: string): Promise<UserTypes.SearchResponse> {
 	const query = encodeURIComponent(keyword);
-	const res = await fetch(`api/user/mypage/search?searching_user=${query}`);
+	const res = await fetch(`http://localhost:4000/api/user/mypage/search?searching_user=${query}`);
 
 	if(!res.ok) {
 		await handleApiError(res, "유저 검색 실패");

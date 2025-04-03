@@ -22,8 +22,8 @@ export async function render() {
 
 	if(mainRoute === "play") {
 		if(subRoute === "1p1") {
-			app.innerHTML = render1P1PlayPage();
-			previousCleanup = cleanup1P1PlayPage;
+			// app.innerHTML = render1P1PlayPage();
+			// previousCleanup = cleanup1P1PlayPage;
 		// } else if(subRoute === "tp") {
 		// 	app.innerHTML = renderTPPlayPage();
 		} else {

@@ -47,38 +47,38 @@ export async function renderMyPage() {
 				<button id="currentUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
 			</div>
 			<div id="changedUsername" class="flex flex-row gap-5">
-				<h2 class="text-[3vw] font-bold text-[#9CCA95]">${username.username}</h2>
+				<h2 class="text-[3vw] 2xl:text-5xl font-bold text-[#9CCA95]">${username.username}</h2>
 				<button id="changedUsernameInput" class="text-xl text-[#9CCA95] rounded-full">✎</button>
 			</div>
 		  </div>
 		</section>
 	  
-		<section class="flex flex-col w-full max-w-3xl">
+		<section class="flex flex-col w-full max-w-7xl">
 		  <div class="flex justify-end gap-4 text-[#9CCA95]">
 			<span><strong>${following.length}</strong> followers</span>
 			<span><strong>${follower.follower_number}</strong> following</span>
 		  </div>
 	  
-		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
-			<h3 class="absolute top-0 left-0 bg-[#375433] text-[1.1vw] font-bold px-3 py-1 rounded-br-lg">📋 FRIENDS LIST</h3>
-			<div class="flex justify-center items-center border-b-2 border-[#375433] pb-4">
+		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] 2xl:text-lg w-full">
+			<h3 class="absolute top-0 left-0 bg-[#375433] text-[1.1vw] 2xl:text-lg font-bold px-3 py-1 rounded-br-lg">📋 FRIENDS LIST</h3>
+			<div class="flex justify-center items-center border-b-2 border-[#375433] pb-4 w-full">
 			  <div class="flex items-center bg-[#162113] px-2 rounded">
 				<input id="search" type="text" name="username" placeholder="SEARCH" maxlength="10" class="text-white outline-none">
 				<button id="searchOrDelete"></button>
 			  </div>
 			</div>
-			<ul id="friendList" class="space-y-3 pt-4"></ul>
+			<ul id="friendList" class="space-y-3 pt-4 w-full"></ul>
 		  </div>
 	  
-		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
+		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] 2xl:text-lg w-full">
 			<div class="absolute top-0 left-0 flex justify-center items-center gap-4 pb-2">
-				<h3 class="bg-[#375433] text-[1.1vw] font-bold px-3 py-1 rounded-br-lg">⭐ MATCH HISTORY</h3>
+				<h3 class="bg-[#375433] text-[1.1vw] 2xl:text-lg font-bold px-3 py-1 rounded-br-lg">⭐ MATCH HISTORY</h3>
 				<div>
 					<button id="single">1P1</button>
 					<button id="tournament">TP</button>
 				</div>
 			</div>
-			<ul id="gameList" class="space-y-3 pt-10"></ul>
+			<ul id="gameList" class="space-y-3 pt-10 w-full"></ul>
 		  </div>
 		`;
 		
@@ -120,7 +120,7 @@ export async function renderMyPage() {
 						try{
 							if(unfollowBtn.textContent == "Unfollow") {
 								await unfollowUser(friend.username);
-								unfollowBtn.textContent = "Follow"
+								unfollowBtn.innerHTML = "&nbsp;&nbsp;Follow&nbsp;&nbsp;"
 							} else {
 								await followUser(friend.username);
 								unfollowBtn.textContent = "Unfollow"
