@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -8,5 +9,10 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     allowedHosts: ["frontend", "localhost"],
-  }
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 })
