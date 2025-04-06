@@ -1,15 +1,14 @@
-import { MeshBuilder, Mesh, Scene } from "@babylonjs/core";
+import { MeshBuilder, Mesh, Scene, Vector3 } from "@babylonjs/core";
 
 export class Ball {
   mesh: Mesh;
 
   constructor(scene: Scene) {
     this.mesh = MeshBuilder.CreateSphere("ball", { diameter: 20 }, scene);
-    this.mesh.position.z = 10;
+    this.mesh.position = new Vector3(0, 0, 0);
   }
 
-  update(x: number, y: number) {
-    this.mesh.position.x = x - 300;
-    this.mesh.position.y = 200 - y;
+  update(x: number, y: number, z: number): void {
+    this.mesh.position.set(x, y, z);
   }
 }

@@ -1,17 +1,27 @@
-import { MeshBuilder, Mesh, Scene } from "@babylonjs/core";
+import { MeshBuilder, Mesh, Scene, Vector3, StandardMaterial, Color3 } from "@babylonjs/core";
 
 export class Player {
   mesh: Mesh;
+  private readonly width = 10;
+  private readonly height = 20;
+  private readonly depth = 100;
 
   constructor(scene: Scene, name: string) {
-    this.mesh = MeshBuilder.CreateBox(name, { width: 100, height: 20, depth: 10 }, scene);
-    this.mesh.position.z = 5;
+    this.mesh = MeshBuilder.CreateBox(name, {
+      width: this.width,
+      height: this.height,
+      depth: this.depth,
+    }, scene);
+
+    this.mesh.position = new Vector3(0, 0, 0);
+
+    // 선택사항: 색상 지정
+    const mat = new StandardMaterial("paddleMat", scene);
+    mat.diffuseColor = name === "paddle1" ? new Color3(1, 1, 1) : new Color3(1, 1, 1);
+    this.mesh.material = mat;
   }
 
-  update(x: number, y: number, width: number, height: number) {
-    this.mesh.scaling.x = width / 100;
-    this.mesh.scaling.y = height / 20;
-    this.mesh.position.x = x - 300;
-    this.mesh.position.y = 200 - y;
+  update(x: number, y: number, z: number): void {
+    this.mesh.position.set(x, y, z);
   }
 }

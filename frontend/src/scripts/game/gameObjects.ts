@@ -17,23 +17,31 @@ export function createGameObjects(scene: Scene): void {
 }
 
 export function updateGameObjects(state: GameState): void {
-  ball.update(state.ball.x, state.ball.y);
-  Player1.update(state.paddle1.x, state.paddle1.y, state.paddle1.width, state.paddle1.height);
-  Player2.update(state.paddle2.x, state.paddle2.y, state.paddle2.width, state.paddle2.height);
+  ball.update(state.ball.x, state.ball.y, state.ball.z);
+  Player1.update(  state.paddle1.x,
+    state.paddle1.y,
+    state.paddle1.z,
+    state.paddle1.width,
+    state.paddle1.height);
+  Player2.update(  state.paddle2.x,
+    state.paddle2.y,
+    state.paddle2.z,
+    state.paddle2.width,
+    state.paddle2.height);
 }
 
 export function InvisibleGameObjects(): void {
   ball.mesh.setEnabled(false);
   Player1.mesh.setEnabled(false);
   Player2.mesh.setEnabled(false);
-  table.mesh.setEnabled(false);
+  // table.mesh.setEnabled(false);
 }
 
 export function VisibleGameObjects(): void {
   ball.mesh.setEnabled(true);
   Player1.mesh.setEnabled(true);
   Player2.mesh.setEnabled(true);
-  table.mesh.setEnabled(true);
+  // table.mesh.setEnabled(true);
 }
 
 export function getBallMesh() {
