@@ -2,8 +2,13 @@ import { FastifyPluginAsync } from 'fastify'
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify.get('/', async function (request, reply) {
-	return { root: true }
-  })
+	const users = [
+		{ username: 'younghoc', online: 1 },
+		{ username: 'yeoshin', online: 0 },
+		{ username: 'jjhang', online: 1 },
+	  ]
+	  return users
+	})
 }
 
 

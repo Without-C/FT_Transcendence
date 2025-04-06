@@ -10,7 +10,8 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			id: String(userId),
 		},
 	})
-	return (user?.username);
+	return (reply.send({username: user?.username}))
+	// return (user?.username);
   })
   fastify.patch('/', async function (request, reply) {
 
