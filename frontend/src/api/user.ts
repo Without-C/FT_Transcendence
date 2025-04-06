@@ -28,8 +28,9 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
 	}
 	
 	console.log("이름 가져오기 성공");
+	console.log(await res.json());
+	// console.log(data);
 	const data: UserTypes.UsernameResponse = await res.json();
-	console.log(data.username);
 	return data;
 }
 

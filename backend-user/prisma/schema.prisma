@@ -14,7 +14,7 @@ model User {
   id         String  @id @default(cuid())
   username   String
 
-  oauth_id_42     String?
-  oauth_id_github String?
-  oauth_id_google String?
+  oauth_id_42     String? @unique
+  oauth_id_github String? @unique
+  oauth_id_google String? @unique
 }
