@@ -26,8 +26,10 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
 	if(!res.ok) {
 		await handleApiError(res, "유저 이름 가져오기 실패");
 	}
-
+	
+	console.log("이름 가져오기 성공");
 	const data: UserTypes.UsernameResponse = await res.json();
+	console.log(data.username);
 	return data;
 }
 
