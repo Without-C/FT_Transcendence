@@ -1,61 +1,49 @@
-// gameObjects.ts
-import {
-    Mesh,
-    MeshBuilder,
-    Color3,
-    StandardMaterial,
-    Scene
-  } from "@babylonjs/core";
-  import { GameState } from "../core/types";
-  
-  let ballMesh: Mesh;
-  let paddle1Mesh: Mesh;
-  let paddle2Mesh: Mesh;
-  
-  export function createGameObjects(scene: Scene): void {
-    const table = MeshBuilder.CreateGround("table", { width: 600, height: 400 }, scene);
-    const tableMat = new StandardMaterial("tableMat", scene);
-    tableMat.diffuseColor = new Color3(0, 0.5, 0);
-    table.material = tableMat;
-  
-    ballMesh = MeshBuilder.CreateSphere("ball", { diameter: 20 }, scene);
-    ballMesh.position.z = 10;
-  
-    paddle1Mesh = MeshBuilder.CreateBox("paddle1", { width: 100, height: 20, depth: 10 }, scene);
-    paddle1Mesh.position.z = 5;
-  
-    paddle2Mesh = MeshBuilder.CreateBox("paddle2", { width: 100, height: 20, depth: 10 }, scene);
-    paddle2Mesh.position.z = 5;
-  }
-  
-  export function updateGameObjects(state: GameState): void {
-    const { ball, paddle1, paddle2 } = state;
-  
-    // Ball position
-    ballMesh.position.x = ball.x - 300;
-    ballMesh.position.y = 200 - ball.y;
-  
-    // Paddle update function
-    const updatePaddle = (mesh: Mesh, paddle: typeof paddle1) => {
-      mesh.scaling.x = paddle.width / 100;
-      mesh.scaling.y = paddle.height / 20;
-      mesh.position.x = paddle.x - 300;
-      mesh.position.y = 200 - paddle.y;
-    };
-  
-    updatePaddle(paddle1Mesh, paddle1);
-    updatePaddle(paddle2Mesh, paddle2);
-  }
-  
-  export function getBallMesh(): Mesh {
-    return ballMesh;
-  }
-  
-  export function getPaddle1Mesh(): Mesh {
-    return paddle1Mesh;
-  }
-  
-  export function getPaddle2Mesh(): Mesh {
-    return paddle2Mesh;
-  }
-  
+import { Scene } from "@babylonjs/core";
+import { GameState } from "../core/types";
+import { Ball } from "./objects/Ball";
+import { Player } from "./objects/Player";
+import { Table } from "./objects/Table";
+
+let ball: Ball;
+let Player1: Player;
+let Player2: Player;
+let table: Table;
+
+export function createGameObjects(scene: Scene): void {
+  table = new Table(scene);
+  ball = new Ball(scene);
+  Player1 = new Player(scene, "Player1");
+  Player2 = new Player(scene, "Player2");
+}
+
+export function updateGameObjects(state: GameState): void {
+  ball.update(state.ball.x, state.ball.y);
+  Player1.update(state.paddle1.x, state.paddle1.y, state.paddle1.width, state.paddle1.height);
+  Player2.update(state.paddle2.x, state.paddle2.y, state.paddle2.width, state.paddle2.height);
+}
+
+export function InvisibleGameObjects(): void {
+  ball.mesh.setEnabled(false);
+  Player1.mesh.setEnabled(false);
+  Player2.mesh.setEnabled(false);
+  table.mesh.setEnabled(false);
+}
+
+export function VisibleGameObjects(): void {
+  ball.mesh.setEnabled(true);
+  Player1.mesh.setEnabled(true);
+  Player2.mesh.setEnabled(true);
+  table.mesh.setEnabled(true);
+}
+
+export function getBallMesh() {
+  return ball.mesh;
+}
+
+export function getPlayer1Mesh() {
+  return Player1.mesh;
+}
+
+export function getPlayer2Mesh() {
+  return Player2.mesh;
+}
