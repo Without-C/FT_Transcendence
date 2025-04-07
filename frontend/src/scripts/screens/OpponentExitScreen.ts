@@ -1,5 +1,4 @@
 import { Screen } from "./Screen";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
 import { getScene } from "../core/engineCore";
 import {
   setupMessageGUI,
@@ -19,9 +18,6 @@ export class OpponentExitScreen extends Screen {
     console.log("[OpponentExitScreen] enter");
 
     // 모든 오브젝트 비활성화
-    getBallMesh().setEnabled(false);
-    getPaddle1Mesh().setEnabled(false);
-    getPaddle2Mesh().setEnabled(false);
 
     // 메시지 GUI 세팅
     setupMessageGUI(getScene());

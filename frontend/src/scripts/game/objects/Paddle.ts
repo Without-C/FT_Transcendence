@@ -1,6 +1,6 @@
 import { MeshBuilder, Mesh, Scene, Vector3, StandardMaterial, Color3 } from "@babylonjs/core";
 
-export class Player {
+export class Paddle {
   mesh: Mesh;
   private readonly width = 10;
   private readonly height = 20;
@@ -17,7 +17,7 @@ export class Player {
 
     // 선택사항: 색상 지정
     const mat = new StandardMaterial("paddleMat", scene);
-    mat.diffuseColor = name === "paddle1" ? new Color3(1, 1, 1) : new Color3(1, 1, 1);
+    mat.diffuseColor = name === "paddle1" ? new Color3(1, 0, 0) : new Color3(0, 0, 1);
     this.mesh.material = mat;
   }
 

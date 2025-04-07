@@ -17,6 +17,7 @@ export class Table {
     material.diffuseColor = new Color3(0, 0.5, 0);
     this.mesh.material = material;
 
+    // y축 기준: 아래로 내림 (바닥처럼 보이게)
     this.mesh.position = new Vector3(
       this.width / 2,
       -this.height / 2,
