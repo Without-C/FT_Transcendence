@@ -18,4 +18,9 @@ model User {
   oauth_id_github String? @unique
   oauth_id_google String? @unique
 }
- 
+
+model Follow {
+	id		String @id @default(cuid())
+	followerId	String
+	followingUsername String
+}
