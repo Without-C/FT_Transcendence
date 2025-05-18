@@ -59,16 +59,6 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		const existingUser = await fastify.prisma.user.findFirst({
 			where: { oauth_id_42: String(userinfo.data.id) },
 		});
-
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		console.log(userinfo.data.id, existingUser)
-		
 		//유저 존재하지 않는다면 새 유저 만들어서 저장
 		if (!existingUser) {
 			
