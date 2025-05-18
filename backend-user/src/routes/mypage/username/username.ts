@@ -21,8 +21,8 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 				oauth_id_42: String(userId),
 			},
 		})
-		return (reply.send({username: user?.username}))
-		// return (user?.username);
+		reply.send({username: user?.username})
+		
   	})
   fastify.patch('/', async function (request, reply) {
 
