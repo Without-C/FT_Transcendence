@@ -6,6 +6,7 @@ import multipart from '@fastify/multipart';
 import util from 'util';
 import fastifyStatic from '@fastify/static';
 import fastifyCookie from '@fastify/cookie';
+import { pipeline } from 'stream';
 
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
@@ -29,29 +30,61 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   	return { avatar_url: imageUrl };
 	})
 	
-	//-> file폼으로 프론트에서 받게 api변경 필요
+	
 	fastify.post('/', async function (request, reply) {
 		const file = await request.file(); // FormData의 'file' 필드
-
+		
 		if (!file) {
-		  return reply.status(400).send({ error: 'No file uploaded' });
+			return reply.status(400).send({ error: 'No file uploaded' });
 		}
-
+		
+		
 		const userCookie = request.cookies.auth_token; // 쿠키 받아오기
 		const decoded = fastify.jwt.verify<{ id: number }>(userCookie || ''); // 2️⃣ JWT 검증 및 디코딩
     	const userId = decoded.id; //유저 id 받기
 		const uploadsDir = path.join(process.cwd(), 'uploads'); // 사진 파일 경로
-		const filePath = path.join(path.join(uploadsDir, userId.toString()), ".jpg"); // 사진 파일 이
-
-		const pump = util.promisify(require('stream').pipeline);
+		const filePath = path.join(uploadsDir, `${userId}.jpg`); // 사진 파일 이
+		
+		const pump = util.promisify(pipeline);
 		try {
-  		  // 스트림 저장
+			// 스트림 저장
   		  await pump(file.file, fs.createWriteStream(filePath));
   		  return reply.send({ message: 'Upload complete', filename: `${userId}.jpg` });
-  		} catch (err) {
-  		  console.error(err);
+		} catch (err) {
+			console.error(err);
   		  return reply.status(500).send({ error: 'File upload failed' });
-  		}
+		}
+	})
+	
+	fastify.patch('/', async function (request, reply) {
+		const file = await request.file(); // FormData의 'file' 필드
+	
+		if (!file) {
+		  return reply.status(400).send({ error: 'No file uploaded' });
+		}
+	
+		const userCookie = request.cookies.auth_token; // 쿠키 받아오기
+		const decoded = fastify.jwt.verify<{ id: number }>(userCookie || ''); // 2️⃣ JWT 검증 및 디코딩
+		const userId = decoded.id; //유저 id 받기
+		const uploadsDir = path.join(process.cwd(), 'uploads'); // 사진 파일 경로
+		const filePath = path.join(uploadsDir, `${userId}.jpg`); // 사진 파일 이름 추가
+		
+		try {
+			await fs.unlinkSync(filePath);
+			console.log('파일 삭제 성공!');
+		} catch (err) {
+			  console.error('파일 삭제 실패:', err);
+		}
+	
+		const pump = util.promisify(pipeline);
+		try {
+			// 스트림 저장
+			await pump(file.file, fs.createWriteStream(filePath));
+			return reply.status(200).send();
+		  } catch (err) {
+			console.error(err);
+			return reply.status(500).send({ error: 'File upload failed' });
+		  }
 	})
 }
 
