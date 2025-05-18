@@ -7,7 +7,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	// 	where: { followingId: 1 },
 	//   	select: { follower: true }
 	// 	})
-	return { follower : 0 }
+	reply.send({follower: 0})
   })
 }
 
