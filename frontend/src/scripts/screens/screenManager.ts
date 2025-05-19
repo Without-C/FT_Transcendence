@@ -66,7 +66,7 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
     case "countdown":
       if (data.countdown && data.player1_username && data.player2_username) {
         setPlayerInfo(data.player1_username, data.player2_username);
-        setInitialScore(0, 0); // 초기화 or 서버 값
+        setInitialScore(0, 0);
         changeScreen(new CountingScreen());
       }
       break;
@@ -75,14 +75,14 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
       changeScreen(new PlayScreen());
       break;
 
-      case "opponent_exit":
-        changeScreen(new OpponentExitScreen(data.opponent_username ?? "Opponent"));
-        break;
+    case "opponent_exit":
+      changeScreen(new OpponentExitScreen(data.opponent_username ?? "Opponent"));
+      break;
 
-        case "game_end":
-          if (data.final_winner) {
-            changeScreen(new GameOverScreen(data.final_winner));
-          }
-          break;
+    case "game_end":
+      if (data.final_winner) {
+        changeScreen(new GameOverScreen(data.final_winner));
+      }
+      break;
   }
 }
