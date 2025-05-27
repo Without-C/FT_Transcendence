@@ -5,7 +5,7 @@ import {
   setCountdownText,
   clearCountdownGUI,
 } from "./gui/guiCountdown";
-import { getBallMesh, getPaddle1Mesh, getPaddle2Mesh } from "../game/gameObjects";
+import { InvisibleGameObjects } from "../game/gameObjects";
 import { changeScreen } from "./screenManager";
 import { PlayScreen } from "./PlayScreen";
 
@@ -17,14 +17,13 @@ export class CountingScreen extends Screen {
     console.log("[CountingScreen] enter");
 
     // 게임 오브젝트 숨기기
-    getBallMesh().setEnabled(false);
-    getPaddle1Mesh().setEnabled(false);
-    getPaddle2Mesh().setEnabled(false);
-
+    InvisibleGameObjects();
+    
     // GUI 세팅
     setupCountdownGUI(getScene());
     setCountdownText(this.countdown.toString());
 
+    console.log("scene", getScene().uid);
     // 물리 시간 기반 카운트다운
     this.timerId = setInterval(() => {
       this.countdown--;

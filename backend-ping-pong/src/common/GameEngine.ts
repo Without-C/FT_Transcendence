@@ -1,105 +1,76 @@
 import { Ball } from "../common/Ball";
-import { Rectangle } from "../common/Rectangle";
+import { BoxCollider } from "../common/BoxCollider";
 import { KeyState } from "../common/KeyState";
 import { Player } from "../common/Player";
 
 export class GameEngine {
     private intervalId: NodeJS.Timeout | null = null;
 
-    // 화면 크기
     private readonly width = 600;
-    private readonly height = 400;
-
-    // 패들
-    private readonly paddle_speed = 5
-    private readonly paddle_width = 10
-    private readonly paddle_height = 100
-    private readonly paddle_margin = 30
+    private readonly depth = 400; // 2D의 height → 3D의 z축
+    private readonly paddle_speed = 5;
+    private readonly paddle_width = 10;
+    private readonly paddle_height = 20;
+    private readonly paddle_depth = 100;
+    private readonly paddle_margin = 30;
+    private readonly wall_thickness = 10;
 
     // 벽
-    private readonly wall_depth = 10;
+    private readonly wall_top = new BoxCollider(this.width / 2, 0, -this.wall_thickness / 2, this.width, 20, this.wall_thickness);
+    private readonly wall_bottom = new BoxCollider(this.width / 2, 0, this.depth + this.wall_thickness / 2, this.width, 20, this.wall_thickness);
+    private readonly wall_left = new BoxCollider(-this.wall_thickness / 2, 0, this.depth / 2, this.wall_thickness, 20, this.depth);
+    private readonly wall_right = new BoxCollider(this.width + this.wall_thickness / 2, 0, this.depth / 2, this.wall_thickness, 20, this.depth);
 
-    // 벽 초기화
-    private readonly wall_top = new Rectangle(
-        this.width / 2, -this.wall_depth / 2, this.width, this.wall_depth
-    );
-    private readonly wall_bottom = new Rectangle(
-        this.width / 2,
-        this.height + this.wall_depth / 2,
-        this.width,
-        this.wall_depth,
-    );
-    private readonly wall_left = new Rectangle(
-        -this.wall_depth / 2, this.height / 2, this.wall_depth, this.height
-    );
-    private readonly wall_right = new Rectangle(
-        this.width + this.wall_depth / 2,
-        this.height / 2,
-        this.wall_depth,
-        this.height,
-    );
-
-    // 공 초기화
-    private ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
+    private ball = new Ball(this.width / 2, 2, this.depth / 2, 5, 0, 5, 10); // y = 높이
     private ballIsMoving = false;
     private ballTurn = 0;
 
-    // 패들 초기화
-    private paddle1 = new Rectangle(
-        this.paddle_margin, this.height / 2, this.paddle_width, this.paddle_height
-    );
-    private paddle2 = new Rectangle(
-        this.width - this.paddle_margin,
-        this.height / 2,
-        this.paddle_width,
-        this.paddle_height,
-    );
+    private paddle1 = new BoxCollider(this.paddle_margin, 2, this.depth / 2, this.paddle_width, this.paddle_height, this.paddle_depth);
+    private paddle2 = new BoxCollider(this.width - this.paddle_margin, 2, this.depth / 2, this.paddle_width, this.paddle_height, this.paddle_depth);
 
     constructor(
         private players: Player[],
         private onScore: (scoringPlayerIndex: number) => void,
         private onGameStateUpdate: (state: any) => void,
-    ) { }
+    ) {}
 
     public resetRound(): void {
-        this.ball = new Ball(this.width / 2, this.height / 2, 5, 5, 10);
+        this.ball = new Ball(this.width / 2, 2, this.depth / 2, 0, 0, 0, 10);
         this.ballIsMoving = false;
 
-        this.paddle1 = new Rectangle(
-            this.paddle_margin, this.height / 2, this.paddle_width, this.paddle_height
-        );
-        this.paddle2 = new Rectangle(
-            this.width - this.paddle_margin,
-            this.height / 2,
-            this.paddle_width,
-            this.paddle_height,
-        );
+        this.paddle1 = new BoxCollider(this.paddle_margin, 2, this.depth / 2, this.paddle_width, this.paddle_height, this.paddle_depth);
+        this.paddle2 = new BoxCollider(this.width - this.paddle_margin, 2, this.depth / 2, this.paddle_width, this.paddle_height, this.paddle_depth);
     }
 
     public start(): void {
         this.intervalId = setInterval(() => {
-            this.update()
+            this.update();
             this.onGameStateUpdate({
                 ball: {
                     x: this.ball.x,
                     y: this.ball.y,
+                    z: this.ball.z,
                 },
                 paddle1: {
                     x: this.paddle1.x,
                     y: this.paddle1.y,
+                    z: this.paddle1.z,
                     width: this.paddle1.width,
                     height: this.paddle1.height,
+                    depth: this.paddle1.depth,
                 },
                 paddle2: {
                     x: this.paddle2.x,
                     y: this.paddle2.y,
+                    z: this.paddle2.z,
                     width: this.paddle2.width,
                     height: this.paddle2.height,
+                    depth: this.paddle2.depth,
                 },
                 username: {
                     player1: this.players[0].username,
                     player2: this.players[1].username,
-                }
+                },
             });
         }, 1000 / 60);
     }
@@ -112,64 +83,66 @@ export class GameEngine {
     }
 
     private update(): void {
-        // paadle
-        const paddleKeyPairs: [KeyState, Rectangle][] = [
+        // 패들 이동 (z축)
+        const paddleKeyPairs: [KeyState, BoxCollider][] = [
             [this.players[0].keyState, this.paddle1],
             [this.players[1].keyState, this.paddle2],
         ];
 
-        paddleKeyPairs.forEach(([KeyState, paddle]) => {
-            if (KeyState.get("ArrowUp") || KeyState.get("w")) {
-                paddle.y -= this.paddle_speed;
+        paddleKeyPairs.forEach(([keyState, paddle]) => {
+            if (keyState.get("ArrowUp") || keyState.get("w")) {
+                paddle.z -= this.paddle_speed;
             }
-            if (KeyState.get("ArrowDown") || KeyState.get("s")) {
-                paddle.y += this.paddle_speed;
+            if (keyState.get("ArrowDown") || keyState.get("s")) {
+                paddle.z += this.paddle_speed;
             }
 
-            const halfHeight = paddle.height / 2;
-            paddle.y = Math.max(halfHeight, Math.min(paddle.y, this.height - halfHeight));
-        })
+            const halfDepth = paddle.depth / 2;
+            paddle.z = Math.max(halfDepth, Math.min(paddle.z, this.depth - halfDepth));
+        });
 
-        // ball
+        // 공 위치 초기화
         if (!this.ballIsMoving) {
             if (this.ballTurn == 0) {
                 this.ball.x = this.paddle_margin * 2;
-                this.ball.y = this.paddle1.y;
+                this.ball.z = this.paddle1.z;
             } else {
                 this.ball.x = this.width - this.paddle_margin * 2;
-                this.ball.y = this.paddle2.y;
+                this.ball.z = this.paddle2.z;
             }
             this.ball.vx = 0;
-            this.ball.vy = 0;
+            this.ball.vz = 0;
         }
+
         if (!this.ballIsMoving && this.players[this.ballTurn].keyState.get(" ")) {
             this.ballIsMoving = true;
             if (this.ballTurn == 0) {
                 this.ball.vx = 5;
-                this.ball.vy = 5;
+                this.ball.vz = 5;
             } else {
                 this.ball.vx = -5;
-                this.ball.vy = 5;
+                this.ball.vz = 5;
             }
         }
 
-        const rects: Rectangle[] = [
+        const colliders: BoxCollider[] = [
             this.wall_top,
             this.wall_bottom,
             this.paddle1,
             this.paddle2,
         ];
-        rects.forEach(rect => {
-            this.ball.collideWithRect(rect);
+
+        colliders.forEach(box => {
+            this.ball.collideWithBox(box);
         });
 
-        if (this.ball.collideWithRect(this.wall_left)) {
+        if (this.ball.collideWithBox(this.wall_left)) {
             this.onScore(1);
             this.ballIsMoving = false;
             this.ballTurn = 1 - this.ballTurn;
         }
 
-        if (this.ball.collideWithRect(this.wall_right)) {
+        if (this.ball.collideWithBox(this.wall_right)) {
             this.onScore(0);
             this.ballIsMoving = false;
             this.ballTurn = 1 - this.ballTurn;

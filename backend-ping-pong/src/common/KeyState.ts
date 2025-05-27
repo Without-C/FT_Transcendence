@@ -16,4 +16,13 @@ export class KeyState {
     public get(key: string): boolean {
         return this.keyState[key] ?? false;
     }
+    
+    public isUp(): boolean {
+        return this.get("ArrowUp") || this.get("w");
+    }
+    
+    public isDown(): boolean {
+        return this.get("ArrowDown") || this.get("s");
+    }
+    
 }
