@@ -45,17 +45,17 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
  * 프로필 이미지 변경하기 -> string이여도 괜찮나, FormData??
  * @param newAvatarUrl 새로 변경할 프로필 이미지 URL
  */
-export async function updateAvatar(newAvatarUrl: string): Promise<void> {
+export async function updateAvatar(file: File): Promise<void> {
+	const formData = new FormData();
+	formData.append("avatar", file); // 서버에서 "avatar" 필드로 받도록 설정
+
 	const res = await fetch("api/user/mypage/avatar", {
 		method: "PATCH",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		credentials: 'include',
-		body: JSON.stringify({avatar_url: newAvatarUrl}),
+		credentials: "include",
+		body: formData, // ⛔ Content-Type 헤더는 생략해야 함 (브라우저가 자동 처리함)
 	});
 
-	if(!res.ok) {
+	if (!res.ok) {
 		await handleApiError(res, "프로필 이미지 변경 실패");
 	}
 }
