@@ -49,7 +49,7 @@ export async function renderMyPage() {
 
 		  <div class="relative">
 			<img src="${avatar.avatar_url}" class="w-40 h-40 rounded-full object-cover" alt="profile">
-			<input type="file" id="fileInput" accept="image/*" class="hidden">
+			<input type="file" id="fileInput" accept="image/jpeg" class="hidden">
 			<button id="profileImg" class="absolute bottom-2 right-2 bg-[#375433] px-2.5 py-1 rounded-full">✎</button>
 		  </div>
 
