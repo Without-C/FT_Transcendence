@@ -22,12 +22,24 @@ export async function renderMyPage() {
 			singleGames,
 			tournamentGames
 		  ] = await Promise.all([
-			fetchAvatar(),
-			fetchUsername(),
-			fetchFollowing(),
-			fetchFollow(),
-			fetchSingleGames(),
-			fetchTournamentGames()
+			fetchAvatar().catch(error => {
+				console.error("Avatar fetch error:", error);
+				throw error;
+			}),
+			fetchUsername().catch(error => {
+				console.error("Username fetch error:", error);
+				throw error;
+			}),
+			fetchFollowing().catch(error => {
+				console.error("Following fetch error:", error);
+				throw error;
+			}),
+			fetchFollow().catch(error => {
+				console.error("Follow fetch error:", error);
+				throw error;
+			}),
+			Promise.resolve([]),
+			Promise.resolve([])
 		  ]);
 		
 		const template = `
