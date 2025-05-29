@@ -67,8 +67,8 @@ export async function renderMyPage() {
 	  
 		<section class="flex flex-col w-full max-w-3xl">
 		  <div class="flex justify-end gap-4 text-[#9CCA95]">
-			<span><strong>${following.length}</strong> followers</span>
-			<span><strong>${follower.follower_number}</strong> following</span>
+			<span><strong>${following.length || 0}</strong> followers</span>
+			<span><strong>${follower.follower_number || 0}</strong> following</span>
 		  </div>
 	  
 		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
@@ -313,23 +313,40 @@ export async function renderMyPage() {
 			})
 			
 			//username 변경 랜더링
-			const currentUsernameInput = document.getElementById("currentUsernameInput");
-			const changedUsernameInput = document.getElementById("changedUsernameInput");
-
-			document.getElementById("currentUsernameInput")?.addEventListener("click" , () => {
-				const newName = document.getElementById("usernameInput"); //빈문자열인지 확인
-				if(newName.value != '') {
-					document.getElementById("currentUsername")?.classList.toggle("hidden");
-					document.getElementById("changedUsername")?.classList.toggle("hidden");
-					updateUsername(newName.value);
-				}
-			});
-
-			document.getElementById("changedUsernameInput")?.addEventListener("click", () => {
-				document.getElementById("currentUsername")?.classList.toggle("hidden");
-				document.getElementById("changedUsername")?.classList.toggle("hidden");
-			});
+			const renderName = () => {
+				const currentUsernameInput = document.getElementById("currentUsernameInput");
+				const changedUsernameInput = document.getElementById("changedUsernameInput");
+			  
+				currentUsernameInput?.addEventListener("click", async () => {
+				  const newName = document.getElementById("usernameInput") as HTMLInputElement;
+			  
+				  // 빈 값이 아닐 때만
+				  if (newName.value.trim() !== '') {
+					try {
+					  await updateUsername(newName.value);
+			  
+					  const nameHeading = document.querySelector("#changedUsername h2");
+					  if (nameHeading) {
+						nameHeading.textContent = newName.value;
+					  }
+			  
+					  document.getElementById("currentUsername")?.classList.toggle("hidden");
+					  document.getElementById("changedUsername")?.classList.toggle("hidden");
+					} catch (error) {
+					  console.error("이름 변경 실패:", error);
+					}
+				  }
+				});
+			  
+				// ✏️ '✎' 다시 누르면 input창 숨기기 (취소처럼)
+				changedUsernameInput?.addEventListener("click", () => {
+				  document.getElementById("currentUsername")?.classList.toggle("hidden");
+				  document.getElementById("changedUsername")?.classList.toggle("hidden");
+				});
+			};
+			  
 			
+			renderName();
 			renderFriendList();
 			renderSingleList();
 		});
