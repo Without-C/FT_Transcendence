@@ -312,40 +312,56 @@ export async function renderMyPage() {
 				document.getElementById("fileInput")?.click();
 			})
 			
-			//username 변경 랜더링
+			//username 랜더링
 			const renderName = () => {
 				const currentUsernameInput = document.getElementById("currentUsernameInput");
 				const changedUsernameInput = document.getElementById("changedUsernameInput");
 			  
 				currentUsernameInput?.addEventListener("click", async () => {
-				  const newName = document.getElementById("usernameInput") as HTMLInputElement;
+					const newName = document.getElementById("usernameInput") as HTMLInputElement;
 			  
-				  // 빈 값이 아닐 때만
-				  if (newName.value.trim() !== '') {
-					try {
-					  await updateUsername(newName.value);
-			  
-					  const nameHeading = document.querySelector("#changedUsername h2");
-					  if (nameHeading) {
-						nameHeading.textContent = newName.value;
-					  }
-			  
-					  document.getElementById("currentUsername")?.classList.toggle("hidden");
-					  document.getElementById("changedUsername")?.classList.toggle("hidden");
-					} catch (error) {
-					  console.error("이름 변경 실패:", error);
-					}
-				  }
+					if (newName.value.trim() !== '') {
+						try {
+							await updateUsername(newName.value);
+					
+							const nameHeading = document.querySelector("#changedUsername h2");
+							if (nameHeading) {
+								nameHeading.textContent = newName.value;
+							}
+					
+							document.getElementById("currentUsername")?.classList.toggle("hidden");
+							document.getElementById("changedUsername")?.classList.toggle("hidden");
+							} catch (error) {
+							console.error("이름 변경 실패:", error);
+						}
+				  	}
 				});
 			  
-				// ✏️ '✎' 다시 누르면 input창 숨기기 (취소처럼)
 				changedUsernameInput?.addEventListener("click", () => {
 				  document.getElementById("currentUsername")?.classList.toggle("hidden");
 				  document.getElementById("changedUsername")?.classList.toggle("hidden");
 				});
 			};
-			  
 			
+			//profile image 랜더링
+			const renderProfileImage = () => {
+				const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+				const profileImg = document.querySelector("img[alt='profile']") as HTMLImageElement;
+
+				fileInput.addEventListener("change", async (e) => {
+					const file = (e.target as HTMLInputElement).files?.[0];
+					if (!file) return;
+
+					try {
+						await updateAvatar(file);
+						profileImg.src = URL.createObjectURL(file);
+					} catch (error) {
+						console.error("프로필 이미지 업로드 실패:", error);
+					}
+				});
+			}
+			
+			renderProfileImage();
 			renderName();
 			renderFriendList();
 			renderSingleList();
