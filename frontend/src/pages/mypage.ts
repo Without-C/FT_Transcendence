@@ -48,7 +48,7 @@ export async function renderMyPage() {
 		<section class="flex flex-col items-center gap-4 pt-20">
 
 		  <div class="relative">
-			<img src="${avatar.avatar_url}" class="w-40 h-40 rounded-full" alt="profile">
+			<img src="${avatar.avatar_url}" class="w-40 h-40 rounded-full object-cover" alt="profile">
 			<input type="file" id="fileInput" accept="image/*" class="hidden">
 			<button id="profileImg" class="absolute bottom-2 right-2 bg-[#375433] px-2.5 py-1 rounded-full">✎</button>
 		  </div>
