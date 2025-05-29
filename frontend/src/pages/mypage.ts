@@ -316,8 +316,9 @@ export async function renderMyPage() {
 			const renderName = () => {
 				const currentUsernameInput = document.getElementById("currentUsernameInput");
 				const changedUsernameInput = document.getElementById("changedUsernameInput");
-			  
-				currentUsernameInput?.addEventListener("click", async () => {
+				const newNameInput = document.getElementById("usernameInput") as HTMLInputElement;
+
+				const submitUsername = async () => {
 					const newName = document.getElementById("usernameInput") as HTMLInputElement;
 			  
 					if (newName.value.trim() !== '') {
@@ -335,7 +336,15 @@ export async function renderMyPage() {
 							console.error("이름 변경 실패:", error);
 						}
 				  	}
-				});
+				};
+
+				currentUsernameInput?.addEventListener("click", submitUsername);
+
+				newNameInput?.addEventListener("keydown", (e) => {
+					if (e.key === "Enter") {
+					  submitUsername();
+					}
+				  });
 			  
 				changedUsernameInput?.addEventListener("click", () => {
 				  document.getElementById("currentUsername")?.classList.toggle("hidden");
