@@ -1,7 +1,7 @@
 import {renderPlayPage} from "./pages/playpage.ts";
 import {renderMyPage} from "./pages/mypage.ts";
 import {renderSignInPage} from "./pages/signinpage.ts";
-import {render1P1PlayPage, cleanup1P1PlayPage} from "./pages/1p1_playpage.ts";
+// import {render1P1PlayPage, cleanup1P1PlayPage} from "./pages/1p1_playpage.ts";
 // import {renderTPPlayPage} from "./pages/tp_playpage.ts";
 
 let previousCleanup: (() => void) | null = null;
@@ -22,8 +22,8 @@ export async function render() {
 
 	if(mainRoute === "play") {
 		if(subRoute === "1p1") {
-			app.innerHTML = render1P1PlayPage();
-			previousCleanup = cleanup1P1PlayPage;
+			// app.innerHTML = render1P1PlayPage();
+			// previousCleanup = cleanup1P1PlayPage;
 		// } else if(subRoute === "tp") {
 		// 	app.innerHTML = renderTPPlayPage();
 		} else {

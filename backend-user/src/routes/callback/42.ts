@@ -59,7 +59,6 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		const existingUser = await fastify.prisma.user.findFirst({
 			where: { oauth_id_42: String(userinfo.data.id) },
 		});
-
 		//유저 존재하지 않는다면 새 유저 만들어서 저장
 		if (!existingUser) {
 			
@@ -71,7 +70,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
 			const newUser = await fastify.prisma.user.create({
 				data: {
-					username: userinfo.data.login,//인트라 아이디 저장
+					username: String(userinfo.data.login),//인트라 아이디 저장
 					oauth_id_42: String(userinfo.data.id), // 직접 ID 지정
 				},
 			});
@@ -88,7 +87,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			path: '/', // 전체 도메인에서 쿠키 사용
 			});
 
-		reply.redirect('http://localhost:8080/');
+		reply.redirect('http://localhost:8080/#/play');
 		return;
 	})
 }
