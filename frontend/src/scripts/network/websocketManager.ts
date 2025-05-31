@@ -31,6 +31,9 @@ class SocketManager {
     this.socket.onopen = () => {
       console.log(`✅ WebSocket connected [${mode} mode]`);
       this.isConnected = true;
+
+      // Send nickname
+      this.socket.send(JSON.stringify({ type: "set_nickname", nickname }));
     };
 
     this.socket.onmessage = (event: MessageEvent) => {

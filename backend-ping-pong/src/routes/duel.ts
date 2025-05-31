@@ -22,6 +22,13 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         ws.on('message', async (message) => {
             const data = JSON.parse(message.toString())
+
+            // Handle set nickname
+            if (data.type === 'set_nickname') {
+                player.username = data.nickname;
+                return;
+            }
+
             if (player.game) {
                 player.game.onMessage(player, data);
             }
