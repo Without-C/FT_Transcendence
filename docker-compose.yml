@@ -55,9 +55,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
     tty: true
 
   backend-ping-pong:
@@ -75,9 +72,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
     tty: true
 
   backend-blockchain:
@@ -92,22 +86,6 @@ services:
       - AMQP_URL=${AMQP_URL}
     healthcheck:
       test: wget -qO- http://127.0.0.1:3000/healthcheck
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    tty: true
-
-  rabbitmq:
-    image: rabbitmq:4.0-alpine
-    container_name: rabbitmq
-    volumes:
-      - ${PWD}/backend-blockchain:/app
-      - /app/node_modules
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
       interval: 10s
       timeout: 10s
       retries: 5
