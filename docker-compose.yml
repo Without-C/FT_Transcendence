@@ -175,7 +175,7 @@ services:
       - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+      test: ["CMD", "curl", "-f", "http://localhost:5601/kibana/api/status"]
       interval: 10s
       timeout: 10s
       retries: 5
