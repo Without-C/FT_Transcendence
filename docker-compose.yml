@@ -38,8 +38,6 @@ services:
     build: ./backend-user
     image: backend-user
     container_name: backend-user
-    ports:
-      - "3000:3000"
     volumes:
       - backend-user-log:/var/log/backend-user
       - ${PWD}/backend-user:/app
@@ -66,8 +64,6 @@ services:
     build: ./backend-ping-pong
     image: backend-ping-pong
     container_name: backend-ping-pong
-    ports:
-      - "3001:3000"
     volumes:
       - backend-ping-pong-log:/var/log/backend-ping-pong
       - ${PWD}/backend-ping-pong:/app
@@ -88,8 +84,6 @@ services:
     build: ./backend-blockchain
     image: backend-blockchain
     container_name: backend-blockchain
-    ports:
-      - "3002:3000"
     volumes:
       - backend-blockchain-log:/var/log/backend-blockchain
       - ${PWD}/backend-blockchain:/app
@@ -109,8 +103,6 @@ services:
   rabbitmq:
     image: rabbitmq:4.0-alpine
     container_name: rabbitmq
-    ports:
-      - "5672:5672"
     volumes:
       - ${PWD}/backend-blockchain:/app
       - /app/node_modules
@@ -144,8 +136,6 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
     container_name: elasticsearch
-    ports:
-      - "9200:9200"
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - node.store.allow_mmap=false
@@ -161,8 +151,6 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.17.2
     container_name: kibana
-    ports:
-      - "5601:5601"
     volumes:
       - ${PWD}/elk/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
       - ${PWD}/elk/kibana/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
