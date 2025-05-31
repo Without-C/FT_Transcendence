@@ -31,7 +31,6 @@ const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> 
 
 		
 		const { code } = request.query; // authenticate code calback으로 받아옴
-		console.log("I'm here!!!!!!!!!!")
 		const url = 'https://oauth2.googleapis.com/token'; //해당 url에서 access token 받아옴
 		const data = qs.stringify({
 			grant_type: 'authorization_code',
@@ -47,32 +46,40 @@ const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> 
 			}
 		}); //요청 post -> response에 응답 담겨서 온다.
 		
-		const userinfo = await axios.get("https://www.googleapis.com/auth/userinfo.email", {
+		const userinfo = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
 			headers: {
 				Authorization: `Bearer ` + response.data.access_token
 			}
 		}); //요청 post -> accesstoken으로 유저 정보 받아오는 부분
-		console.log(userinfo);
-		reply.redirect('http://localhost:8080/#/play');
-		return;
+		/* data 형식
+		data: {
+		  id: '108656688554991732378',
+		  email: 'syk9063@gmail.com',
+		  verified_email: true,
+		  name: '덕기',
+		  given_name: '기',
+		  family_name: '덕',
+		  picture: 'https://lh3.googleusercontent.com/a/ACg8ocKKvin7TY493TAeXXmh0HMAZrAh9xkAQlxrGYzrubQUV-PJmA=s96-c'
+		}
+		*/
 		
 		//유저가 한 명인지 확인
 		const existingUser = await fastify.prisma.user.findFirst({
-			where: { oauth_id_42: String(userinfo.data.id) },
+			where: { oauth_id_google: String(userinfo.data.id) },
 		});
 		//유저 존재하지 않는다면 새 유저 만들어서 저장
 		if (!existingUser) {
 			
 			await downloadAndSaveImage(
-				userinfo.data.image.link,
+				userinfo.data.picture,
 				String(userinfo.data.id),
 				uploadsDir
 			  );
 
 			const newUser = await fastify.prisma.user.create({
 				data: {
-					username: String(userinfo.data.login),//인트라 아이디 저장
-					oauth_id_42: String(userinfo.data.id), // 직접 ID 지정
+					username: String(userinfo.data.name),//인트라 아이디 저장
+					oauth_id_google: String(userinfo.data.id), // 직접 ID 지정
 				},
 			});
 			console.log('새로운 유저 생성:', newUser);
