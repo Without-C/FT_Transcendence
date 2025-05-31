@@ -19,6 +19,7 @@ services:
         condition: service_healthy
       kibana:
         condition: service_healthy
+    init: true
 
   frontend:
     build: ./frontend
@@ -32,6 +33,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    init: true
 
   backend-user:
     build: ./backend-user
@@ -54,6 +56,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    init: true
 
   backend-ping-pong:
     build: ./backend-ping-pong
@@ -68,6 +71,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    init: true
 
   backend-blockchain:
     build: ./backend-blockchain
@@ -82,6 +86,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    init: true
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.17.2
@@ -101,6 +106,7 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+    init: true
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
@@ -116,6 +122,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    init: true
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.17.2
@@ -140,6 +147,7 @@ services:
       elasticsearch:
         condition: service_healthy
     entrypoint: [ "/usr/local/bin/docker-entrypoint.sh" ]
+    init: true
 
 volumes:
   proxy-log:
