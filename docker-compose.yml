@@ -4,7 +4,6 @@ services:
     image: proxy
     container_name: proxy
     ports:
-      - "8080:80"
       - "4433:443"
     volumes:
       - proxy-log:/var/log/nginx
