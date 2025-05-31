@@ -18,7 +18,7 @@ class SocketManager {
     return SocketManager.instance;
   }
 
-  public connect(mode: "duel" | "tournament" | "spectator" = "duel"): void {
+  public connect(mode: "duel" | "tournament" | "spectator" = "duel", nickanme: string): void {
     if (this.isConnected && this.socket.readyState <= 1) {
       console.log("✅ WebSocket already connected.");
       return;

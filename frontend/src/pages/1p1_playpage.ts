@@ -1,6 +1,7 @@
 import { initCanvas, resetCanvas } from "../scripts/core/canvasManager";
 import { socketManager } from "../scripts/network/websocketManager";
 import { setupKeyListeners } from "../scripts/input/keyManager";
+import { fetchUsername } from "@/api";
 
 export function render1P1PlayPage(): string {
   const template = `
@@ -9,7 +10,9 @@ export function render1P1PlayPage(): string {
     </div>
   `;
 
-  queueMicrotask(() => {
+  queueMicrotask(async () => {
+    const nickname = await fetchUsername();
+
     const canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
     if (!canvas) {
       console.error("canvas not found");
@@ -17,7 +20,7 @@ export function render1P1PlayPage(): string {
     }
 
     initCanvas(); // 엔진 + 오브젝트 + GUI + 루프
-    socketManager.connect("duel");  // WebSocket 연결
+    socketManager.connect("duel", nickname.username);  // WebSocket 연결
     setupKeyListeners();           // 키 입력 처리
   });
 
