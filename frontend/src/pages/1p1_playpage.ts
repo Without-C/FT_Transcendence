@@ -5,7 +5,7 @@ import { fetchUsername } from "@/api";
 
 export function render1P1PlayPage(): string {
   const template = `
-	<div class="bg-black text-gray-200 flex justify-center items-center min-h-screen">
+	<div class="bg-black h-screen text-gray-200 flex flex-col justify-center items-center">
       <canvas id="ping-ping" width="800" height="600"></canvas>
     </div>
   `;
