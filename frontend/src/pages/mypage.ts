@@ -22,12 +22,24 @@ export async function renderMyPage() {
 			singleGames,
 			tournamentGames
 		  ] = await Promise.all([
-			fetchAvatar(),
-			fetchUsername(),
-			fetchFollowing(),
-			fetchFollow(),
-			fetchSingleGames(),
-			fetchTournamentGames()
+			fetchAvatar().catch(error => {
+				console.error("Avatar fetch error:", error);
+				throw error;
+			}),
+			fetchUsername().catch(error => {
+				console.error("Username fetch error:", error);
+				throw error;
+			}),
+			fetchFollowing().catch(error => {
+				console.error("Following fetch error:", error);
+				throw error;
+			}),
+			fetchFollow().catch(error => {
+				console.error("Follow fetch error:", error);
+				throw error;
+			}),
+			Promise.resolve([]),
+			Promise.resolve([])
 		  ]);
 		
 		const template = `
@@ -36,8 +48,8 @@ export async function renderMyPage() {
 		<section class="flex flex-col items-center gap-4 pt-20">
 
 		  <div class="relative">
-			<img src="${avatar.avatar_url}" class="w-40 h-40 rounded-full" alt="profile">
-			<input type="file" id="fileInput" accept="image/*" class="hidden">
+			<img src="${avatar.avatar_url}" class="w-40 h-40 rounded-full object-cover" alt="profile">
+			<input type="file" id="fileInput" accept="image/jpeg" class="hidden">
 			<button id="profileImg" class="absolute bottom-2 right-2 bg-[#375433] px-2.5 py-1 rounded-full">✎</button>
 		  </div>
 
@@ -55,8 +67,8 @@ export async function renderMyPage() {
 	  
 		<section class="flex flex-col w-full max-w-3xl">
 		  <div class="flex justify-end gap-4 text-[#9CCA95]">
-			<span><strong>${following.length}</strong> followers</span>
-			<span><strong>${follower.follower_number}</strong> following</span>
+			<span><strong>${following.length || 0}</strong> followers</span>
+			<span><strong>${follower.follower_number || 0}</strong> following</span>
 		  </div>
 	  
 		  <div class="relative p-5 m-3 border-3 border-[#375433] text-[1vw] w-full">
@@ -300,24 +312,66 @@ export async function renderMyPage() {
 				document.getElementById("fileInput")?.click();
 			})
 			
-			//username 변경 랜더링
-			const currentUsernameInput = document.getElementById("currentUsernameInput");
-			const changedUsernameInput = document.getElementById("changedUsernameInput");
+			//username 랜더링
+			const renderName = () => {
+				const currentUsernameInput = document.getElementById("currentUsernameInput");
+				const changedUsernameInput = document.getElementById("changedUsernameInput");
+				const newNameInput = document.getElementById("usernameInput") as HTMLInputElement;
 
-			document.getElementById("currentUsernameInput")?.addEventListener("click" , () => {
-				const newName = document.getElementById("usernameInput"); //빈문자열인지 확인
-				if(newName.value != '') {
-					document.getElementById("currentUsername")?.classList.toggle("hidden");
-					document.getElementById("changedUsername")?.classList.toggle("hidden");
-					updateUsername(newName.value);
-				}
-			});
+				const submitUsername = async () => {
+					const newName = document.getElementById("usernameInput") as HTMLInputElement;
+			  
+					if (newName.value.trim() !== '') {
+						try {
+							await updateUsername(newName.value);
+					
+							const nameHeading = document.querySelector("#changedUsername h2");
+							if (nameHeading) {
+								nameHeading.textContent = newName.value;
+							}
+					
+							document.getElementById("currentUsername")?.classList.toggle("hidden");
+							document.getElementById("changedUsername")?.classList.toggle("hidden");
+							} catch (error) {
+							console.error("이름 변경 실패:", error);
+						}
+				  	}
+				};
 
-			document.getElementById("changedUsernameInput")?.addEventListener("click", () => {
-				document.getElementById("currentUsername")?.classList.toggle("hidden");
-				document.getElementById("changedUsername")?.classList.toggle("hidden");
-			});
+				currentUsernameInput?.addEventListener("click", submitUsername);
+
+				newNameInput?.addEventListener("keydown", (e) => {
+					if (e.key === "Enter") {
+					  submitUsername();
+					}
+				  });
+			  
+				changedUsernameInput?.addEventListener("click", () => {
+				  document.getElementById("currentUsername")?.classList.toggle("hidden");
+				  document.getElementById("changedUsername")?.classList.toggle("hidden");
+				});
+			};
 			
+			//profile image 랜더링
+			const renderProfileImage = () => {
+				const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+				const profileImg = document.querySelector("img[alt='profile']") as HTMLImageElement;
+
+				fileInput.addEventListener("change", async (e) => {
+					const file = (e.target as HTMLInputElement).files?.[0];
+					if (!file) return;
+
+					try {
+						await updateAvatar(file);
+						profileImg.src = URL.createObjectURL(file);
+					} catch (error) {
+						console.error("프로필 이미지 업로드 실패:", error);
+					}
+				});
+			}
+			
+			renderProfileImage();
+			renderName();
 			renderFriendList();
 			renderSingleList();
 		});
