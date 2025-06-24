@@ -26,7 +26,7 @@ export function redirectToGoogleLogin(): void {
  */
 export async function logout(): Promise<void> {
 	const res = await fetch("api/auth/logout", {
-		method: "DELETE",
+		method: "GET",
 		credentials: "include",
 	});
 
