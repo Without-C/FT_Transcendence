@@ -18,7 +18,7 @@ class SocketManager {
     return SocketManager.instance;
   }
 
-  public connect(mode: "duel" | "tournament" | "spectator" = "duel"): void {
+  public connect(mode: "duel" | "tournament" | "spectator" = "duel", nickname: string): void {
     if (this.isConnected && this.socket.readyState <= 1) {
       console.log("✅ WebSocket already connected.");
       return;
@@ -31,6 +31,9 @@ class SocketManager {
     this.socket.onopen = () => {
       console.log(`✅ WebSocket connected [${mode} mode]`);
       this.isConnected = true;
+
+      // Send nickname
+      this.socket.send(JSON.stringify({ type: "set_nickname", nickname }));
     };
 
     this.socket.onmessage = (event: MessageEvent) => {
