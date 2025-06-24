@@ -5,7 +5,7 @@ import { fetchUsername } from "@/api";
 
 export function renderTPPlayPage() {
     const template = `
-	<div class="bg-black h-screen text-gray-200 flex flex-col justify-center items-center">
+	<div class="bg-black h-full text-gray-200 flex flex-col justify-center items-center">
 			<canvas id="ping-ping" width="600" height="400"></canvas>
 		</div>
 	`;
