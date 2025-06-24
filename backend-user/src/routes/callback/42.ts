@@ -40,7 +40,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			client_id: `${process.env.OAUTH_UID_42}`,
 			client_secret: `${process.env.OAUTH_SECRET_42}`,
 			code: code,
-			redirect_uri: 'http://localhost:8080/api/auth/callback/42',
+			redirect_uri: fastify.config.FRONTEND_URL + '/api/auth/callback/42',
 		}); //요청 쿼리 내용
 
 		const response = await axios.post(url, data, {
@@ -87,7 +87,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			path: '/', // 전체 도메인에서 쿠키 사용
 			});
 
-		reply.redirect('http://localhost:8080/#/play');
+		reply.redirect(fastify.config.FRONTEND_URL + '/#/play');
 		return;
 	})
 }

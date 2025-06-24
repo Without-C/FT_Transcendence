@@ -14,7 +14,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			reply.clearCookie(cookieName);
 		}
 		
-		reply.redirect(`http://localhost:8080/`);
+		reply.redirect(fastify.config.FRONTEND_URL + `/`);
 	})
 };
 
