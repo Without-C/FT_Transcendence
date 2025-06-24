@@ -6,7 +6,8 @@ export class MessageBrocker implements IMessageBroker {
     constructor(private fastify: FastifyInstance) { }
 
     sendGameResult(message: any): void {
-        this.fastify.amqpChannel.sendToQueue('tournament-result',
-            Buffer.from(JSON.stringify(message)));
+        this.fastify;
+        // this.fastify.amqpChannel.sendToQueue('tournament-result',
+            // Buffer.from(JSON.stringify(message)));
     }
 }

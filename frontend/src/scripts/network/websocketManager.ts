@@ -25,7 +25,7 @@ class SocketManager {
     }
 
     this.mode = mode;
-    const wsUrl = `ws://${window.location.host}/api/ping-pong/${mode}/ws`;
+    const wsUrl = `wss://${window.location.host}/api/ping-pong/${mode}/ws`;
     this.socket = new WebSocket(wsUrl);
 
     this.socket.onopen = () => {
