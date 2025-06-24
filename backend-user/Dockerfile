@@ -7,13 +7,11 @@ COPY package*.json ./
 RUN npm install
 RUN mkdir /var/log/backend-user
 
-COPY . .
-
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3000
 
 ENTRYPOINT ["docker-entrypoint.sh"] 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
 
