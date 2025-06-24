@@ -50,6 +50,7 @@ services:
       - OAUTH_UID_GITHUB=${OAUTH_UID_GITHUB}
       - OAUTH_SECRET_GITHUB=${OAUTH_SECRET_GITHUB}
       - OAUTH_REDIRECT_GITHUB=${OAUTH_REDIRECT_GITHUB}
+      - FRONTEND_URL=${FRONTEND_URL}
       - DATABASE_URL=${DATABASE_URL}
     healthcheck:
       test: wget -qO- http://127.0.0.1:3000/healthcheck

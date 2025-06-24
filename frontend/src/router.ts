@@ -9,7 +9,7 @@ let previousCleanup: (() => void) | null = null;
 
 export async function render() {
 	const app = document.getElementById("app");
-	if(!app) return;
+	if (!app) return;
 
 	if (previousCleanup) {
 		previousCleanup();
@@ -32,16 +32,16 @@ export async function render() {
 		if(subRoute === "1p1") {
 			app.innerHTML = render1P1PlayPage();
 			previousCleanup = cleanup1P1PlayPage;
-		} else if(subRoute === "tp") {
+		} else if (subRoute === "tp") {
 			app.innerHTML = renderTPPlayPage();
 			previousCleanup = cleanupTPPlayPage;
 		} else {
 			app.innerHTML = renderPlayPage();
 		}
-	} else if(mainRoute === "mypage") {
+	} else if (mainRoute === "mypage") {
 		app.innerHTML = await renderMyPage();
-	} else if(mainRoute === "signin" || mainRoute === "") {
-		app.innerHTML = await renderSignInPage();	
+	} else if (mainRoute === "signin" || mainRoute === "") {
+		app.innerHTML = await renderSignInPage();
 	} else {
 		app.innerHTML = "<h1>404 - 페이지를 찾을 수 없음</h1>";
 	}

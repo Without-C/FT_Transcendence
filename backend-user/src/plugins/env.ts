@@ -6,7 +6,8 @@ declare module 'fastify' {
     interface FastifyInstance {
         config: {
             OAUTH_UID_42: string,
-            OAUTH_REDIRECT_42: string
+            OAUTH_REDIRECT_42: string,
+            FRONTEND_URL: string
         };
     }
 }
@@ -20,7 +21,10 @@ const schema = {
         },
         OAUTH_REDIRECT_42: {
             type: 'string'
-        }
+        },
+        FRONTEND_URL: {
+            type: 'string',
+        },
     }
 }
 
