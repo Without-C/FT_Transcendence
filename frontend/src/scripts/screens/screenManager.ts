@@ -31,13 +31,13 @@ export function getInitialScore() {
 }
 
 export function changeScreen(newScreen: Screen): void {
-  if (
-    currentScreen &&
-    currentScreen.constructor === newScreen.constructor
-  ) {
-    console.log("[ScreenManager] Already in this screen.");
-    return;
-  }
+  // if (
+  //   currentScreen &&
+  //   currentScreen.constructor === newScreen.constructor
+  // ) {
+  //   console.log("[ScreenManager] Already in this screen.");
+  //   return;
+  // }
 
   console.log(
     `[ScreenManager] Switching from ${currentScreen?.constructor.name ?? "None"} to ${newScreen.constructor.name}`
