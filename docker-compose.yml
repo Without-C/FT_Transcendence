@@ -4,7 +4,6 @@ services:
     image: proxy
     container_name: proxy
     ports:
-      - "8080:80"
       - "4433:443"
     volumes:
       - proxy-log:/var/log/nginx
@@ -17,6 +16,8 @@ services:
       backend-ping-pong:
         condition: service_healthy
       backend-blockchain:
+        condition: service_healthy
+      kibana:
         condition: service_healthy
 
   frontend:
@@ -173,6 +174,11 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601/kibana/api/status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
       elasticsearch:
         condition: service_healthy
