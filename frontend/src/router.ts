@@ -1,19 +1,9 @@
-<<<<<<< HEAD
-import {renderPlayPage} from "./pages/playpage.ts";
-import {renderMyPage} from "./pages/mypage.ts";
-import {renderSignInPage} from "./pages/signinpage.ts";
-import {render1P1PlayPage, cleanup1P1PlayPage} from "./pages/1p1_playpage.ts";
-// import {renderTPPlayPage} from "./pages/tp_playpage.ts";
-import {fetchUsername} from "@/api";
-import {renderTPPlayPage, cleanupTPPlayPage} from "./pages/tp_playpage.ts";
-=======
 import { renderPlayPage } from "./pages/playpage.ts";
 import { renderMyPage } from "./pages/mypage.ts";
 import { renderSignInPage } from "./pages/signinpage.ts";
 import { render1P1PlayPage, cleanup1P1PlayPage } from "./pages/1p1_playpage.ts";
 import { fetchUsername } from "@/api";
 import { renderTPPlayPage, cleanupTPPlayPage } from "./pages/tp_playpage.ts";
->>>>>>> dbf7afc (fix: restore tournament)
 
 let previousCleanup: (() => void) | null = null;
 
