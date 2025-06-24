@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {renderPlayPage} from "./pages/playpage.ts";
 import {renderMyPage} from "./pages/mypage.ts";
 import {renderSignInPage} from "./pages/signinpage.ts";
@@ -5,12 +6,20 @@ import {render1P1PlayPage, cleanup1P1PlayPage} from "./pages/1p1_playpage.ts";
 // import {renderTPPlayPage} from "./pages/tp_playpage.ts";
 import {fetchUsername} from "@/api";
 import {renderTPPlayPage, cleanupTPPlayPage} from "./pages/tp_playpage.ts";
+=======
+import { renderPlayPage } from "./pages/playpage.ts";
+import { renderMyPage } from "./pages/mypage.ts";
+import { renderSignInPage } from "./pages/signinpage.ts";
+import { render1P1PlayPage, cleanup1P1PlayPage } from "./pages/1p1_playpage.ts";
+import { fetchUsername } from "@/api";
+import { renderTPPlayPage, cleanupTPPlayPage } from "./pages/tp_playpage.ts";
+>>>>>>> dbf7afc (fix: restore tournament)
 
 let previousCleanup: (() => void) | null = null;
 
 export async function render() {
 	const app = document.getElementById("app");
-	if(!app) return;
+	if (!app) return;
 
 	if (previousCleanup) {
 		previousCleanup();
@@ -29,20 +38,20 @@ export async function render() {
 		return;
 	}
 
-	if(mainRoute === "play") {
-		if(subRoute === "1p1") {
+	if (mainRoute === "play") {
+		if (subRoute === "1p1") {
 			app.innerHTML = render1P1PlayPage();
 			previousCleanup = cleanup1P1PlayPage;
-		} else if(subRoute === "tp") {
+		} else if (subRoute === "tp") {
 			app.innerHTML = renderTPPlayPage();
 			previousCleanup = cleanupTPPlayPage;
 		} else {
 			app.innerHTML = renderPlayPage();
 		}
-	} else if(mainRoute === "mypage") {
+	} else if (mainRoute === "mypage") {
 		app.innerHTML = await renderMyPage();
-	} else if(mainRoute === "signin" || mainRoute === "") {
-		app.innerHTML = await renderSignInPage();	
+	} else if (mainRoute === "signin" || mainRoute === "") {
+		app.innerHTML = await renderSignInPage();
 	} else {
 		app.innerHTML = "<h1>404 - 페이지를 찾을 수 없음</h1>";
 	}
