@@ -7,6 +7,7 @@ import { OpponentExitScreen } from "./OpponentExitScreen";
 import { GameOverScreen } from "./GameOverScreen";
 
 import { WebSocketMessage } from "../core/types";
+import { ErrorScreen } from "./ErrorScreen";
 
 let currentScreen: Screen | null = null;
 let usernames = { player1: "", player2: "" };
@@ -83,6 +84,10 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
       if (data.final_winner) {
         changeScreen(new GameOverScreen(data.final_winner));
       }
+      break;
+
+    case "error":
+      changeScreen(new ErrorScreen(data.message || "An error occurred"));
       break;
   }
 }
