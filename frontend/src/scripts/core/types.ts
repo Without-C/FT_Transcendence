@@ -12,6 +12,7 @@ export interface GameState {
 }
 
 export interface WebSocketMessage {
+  message?: string;
   type: string;
   countdown?: number;
   player1_username?: string;
