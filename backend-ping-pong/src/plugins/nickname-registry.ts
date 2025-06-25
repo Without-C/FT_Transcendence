@@ -1,0 +1,1 @@
+export const nicknameRegistry: Set<string> = new Set<string>();
