@@ -67,6 +67,8 @@ services:
       - backend-ping-pong-log:/var/log/backend-ping-pong
       - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
+    environment:
+      - ALLOW_CONCURRENT_GAMES=${ALLOW_CONCURRENT_GAMES}
     healthcheck:
       test: wget -qO- http://127.0.0.1:3000/healthcheck
       interval: 10s

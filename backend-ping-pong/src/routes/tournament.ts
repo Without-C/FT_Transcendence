@@ -28,7 +28,9 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
                     ws.close();
                     return;
                 }
-                nicknameRegistry.add(data.nickname);
+                if (!fastify.config.ALLOW_CONCURRENT_GAMES) {
+                    nicknameRegistry.add(data.nickname);
+                }
 
                 // Create a new player
                 player = new Player("player-" + uuidv4(), data.nickname, ws);
