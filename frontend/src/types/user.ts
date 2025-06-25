@@ -14,7 +14,7 @@ export type FollowingUser  = {
 	online: 0 | 1;
 };
 
-export type FollowingResponse = FollowingUser[] | {};
+export type FollowingResponse = FollowingUser[];
 
 // 팔로워 목록 -> number로 받아오기로 하지 않았나
 // export type FollowResponse = {
@@ -32,7 +32,7 @@ export type SearchResultUser  = {
 	following: 0 | 1;
 };
 
-export type SearchResponse = SearchResultUser[] | {};
+export type SearchResponse = SearchResultUser[];
 
 // 에러
 export type ApiError = {
