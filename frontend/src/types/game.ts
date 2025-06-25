@@ -13,7 +13,7 @@ export type SingleGameHistoryItem = {
 	date: string;
 }
 
-export type SingleGameResponse = SingleGameHistoryItem[] | {};
+export type SingleGameResponse = SingleGameHistoryItem[];
 
 // 토너먼트 게임 기록
 export type GameRound = {
@@ -27,4 +27,4 @@ export type TournamentGameHistoryItem = {
 	game: [GameRound, GameRound, GameRound];
 }
 
-export type TournamentGameResponse = TournamentGameHistoryItem[] | {};
+export type TournamentGameResponse = TournamentGameHistoryItem[];
