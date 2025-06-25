@@ -10,8 +10,13 @@ import { changeScreen } from "./screenManager";
 import { PlayScreen } from "./PlayScreen";
 
 export class CountingScreen extends Screen {
-  private countdown = 3;
+  private countdown: number;
   private timerId: ReturnType<typeof setInterval> | null = null;
+
+  constructor(countdown: number = 3) {
+    super();
+    this.countdown = countdown;
+  }
 
   enter(): void {
     console.log("[CountingScreen] enter");
