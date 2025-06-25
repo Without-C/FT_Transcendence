@@ -24,7 +24,7 @@ const example: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             if (data.type === 'set_nickname') {
                 // Check if the nickname is already exists
                 if (nicknameRegistry.has(data.nickname)) {
-                    ws.send(JSON.stringify({ type: 'error', message: 'Nickname already taken' }));
+                    ws.send(JSON.stringify({ type: 'error', message: 'You are already playing a game' }));
                     ws.close();
                     return;
                 }
