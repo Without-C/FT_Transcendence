@@ -74,7 +74,6 @@ try {
 		`;
 
 		const fourtytwoBtn = document.getElementById("42Signin");
-		const githubBtn = document.getElementById("githubSignin");
 		const googleBtn = document.getElementById("googleSignin");
 
 		fourtytwoBtn?.addEventListener("click", () => redirectTo42Login());
