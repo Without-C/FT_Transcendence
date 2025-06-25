@@ -32,7 +32,7 @@ export class GameEngine {
         private players: Player[],
         private onScore: (scoringPlayerIndex: number) => void,
         private onGameStateUpdate: (state: any) => void,
-    ) {}
+    ) { }
 
     public resetRound(): void {
         this.ball = new Ball(this.width / 2, 2, this.depth / 2, 0, 0, 0, 10);
@@ -116,13 +116,14 @@ export class GameEngine {
 
         if (!this.ballIsMoving && this.players[this.ballTurn].keyState.get(" ")) {
             this.ballIsMoving = true;
-            if (this.ballTurn == 0) {
-                this.ball.vx = 5;
-                this.ball.vz = 5;
-            } else {
-                this.ball.vx = -5;
-                this.ball.vz = 5;
-            }
+
+            const serveSpeed = 5;
+            const centerAngle = this.ballTurn == 0 ? 0 : Math.PI;
+            const angleRange = Math.PI / 4;
+            const theta = centerAngle + (Math.random() * 2 - 1) * angleRange;
+            this.ball.vx = serveSpeed * Math.cos(theta);
+            this.ball.vz = serveSpeed * Math.sin(theta);
+            this.ball.vy = 0;
         }
 
         const colliders: BoxCollider[] = [

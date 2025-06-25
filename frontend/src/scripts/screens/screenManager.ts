@@ -68,7 +68,7 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
       if (data.countdown && data.player1_username && data.player2_username) {
         setPlayerInfo(data.player1_username, data.player2_username);
         setInitialScore(0, 0);
-        changeScreen(new CountingScreen());
+        changeScreen(new CountingScreen(data.countdown));
       }
       break;
 
