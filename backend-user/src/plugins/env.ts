@@ -7,14 +7,15 @@ declare module 'fastify' {
         config: {
             OAUTH_UID_42: string,
             OAUTH_REDIRECT_42: string,
-            FRONTEND_URL: string
+            FRONTEND_URL: string,
+            SECRET: string
         };
     }
 }
 
 const schema = {
     type: 'object',
-    required: ['OAUTH_UID_42', 'OAUTH_REDIRECT_42'],
+    required: ['OAUTH_UID_42', 'OAUTH_REDIRECT_42', 'FRONTEND_URL', 'SECRET'],
     properties: {
         OAUTH_UID_42: {
             type: 'string'
@@ -25,6 +26,9 @@ const schema = {
         FRONTEND_URL: {
             type: 'string',
         },
+        SECRET: {
+            type: 'string',
+        }
     }
 }
 
