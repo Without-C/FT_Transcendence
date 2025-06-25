@@ -4,7 +4,7 @@ import { FastifyPluginAsync } from 'fastify'
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(cookie, {
-		secret: "my-secret", // for cookies signature
+		secret: fastify.config.SECRET, // for cookies signature
 		parseOptions: {}     // options for parsing cookies
 	  } as FastifyCookieOptions)
 

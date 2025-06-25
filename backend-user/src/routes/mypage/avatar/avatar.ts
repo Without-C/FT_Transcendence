@@ -11,7 +11,7 @@ import { pipeline } from 'stream';
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(jwt, {
-		secret: "my-secret"
+		secret: fastify.config.SECRET
 	})
 	await fastify.register(fastifyCookie);
 	// /uploads 폴더를 /static 경로로 공개
