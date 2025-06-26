@@ -26,7 +26,6 @@ services:
     image: frontend
     container_name: frontend
     volumes:
-      - ${PWD}/frontend:/app
       - /app/node_modules
     healthcheck:
       test: wget -qO- http://frontend:5173/
@@ -41,7 +40,6 @@ services:
     container_name: backend-user
     volumes:
       - backend-user-log:/var/log/backend-user
-      - ${PWD}/backend-user:/app
       - /app/node_modules
     environment:
       - OAUTH_UID_42=${OAUTH_UID_42}
@@ -63,7 +61,6 @@ services:
     container_name: backend-ping-pong
     volumes:
       - backend-ping-pong-log:/var/log/backend-ping-pong
-      - ${PWD}/backend-ping-pong:/app
       - /app/node_modules
     environment:
       - ALLOW_CONCURRENT_GAMES=${ALLOW_CONCURRENT_GAMES}
@@ -80,7 +77,6 @@ services:
     container_name: backend-blockchain
     volumes:
       - backend-blockchain-log:/var/log/backend-blockchain
-      - ${PWD}/backend-blockchain:/app
       - /app/node_modules
     healthcheck:
       test: wget -qO- http://127.0.0.1:3000/healthcheck
