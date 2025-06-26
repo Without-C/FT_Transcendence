@@ -13,6 +13,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		});
 
   	fastify.get('/', async function (request, reply) {
+		try {
 		const userCookie = request.cookies.auth_token; // 쿠키 받아오기
 		const decoded = fastify.jwt.verify<{ id: number }>(userCookie || ''); // 2️⃣ JWT 검증 및 디코딩
     	const userId = decoded.id; //유저 id 받기
@@ -22,7 +23,9 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			},
 		})
 		reply.send({username: user?.username})
-		
+		} catch (error) {
+			reply.status(401).send({ error: 'Unauthorized' });
+		}
   	})
   fastify.patch('/', async function (request, reply) {
 
