@@ -23,7 +23,13 @@ export async function render() {
 	// ✅ 로그인 체크가 필요한 페이지 목록
 	const protectedRoutes = ["mypage", "play"];
 	// ✅ 로그인이 안 되어 있는데 보호된 페이지 요청 시 -> signin으로 이동
-	if (protectedRoutes.includes(mainRoute) && !(await fetchUsername())) {
+	try {
+		if (protectedRoutes.includes(mainRoute) && !(await fetchUsername())) {
+			location.hash = "#/signin";
+			return;
+		}
+	} catch (error) {
+		console.error("로그인 체크 중 에러 발생:", error);
 		location.hash = "#/signin";
 		return;
 	}
