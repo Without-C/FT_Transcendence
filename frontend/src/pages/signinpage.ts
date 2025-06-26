@@ -49,28 +49,6 @@ try {
 			Sign in with 42
 			</span>
 		</button>
-		
-		<button id="githubSignin"
-			class="flex items-center border border-[#9CCA95]
-				p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 
-				rounded-3xl lg:rounded-[40px] w-full">
-			<img src="src/images/git.svg" alt="Github" 
-			class="w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full">
-			<span class="flex-1 text-center text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-			Sign in with Github
-			</span>
-		</button>
-
-		<button id="googleSignin"
-			class="flex items-center border border-[#9CCA95]
-				p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 
-				rounded-3xl lg:rounded-[40px] w-full">
-			<img src="src/images/google.svg" alt="Google" 
-			class="w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full">
-			<span class="flex-1 text-center text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-			Sign in with Google
-			</span>
-		</button>
 		`;
 
 		const fourtytwoBtn = document.getElementById("42Signin");
