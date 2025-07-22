@@ -12,6 +12,7 @@ interface QueryString {
 	};
 }
 
+//Todo : username undefined로 나오는거 혹시 한글이 안되는건지 확인해보고 수정하기
 const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(jwt, {
 		secret: "my-secret"

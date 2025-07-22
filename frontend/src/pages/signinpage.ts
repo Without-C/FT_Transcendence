@@ -77,7 +77,7 @@ try {
 		const githubBtn = document.getElementById("githubSignin");
 		const googleBtn = document.getElementById("googleSignin");
 
-		fourtytwoBtn?.addEventListener("click", () => redirectTo42Login());
+		setTimeout(() => fourtytwoBtn?.addEventListener("click", () => redirectTo42Login()), 500);
 		// githubBtn?.addEventListener("click", () => redirectToGithubLogin()); // 구현 예정
 		googleBtn?.addEventListener("click", () => redirectToGoogleLogin());
 	};
