@@ -17,7 +17,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	// /uploads 폴더를 /static 경로로 공개
 	fastify.register(fastifyStatic, {
 		root: '/app/uploads',  // 실제 이미지 저장 경로
-		prefix: '/uploads/',                        // 브라우저에서 접근할 경로 (URL)
+		prefix: '/uploads/',   // 브라우저에서 접근할 경로 (URL)
 	});
 	await fastify.register(multipart)
   	fastify.get('/', async function (request, reply) {

@@ -19,9 +19,16 @@ export async function renderMyPage() {
 			username,
 			following,
 			follower,
-			singleGames,
-			tournamentGames
+			// singleGames,
+			// tournamentGames
 		  ] = await Promise.all([
+
+			//fetchAvatar(),
+			//fetchUsername(),
+			//fetchFollowing(),
+			//fetchFollow(),
+			// fetchSingleGames(),
+			// fetchTournamentGames()
 			fetchAvatar().catch(error => {
 				console.error("Avatar fetch error:", error);
 				throw error;
@@ -325,6 +332,36 @@ export async function renderMyPage() {
 			profileImgButton?.addEventListener("click", () => {
 				document.getElementById("fileInput")?.click();
 			})
+			// Add file input change event listener
+      /*
+			document.getElementById("fileInput")?.addEventListener("change", async (event) => {
+				const fileInput = event.target as HTMLInputElement;
+				if (fileInput.files && fileInput.files[0]) {
+					try {
+						const file = fileInput.files[0];
+						await updateAvatar(file).then(() => {
+							window.location.reload();
+						});
+					} catch (error) {
+						console.error("Failed to update avatar:", error);
+					}
+				}
+			});
+			//username 변경 랜더링
+			const currentUsernameInput = document.getElementById("currentUsernameInput");
+			const changedUsernameInput = document.getElementById("changedUsernameInput");
+
+			document.getElementById("currentUsernameInput")?.addEventListener("click" , () => {
+				const newName = document.getElementById("usernameInput"); //빈문자열인지 확인
+				if(newName.value != '') {
+					document.getElementById("currentUsername")?.classList.toggle("hidden");
+					document.getElementById("changedUsername")?.classList.toggle("hidden");
+					updateUsername(newName.value).then(() => {
+						window.location.reload();
+					});
+				}
+			});
+      */
 			
 			//username 랜더링
 			const renderName = () => {

@@ -16,8 +16,8 @@ export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
 		await handleApiError(res, "프로필 이미지 가져오기 실패");
 	}
 
+	console.log("이미지 가져오기 성공")
 	const data: UserTypes.AvatarResponse = await res.json();
-	console.log("fetchAvatar 성공:", data);
 	return data;
 }
 
@@ -36,14 +36,13 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
 		await handleApiError(res, "유저 이름 가져오기 실패");
 	}
 	
-	const data: UserTypes.UsernameResponse = await res.json();
+	// console.log(await res.json());
 	console.log("fetchUsername 성공:", data);
 	return data;
 }
 
 /**
  * 프로필 이미지 변경하기 -> string이여도 괜찮나, FormData??
- * @param newAvatarUrl 새로 변경할 프로필 이미지 URL
  */
 export async function updateAvatar(file: File): Promise<void> {
 	const formData = new FormData();
@@ -94,6 +93,7 @@ export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
 		await handleApiError(res, "팔로잉 목록 가져오기 실패");
 	}
 
+	console.log("팔로잉 가져오기 성공");
 	const data: UserTypes.FollowingResponse = await res.json();
 	console.log("fetchFollowing 성공:", data);
 	return data;
@@ -101,7 +101,7 @@ export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
 /**
  * 팔로워 명수 가져오기
  * @returns following_number(number)이 담긴 객체
- */
+*/
 export async function fetchFollow(): Promise<UserTypes.FollowResponse> {
 	console.log("fetchFollow 호출 시작");
 	const res = await fetch("api/user/mypage/followers", {
@@ -112,9 +112,11 @@ export async function fetchFollow(): Promise<UserTypes.FollowResponse> {
 	if(!res.ok) {
 		await handleApiError(res, "팔로워 명수 가져오기 실패");
 	}
-
+	
+	console.log("팔로워 가져오기 성공");
 	const data: UserTypes.FollowResponse = await res.json();
 	console.log("fetchFollow 성공:", data);
+
 	return data;
 }
 

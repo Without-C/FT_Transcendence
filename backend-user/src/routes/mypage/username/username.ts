@@ -19,7 +19,10 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     	const userId = decoded.id; //유저 id 받기
 		const user = await fastify.prisma.user.findFirst({
 			where: {
-				oauth_id_42: String(userId),
+				OR: [
+		      			{ oauth_id_42: String(userId) },
+      					{ oauth_id_google: String(userId) },
+    				],
 			},
 		})
 		reply.send({username: user?.username})
@@ -27,7 +30,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			reply.status(401).send({ error: 'Unauthorized' });
 		}
   	})
-  fastify.patch('/', async function (request, reply) {
+	fastify.patch('/', async function (request, reply) {
 
 	const userCookie = request.cookies.auth_token; // 쿠키 받아오기
 	const decoded = fastify.jwt.verify<{ id: number }>(userCookie || ''); // 2️⃣ JWT 검증 및 디코딩
@@ -35,12 +38,24 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	const body = request.body as {
 		username?: string;
 	};
+	const user = await fastify.prisma.user.findFirst({
+  	where: {
+    	OR: [
+    		{ oauth_id_42: String(userId) },
+    		{ oauth_id_google: String(userId) },
+    		],
+  		},
+	});
+
+	if (!user) {
+	  throw new Error('User not found');
+	}
+	
 	await fastify.prisma.user.update({
-		where: { oauth_id_42: String(userId) },
-		data: { username: body.username },
+	  	where: { id: user.id }, // or your primary key
+	  	data: { username: body.username },
 	});
   })
-
 }
 
 export default root;
