@@ -7,7 +7,7 @@ import { WaitingScreen } from "../screens/WaitingScreen";
 
 export function initCanvas(): void {
   const canvas = document.getElementById("ping-ping") as HTMLCanvasElement;
-  const { engine, scene } = initEngine(canvas);
+  const { scene } = initEngine(canvas);
   createGameObjects(scene);
   changeScreen(new WaitingScreen()); // 초기 화면을 Waiting으로 설정
   startRenderLoop();

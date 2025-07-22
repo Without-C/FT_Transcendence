@@ -4,7 +4,7 @@ import { FastifyPluginAsync } from 'fastify'
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(cookie, {
-		secret: "my-secret", // for cookies signature
+		secret: fastify.config.SECRET, // for cookies signature
 		parseOptions: {}     // options for parsing cookies
 	  } as FastifyCookieOptions)
 
@@ -14,7 +14,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			reply.clearCookie(cookieName);
 		}
 		
-		reply.redirect(`http://localhost:8080/`);
+		reply.redirect(fastify.config.FRONTEND_URL + `/`);
 	})
 };
 

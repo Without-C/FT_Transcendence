@@ -6,7 +6,11 @@ import { handleApiError } from "@/utils/handleApiError";
  * @returns avatar_url(string)이 담긴 객체
  */
 export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
-	const res = await fetch("api/user/mypage/avatar");
+	console.log("fetchAvatar 호출 시작");
+	const res = await fetch("api/user/mypage/avatar", {
+		credentials: 'include'
+	});
+	console.log("fetchAvatar 응답:", res.status, res.statusText);
 
 	if(!res.ok) { //400
 		await handleApiError(res, "프로필 이미지 가져오기 실패");
@@ -14,7 +18,6 @@ export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
 
 	console.log("이미지 가져오기 성공")
 	const data: UserTypes.AvatarResponse = await res.json();
-	console.log(data)
 	return data;
 }
 
@@ -23,17 +26,18 @@ export async function fetchAvatar(): Promise<UserTypes.AvatarResponse> {
  * @returns username(string)이 담긴 객체
  */
 export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
-	const res = await fetch("api/user/mypage/username");
+	console.log("fetchUsername 호출 시작");
+	const res = await fetch("api/user/mypage/username", {
+		credentials: 'include'
+	});
+	console.log("fetchUsername 응답:", res.status, res.statusText);
 
 	if(!res.ok) {
 		await handleApiError(res, "유저 이름 가져오기 실패");
 	}
 	
-	console.log("이름 가져오기 성공");
 	// console.log(await res.json());
-	const data: UserTypes.UsernameResponse = await res.json();
-	console.log("이름 가져오기 성공2");
-	console.log(data);
+	console.log("fetchUsername 성공:", data);
 	return data;
 }
 
@@ -42,13 +46,15 @@ export async function fetchUsername(): Promise<UserTypes.UsernameResponse> {
  */
 export async function updateAvatar(file: File): Promise<void> {
 	const formData = new FormData();
-	formData.append("file", file); // 'file'이 백엔드에서 기대하는 필드
+	formData.append("avatar", file); // 서버에서 "avatar" 필드로 받도록 설정
+
 	const res = await fetch("api/user/mypage/avatar", {
 		method: "PATCH",
-  		body: formData, // ✅ Content-Type 생략 (브라우저가 자동으로 multipart/form-data 설정)
+		credentials: "include",
+		body: formData, // ⛔ Content-Type 헤더는 생략해야 함 (브라우저가 자동 처리함)
 	});
 
-	if(!res.ok) {
+	if (!res.ok) {
 		await handleApiError(res, "프로필 이미지 변경 실패");
 	}
 }
@@ -63,6 +69,7 @@ export async function updateUsername(newUsername: string): Promise<void> {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		credentials: 'include',
 		body: JSON.stringify({username: newUsername}),
 	});
 
@@ -76,7 +83,11 @@ export async function updateUsername(newUsername: string): Promise<void> {
  * @returns username과 online 상태가 담긴 유저 배열 or 빈 객체 -> online은 일단 모두 1
  */
 export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
-	const res = await fetch("api/user/mypage/following");
+	console.log("fetchFollowing 호출 시작");
+	const res = await fetch("api/user/mypage/following", {
+		credentials: 'include'
+	});
+	console.log("fetchFollowing 응답:", res.status, res.statusText);
 
 	if(!res.ok) {
 		await handleApiError(res, "팔로잉 목록 가져오기 실패");
@@ -84,7 +95,7 @@ export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
 
 	console.log("팔로잉 가져오기 성공");
 	const data: UserTypes.FollowingResponse = await res.json();
-	// console.log(data);
+	console.log("fetchFollowing 성공:", data);
 	return data;
 }
 /**
@@ -92,15 +103,20 @@ export async function fetchFollowing(): Promise<UserTypes.FollowingResponse> {
  * @returns following_number(number)이 담긴 객체
 */
 export async function fetchFollow(): Promise<UserTypes.FollowResponse> {
-	const res = await fetch("api/user/mypage/followers");
-	
+	console.log("fetchFollow 호출 시작");
+	const res = await fetch("api/user/mypage/followers", {
+		credentials: 'include'
+	});
+	console.log("fetchFollow 응답:", res.status, res.statusText);
+
 	if(!res.ok) {
 		await handleApiError(res, "팔로워 명수 가져오기 실패");
 	}
 	
 	console.log("팔로워 가져오기 성공");
 	const data: UserTypes.FollowResponse = await res.json();
-	// console.log(data);
+	console.log("fetchFollow 성공:", data);
+
 	return data;
 }
 
@@ -114,6 +130,7 @@ export async function followUser(username: string): Promise<void> {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		credentials: 'include',
 		body: JSON.stringify({ follow_username: username}),
 	});
 
@@ -132,6 +149,7 @@ export async function unfollowUser(username: string): Promise<void> {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		credentials: 'include',
 		body: JSON.stringify({ unfollow_username: username}),
 	});
 
@@ -147,7 +165,9 @@ export async function unfollowUser(username: string): Promise<void> {
  */
 export async function searchUsers(keyword: string): Promise<UserTypes.SearchResponse> {
 	const query = encodeURIComponent(keyword);
-	const res = await fetch(`api/user/mypage/search?searching_user=${query}`);
+	const res = await fetch(`api/user/mypage/search?searching_user=${query}`, {
+		credentials: 'include'
+	});
 
 	if(!res.ok) {
 		await handleApiError(res, "유저 검색 실패");

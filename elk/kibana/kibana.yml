@@ -1,3 +1,6 @@
 server.host: "0.0.0.0"
 server.shutdownTimeout: "5s"
 monitoring.ui.container.elasticsearch.enabled: false
+
+server.basePath: "/kibana"
+server.rewriteBasePath: true

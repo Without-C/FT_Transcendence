@@ -1,6 +1,8 @@
 import { setGameState } from "../core/stateManager";
 import { WebSocketMessage, KeyState } from "../core/types";
-import { handleGameEvent } from "../screens/screenManager";
+import { FinalWinnerScreen } from "../screens/FinalWinnerScreen";
+import { RoundResultScreen } from "../screens/RoundResultScreen";
+import { changeScreen, handleGameEvent } from "../screens/screenManager";
 
 class SocketManager {
   private static instance: SocketManager;
@@ -18,19 +20,22 @@ class SocketManager {
     return SocketManager.instance;
   }
 
-  public connect(mode: "duel" | "tournament" | "spectator" = "duel"): void {
+  public connect(mode: "duel" | "tournament" | "spectator" = "duel", nickname: string): void {
     if (this.isConnected && this.socket.readyState <= 1) {
       console.log("✅ WebSocket already connected.");
       return;
     }
 
     this.mode = mode;
-    const wsUrl = `ws://${window.location.host}/api/ping-pong/${mode}/ws`;
+    const wsUrl = `wss://${window.location.host}/api/ping-pong/${mode}/ws`;
     this.socket = new WebSocket(wsUrl);
 
     this.socket.onopen = () => {
       console.log(`✅ WebSocket connected [${mode} mode]`);
       this.isConnected = true;
+
+      // Send nickname
+      this.socket.send(JSON.stringify({ type: "set_nickname", nickname }));
     };
 
     this.socket.onmessage = (event: MessageEvent) => {
@@ -62,13 +67,13 @@ class SocketManager {
       console.log(
         `🏁 Round End - Winner: ${data.winner}, Score: ${data.round_score.player1} : ${data.round_score.player2}`
       );
-      // TODO: setRoundResult() GUI 출력
+      changeScreen(new RoundResultScreen(data.winner, data.round_score));
     }
 
     // 4️⃣ 최종 승자 로그
     if (data.type === "game_end" && data.final_winner) {
       console.log(`🏆 Final Winner: ${data.final_winner}`);
-      // TODO: setFinalWinner() GUI 출력
+      changeScreen(new FinalWinnerScreen(data.final_winner));
     }
 
     // 5️⃣ 게임 시작/종료 상태

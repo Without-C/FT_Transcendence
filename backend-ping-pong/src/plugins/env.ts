@@ -5,18 +5,18 @@ import fastifyEnv from '@fastify/env';
 declare module 'fastify' {
     interface FastifyInstance {
         config: {
-            AMQP_URL: string
+            ALLOW_CONCURRENT_GAMES: string
         };
     }
 }
 
 const schema = {
     type: 'object',
-    required: ['AMQP_URL'],
+    required: ['ALLOW_CONCURRENT_GAMES'],
     properties: {
-        AMQP_URL: {
-            type: 'string',
-        }
+        ALLOW_CONCURRENT_GAMES: {
+            type: 'boolean',
+        },
     }
 }
 

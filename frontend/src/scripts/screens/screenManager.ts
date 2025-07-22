@@ -7,6 +7,7 @@ import { OpponentExitScreen } from "./OpponentExitScreen";
 import { GameOverScreen } from "./GameOverScreen";
 
 import { WebSocketMessage } from "../core/types";
+import { ErrorScreen } from "./ErrorScreen";
 
 let currentScreen: Screen | null = null;
 let usernames = { player1: "", player2: "" };
@@ -31,13 +32,13 @@ export function getInitialScore() {
 }
 
 export function changeScreen(newScreen: Screen): void {
-  if (
-    currentScreen &&
-    currentScreen.constructor === newScreen.constructor
-  ) {
-    console.log("[ScreenManager] Already in this screen.");
-    return;
-  }
+  // if (
+  //   currentScreen &&
+  //   currentScreen.constructor === newScreen.constructor
+  // ) {
+  //   console.log("[ScreenManager] Already in this screen.");
+  //   return;
+  // }
 
   console.log(
     `[ScreenManager] Switching from ${currentScreen?.constructor.name ?? "None"} to ${newScreen.constructor.name}`
@@ -66,8 +67,8 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
     case "countdown":
       if (data.countdown && data.player1_username && data.player2_username) {
         setPlayerInfo(data.player1_username, data.player2_username);
-        setInitialScore(0, 0); // 초기화 or 서버 값
-        changeScreen(new CountingScreen());
+        setInitialScore(0, 0);
+        changeScreen(new CountingScreen(data.countdown));
       }
       break;
 
@@ -75,14 +76,18 @@ export function handleGameEvent(type: string, data: WebSocketMessage): void {
       changeScreen(new PlayScreen());
       break;
 
-      case "opponent_exit":
-        changeScreen(new OpponentExitScreen(data.opponent_username ?? "Opponent"));
-        break;
+    case "opponent_exit":
+      changeScreen(new OpponentExitScreen(data.opponent_username ?? "Opponent"));
+      break;
 
-        case "game_end":
-          if (data.final_winner) {
-            changeScreen(new GameOverScreen(data.final_winner));
-          }
-          break;
+    case "game_end":
+      if (data.final_winner) {
+        changeScreen(new GameOverScreen(data.final_winner));
+      }
+      break;
+
+    case "error":
+      changeScreen(new ErrorScreen(data.message || "An error occurred"));
+      break;
   }
 }
