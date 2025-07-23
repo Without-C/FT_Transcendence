@@ -19,8 +19,8 @@ export async function renderMyPage() {
 			username,
 			following,
 			follower,
-			// singleGames,
-			// tournamentGames
+			singleGames,
+			tournamentGames
 		  ] = await Promise.all([
 
 			//fetchAvatar(),

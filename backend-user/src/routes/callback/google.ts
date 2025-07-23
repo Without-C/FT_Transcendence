@@ -96,7 +96,7 @@ const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> 
 			path: '/', // 전체 도메인에서 쿠키 사용
 			});
 
-		reply.redirect('http://localhost:8080/#/play');
+		reply.redirect(fastify.config.FRONTEND_URL + '/#/play');
 		return;
 	})
 }
