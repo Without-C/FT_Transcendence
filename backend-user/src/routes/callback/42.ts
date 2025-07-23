@@ -40,7 +40,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 			client_id: `${process.env.OAUTH_UID_42}`,
 			client_secret: `${process.env.OAUTH_SECRET_42}`,
 			code: code,
-			redirect_uri: fastify.config.FRONTEND_URL + '/api/auth/callback/42',
+			redirect_uri: fastify.config.OAUTH_REDIRECT_42,
 		}); //요청 쿼리 내용
 
 		const response = await axios.post(url, data, {
@@ -70,7 +70,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
 			const newUser = await fastify.prisma.user.create({
 				data: {
-					username: String(userinfo.data.login),//인트라 아이디 저장
+					username: String(userinfo.data.login),//인트라 아이디 저장www
 					oauth_id_42: String(userinfo.data.id), // 직접 ID 지정
 				},
 			});

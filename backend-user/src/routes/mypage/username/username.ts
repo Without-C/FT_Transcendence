@@ -17,6 +17,11 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		const userCookie = request.cookies.auth_token; // 쿠키 받아오기
 		const decoded = fastify.jwt.verify<{ id: number }>(userCookie || ''); // 2️⃣ JWT 검증 및 디코딩
     	const userId = decoded.id; //유저 id 받기
+		console.log(userId);
+		console.log(userId);
+		console.log(userId);
+		console.log(userId);
+		console.log(userId);console.log(userId);console.log(userId);console.log(userId);console.log(userId);
 		const user = await fastify.prisma.user.findFirst({
 			where: {
 				OR: [

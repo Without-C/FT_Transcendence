@@ -4,7 +4,7 @@ import fastifyCookie from '@fastify/cookie';
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(jwt, {
-			secret: "my-secret"
+			secret: fastify.config.SECRET
 		})
 	await fastify.register(fastifyCookie);
 
