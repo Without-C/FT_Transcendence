@@ -15,11 +15,11 @@ interface QueryString {
 //Todo : username undefined로 나오는거 혹시 한글이 안되는건지 확인해보고 수정하기
 const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	await fastify.register(jwt, {
-		secret: "my-secret"
+		secret: fastify.config.SECRET
 	})
 	
 	await fastify.register(cookie, {
-		secret: "my-secret", // 쿠키 서명에 사용할 비밀 키
+		secret: fastify.config.SECRET, // 쿠키 서명에 사용할 비밀 키
 		parseOptions: {}  // 쿠키 파싱 옵션
 	});
 	
@@ -79,7 +79,7 @@ const callbackGoogle: FastifyPluginAsync = async (fastify, opts): Promise<void> 
 
 			const newUser = await fastify.prisma.user.create({
 				data: {
-					username: String(userinfo.data.name),//인트라 아이디 저장
+					username: String(userinfo.data.name),//구글 아이디 저장
 					oauth_id_google: String(userinfo.data.id), // 직접 ID 지정
 				},
 			});
