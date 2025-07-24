@@ -109,9 +109,7 @@ export async function renderMyPage() {
 		
 		setTimeout(() => {
 			const friendListElement = document.getElementById("friendList") as HTMLDivElement;
-			// const gameListElement = document.getElementById("gameList") as HTMLDivElement;
-			// const singleButton = document.querySelector("#single") as HTMLDivElement;
-			// const tournamentButton = document.querySelector("#tournament") as HTMLDivElement;
+			// const gameListElement = documewent.querySelector("#tournament") as HTMLDivElement;
 			const searchElement = document.getElementById("search") as HTMLInputElement;
 			const profileImgButton = document.getElementById("profileImg") as HTMLDivElement;
 
