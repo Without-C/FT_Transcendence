@@ -7,9 +7,9 @@ import {
 	fetchFollow,
 	followUser,
 	unfollowUser,
-	searchUsers,
-	fetchSingleGames,
-	fetchTournamentGames
+	searchUsers
+	// fetchSingleGames,
+	// fetchTournamentGames
 } from "@/api";
 
 export async function renderMyPage() {
@@ -18,9 +18,9 @@ export async function renderMyPage() {
 			avatar,
 			username,
 			following,
-			follower,
-			singleGames,
-			tournamentGames
+			follower
+			// singleGames,
+			// tournamentGamese
 		  ] = await Promise.all([
 
 			//fetchAvatar(),
@@ -45,14 +45,14 @@ export async function renderMyPage() {
 				console.error("Follow fetch error:", error);
 				throw error;
 			}),
-			fetchSingleGames().catch(error => {
-				console.error("Single games fetch error:", error);
-				return [];
-			}),
-			fetchTournamentGames().catch(error => {
-				console.error("Tournament games fetch error:", error);
-				return [];
-			})
+			// fetchSingleGames().catch(error => {
+			// 	console.error("Single games fetch error:", error);
+			// 	return [];
+			// }),
+			// fetchTournamentGames().catch(error => {
+			// 	console.error("Tournament games fetch error:", error);
+			// 	return [];
+			// })
 		  ]);
 		
 		const template = `
@@ -109,9 +109,9 @@ export async function renderMyPage() {
 		
 		setTimeout(() => {
 			const friendListElement = document.getElementById("friendList") as HTMLDivElement;
-			const gameListElement = document.getElementById("gameList") as HTMLDivElement;
-			const singleButton = document.querySelector("#single") as HTMLDivElement;
-			const tournamentButton = document.querySelector("#tournament") as HTMLDivElement;
+			// const gameListElement = document.getElementById("gameList") as HTMLDivElement;
+			// const singleButton = document.querySelector("#single") as HTMLDivElement;
+			// const tournamentButton = document.querySelector("#tournament") as HTMLDivElement;
 			const searchElement = document.getElementById("search") as HTMLInputElement;
 			const profileImgButton = document.getElementById("profileImg") as HTMLDivElement;
 
@@ -163,105 +163,105 @@ export async function renderMyPage() {
 			}
 
 			//  1P1 리스트 렌더링
-			const renderSingleList = () => {
-				gameListElement.innerHTML = "";
-				singleButton.className = "bg-[#375433] border-2 border-[#375433] px-4 rounded-xl";
-				tournamentButton.className = "bg-black border-2 border-[#375433] px-4 rounded-xl";
-				if (Array.isArray(singleGames)) {
-					singleGames.forEach((single, idx) => {
-						const singlePlayList = document.createElement("li");
-						singlePlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
+			// const renderSingleList = () => {
+			// 	gameListElement.innerHTML = "";
+			// 	singleButton.className = "bg-[#375433] border-2 border-[#375433] px-4 rounded-xl";
+			// 	tournamentButton.className = "bg-black border-2 border-[#375433] px-4 rounded-xl";
+			// 	if (Array.isArray(singleGames)) {
+			// 		singleGames.forEach((single, idx) => {
+			// 			const singlePlayList = document.createElement("li");
+			// 			singlePlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
 
-						const result = document.createElement("span");
-						result.style.whiteSpace = "pre"; 
-						if((single.player1.username === username.username && single.player1.result === "winner") ||
-							(single.player2.username === username.username && single.player2.result === "winner")) {
-								result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
-								result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
-													`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
-						}
-						else {
-							result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
-							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
-												`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
-						}
-						singlePlayList.appendChild(result);
+			// 			const result = document.createElement("span");
+			// 			result.style.whiteSpace = "pre"; 
+			// 			if((single.player1.username === username.username && single.player1.result === "winner") ||
+			// 				(single.player2.username === username.username && single.player2.result === "winner")) {
+			// 					result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
+			// 					result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+			// 										`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
+			// 			}
+			// 			else {
+			// 				result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
+			// 				result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+			// 									`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
+			// 			}
+			// 			singlePlayList.appendChild(result);
 
-						const date = document.createElement("span");
-						date.textContent = `${single.date}`;
-						singlePlayList.appendChild(date);
+			// 			const date = document.createElement("span");
+			// 			date.textContent = `${single.date}`;
+			// 			singlePlayList.appendChild(date);
 
-						const players = document.createElement("span");
-						players.style.whiteSpace = "pre"; 
-						players.textContent = `${single.player1.username.padStart(10, " ")} vs ${single.player2.username.padEnd(10, " ")}`;
-						singlePlayList.appendChild(players);
+			// 			const players = document.createElement("span");
+			// 			players.style.whiteSpace = "pre"; 
+			// 			players.textContent = `${single.player1.username.padStart(10, " ")} vs ${single.player2.username.padEnd(10, " ")}`;
+			// 			singlePlayList.appendChild(players);
 
-						const score = document.createElement("span");
-						score.style.whiteSpace = "pre"; 
-						score.classList.add("font-bold");
-						score.textContent = `${single.player1.roundScore.toString().padStart(2, " ")} : ${single.player2.roundScore.toString().padEnd(2, " ")}`;
-						singlePlayList.appendChild(score);
+			// 			const score = document.createElement("span");
+			// 			score.style.whiteSpace = "pre"; 
+			// 			score.classList.add("font-bold");
+			// 			score.textContent = `${single.player1.roundScore.toString().padStart(2, " ")} : ${single.player2.roundScore.toString().padEnd(2, " ")}`;
+			// 			singlePlayList.appendChild(score);
 
-						gameListElement?.appendChild(singlePlayList);
-					});
-				}
-			};
+			// 			gameListElement?.appendChild(singlePlayList);
+			// 		});
+			// 	}
+			// };
 
-			// TP 리스트 렌더링
-			const renderTournamentList = () => {
-				gameListElement.innerHTML = "";
-				singleButton.className = "bg-black border-2 border-[#375433] px-4 rounded-xl";
-				tournamentButton.className = "bg-[#375433] border-2 border-[#375433] px-4 rounded-xl";
-				if (Array.isArray(tournamentGames)) {
-					tournamentGames.forEach((tournament, idx) => {
-						const tournamentPlayList = document.createElement("li");
-						tournamentPlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
+			// // TP 리스트 렌더링
+			// const renderTournamentList = () => {
+			// 	gameListElement.innerHTML = "";
+			// 	singleButton.className = "bg-black border-2 border-[#375433] px-4 rounded-xl";
+			// 	tournamentButton.className = "bg-[#375433] border-2 border-[#375433] px-4 rounded-xl";
+			// 	if (Array.isArray(tournamentGames)) {
+			// 		tournamentGames.forEach((tournament, idx) => {
+			// 			const tournamentPlayList = document.createElement("li");
+			// 			tournamentPlayList.className = "flex justify-between items-center px-5 py-2 bg-[#162113]";
 
-						const result = document.createElement("span");
-						result.style.whiteSpace = "pre";
-						if((tournament.game[2].player1.username === username.username && tournament.game[2].player1.result === "winner") ||
-							(tournament.game[2].player2.username === username.username && tournament.game[2].player2.result === "winner")) {
-								result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
-								result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
-													`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
-						}
-						else {
-							result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
-							result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
-												`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
-						}
-						tournamentPlayList.appendChild(result);
+			// 			const result = document.createElement("span");
+			// 			result.style.whiteSpace = "pre";
+			// 			if((tournament.game[2].player1.username === username.username && tournament.game[2].player1.result === "winner") ||
+			// 				(tournament.game[2].player2.username === username.username && tournament.game[2].player2.result === "winner")) {
+			// 					result.textContent = `#${idx + 1}   WIN! `.padEnd(15, " ");
+			// 					result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+			// 										`<span class="font-bold text-blue-400">${result.textContent.slice(3)}</span>`;
+			// 			}
+			// 			else {
+			// 				result.textContent = `#${idx + 1}   LOSE`.padEnd(15, " ");
+			// 				result.innerHTML = `<span class="text-white">${result.textContent.slice(0, 4)}</span>` +
+			// 									`<span class="font-bold text-red-400">${result.textContent.slice(3)}</span>`;
+			// 			}
+			// 			tournamentPlayList.appendChild(result);
 
-						const date = document.createElement("span");
-						date.textContent = `${tournament.date}`;
-						tournamentPlayList.appendChild(date);
+			// 			const date = document.createElement("span");
+			// 			date.textContent = `${tournament.date}`;
+			// 			tournamentPlayList.appendChild(date);
 
-						const players = document.createElement("div");
-						players.className = "flex flex-col";
+			// 			const players = document.createElement("div");
+			// 			players.className = "flex flex-col";
 
-						const results = document.createElement("div");
-						results.className = "flex flex-col";
+			// 			const results = document.createElement("div");
+			// 			results.className = "flex flex-col";
 
-						tournament.game.forEach((round, idx) => {
-							const player = document.createElement("span");
-							const result = document.createElement("span");
-							player.style.whiteSpace = "pre";
-							result.style.whiteSpace = "pre";
-							result.classList.add("font-bold");
+			// 			tournament.game.forEach((round, idx) => {
+			// 				const player = document.createElement("span");
+			// 				const result = document.createElement("span");
+			// 				player.style.whiteSpace = "pre";
+			// 				result.style.whiteSpace = "pre";
+			// 				result.classList.add("font-bold");
 
-							player.textContent = `R${idx + 1} :   ${round.player1.username} vs ${round.player2.username}`;
-							result.textContent = `${round.player1.roundScore.toString().padStart(2, " ")} : ${round.player2.roundScore.toString().padEnd(2, " ")}`;
+			// 				player.textContent = `R${idx + 1} :   ${round.player1.username} vs ${round.player2.username}`;
+			// 				result.textContent = `${round.player1.roundScore.toString().padStart(2, " ")} : ${round.player2.roundScore.toString().padEnd(2, " ")}`;
 
-							players?.appendChild(player);
-							results?.appendChild(result);
-						});
-						tournamentPlayList.appendChild(players);
-						tournamentPlayList.appendChild(results);
+			// 				players?.appendChild(player);
+			// 				results?.appendChild(result);
+			// 			});
+			// 			tournamentPlayList.appendChild(players);
+			// 			tournamentPlayList.appendChild(results);
 
-						gameListElement?.appendChild(tournamentPlayList);
-					});
-				}
-			};
+			// 			gameListElement?.appendChild(tournamentPlayList);
+			// 		});
+			// 	}
+			// };
 
 
 			// search 랜더링
@@ -323,8 +323,8 @@ export async function renderMyPage() {
 				}
 			};
 
-			singleButton?.addEventListener("click", renderSingleList);
-			tournamentButton?.addEventListener("click", renderTournamentList);
+			// singleButton?.addEventListener("click", renderSingleList);
+			// tournamentButton?.addEventListener("click", renderTournamentList);
 			searchElement?.addEventListener("input", search => {
 				const keyword = (search.target as HTMLInputElement).value;
 				renderSearch(keyword);
@@ -424,7 +424,7 @@ export async function renderMyPage() {
 			renderProfileImage();
 			renderName();
 			renderFriendList();
-			renderSingleList();
+			// renderSingleList();
 		});
 		
 		return template;

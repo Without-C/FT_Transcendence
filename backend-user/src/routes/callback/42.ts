@@ -70,7 +70,7 @@ const callback42: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
 			const newUser = await fastify.prisma.user.create({
 				data: {
-					username: String(userinfo.data.login),//인트라 아이디 저장
+					username: String(userinfo.data.login),//인트라 아이디 저장www
 					oauth_id_42: String(userinfo.data.id), // 직접 ID 지정
 				},
 			});
